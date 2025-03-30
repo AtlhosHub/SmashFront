@@ -2,7 +2,7 @@
     - Material Ui
     - Toastify
 
-## RESUMO DE ALGUNS COMPONENTES
+# RESUMO DE ALGUNS COMPONENTES
 ### TOASTIFY
 ``` jsx
 <ToastContainer>
