@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { DefaultButton } from "../DefaultButton/DefaultButton"
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
     Autocomplete,
     Box,
     Fade,
-    Grow,
     Popover,
     TextField
 } from "@mui/material";
@@ -18,15 +20,27 @@ const DefaultFilter = ({
     setStatusPagamento,
     setStatusPresenca,
     setHorarioPref,
-    setData
+    dateRange,
+    setDateRange,
+    handleApplyFilter
 }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl)
     const rect = anchorEl?.getBoundingClientRect();
 
-    const statusPagArray = ["Enviado", "Pendente", "Atrasado"];
-    const statusPresencaArray = ["Presente", "Ausente"];
-    const horarioPrefArray = ["18-20", "12-14"]
+    const statusPagArray = [
+        { label: "Enviado" },
+        { label: "Pendente" },
+        { label: "Atrasado" }
+    ];
+    const statusPresencaArray = [
+        { id: "statPres", label: "Presente" },
+        { id: "statAuse", label: "Ausente" }
+    ];
+    const horarioPrefArray = [
+        { id: 1820, label: "18h - 20h" },
+        { id: 1214, label: "12h - 14h" }
+    ]
 
     const handleOpenFilter = (event) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -46,7 +60,6 @@ const DefaultFilter = ({
                 TransitionComponent={Fade}
                 onClose={() => setAnchorEl(null)}
                 PaperProps={{
-                    // onClick: () => setAnchorEl(null),
                     style: {
                         width: "100vw",
                         height: "100vh",
@@ -62,7 +75,7 @@ const DefaultFilter = ({
                     <>
                         <Box className="filter-box"
                             position="absolute"
-                            top={(rect.top + rect.height)+10}
+                            top={(rect.top + rect.height) + 10}
                             left={rect.left + window.scrollX}
                         >
                             <Box className="filter-input-box">
@@ -70,41 +83,54 @@ const DefaultFilter = ({
                                     size="small"
                                     value={statusPagamento}
                                     options={statusPagArray}
+                                    getOptionLabel={(option) => option?.label || ""}
                                     renderInput={(params) => <TextField {...params} label="Status de Pagamento" />}
-                                    onChange={(e) => {
-                                        setStatusPagamento(e)
-                                    }}
+                                    onChange={(e, newValue) => setStatusPagamento(newValue)}
                                 />
                                 <Autocomplete
                                     size="small"
                                     value={statusPresenca}
                                     options={statusPresencaArray}
+                                    getOptionLabel={(option) => option?.label || ""}
                                     renderInput={(params) => <TextField {...params} label="Status de Presença" />}
-                                    onChange={(e) => {
-                                        setStatusPresenca(e)
-                                    }}
+                                    onChange={(e, newValue) => setStatusPresenca(newValue)}
                                 />
                                 <Autocomplete
                                     size="small"
                                     value={horarioPref}
                                     options={horarioPrefArray}
+                                    getOptionLabel={(option) => option?.label || ""}
                                     renderInput={(params) => <TextField {...params} label="Horario de Preferência" />}
-                                    onChange={(e) => {
-                                        setHorarioPref(e)
-                                    }}
+                                    onChange={(e, newValue) => setHorarioPref(newValue)}
                                 />
+                                {setDateRange && dateRange &&
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DateRangePicker
+                                            value={dateRange}
+                                            onChange={(e) => setDateRange(e)}
+                                            localeText={{ start: 'Início', end: 'Fim' }}
+                                            format="DD/MM/YYYY"
+                                            renderInput={(startProps, endProps) => (
+                                                <Box sx={{ display: 'flex', gap: 2 }}>
+                                                    <TextField {...startProps} />
+                                                    <TextField {...endProps} />
+                                                </Box>
+                                            )}
+                                        />
+                                    </LocalizationProvider>
+                                }
                             </Box>
                             <Box sx={{ display: "flex", gap: "10px", marginLeft: "auto" }}>
                                 <DefaultButton size="small" label="Limpar" />
-                                <DefaultButton size="small" variant="contained" label="Aplicar" />
+                                <DefaultButton size="small" variant="contained" label="Aplicar" onClick={() => { setAnchorEl(null); handleApplyFilter }} />
                             </Box>
                         </Box>
                         <Box
-                        onClick={() => setAnchorEl(null)}
-                        sx={{
-                            height: "100vh",
-                            width: "100vw"
-                        }}
+                            onClick={() => setAnchorEl(null)}
+                            sx={{
+                                height: "100vh",
+                                width: "100vw"
+                            }}
                         />
                     </>
                 )}
