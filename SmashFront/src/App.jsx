@@ -1,6 +1,5 @@
 import './App.css'
 import { ToastContainer } from 'react-toastify';
-import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
 
 function App() {
   // const [dateRange, setDateRange] = useState([
@@ -15,7 +14,6 @@ function App() {
 
   return (
     <>
-      <DefaultHeader pageTitle={"Menu Principal"} />
       <ToastContainer />
     </>
   )
