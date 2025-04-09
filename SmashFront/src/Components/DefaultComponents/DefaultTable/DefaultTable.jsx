@@ -1,4 +1,6 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead } from "@mui/material"
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import CircleIcon from '@mui/icons-material/Circle';
+import "./DefaultTable.css"
 
 export const DefaultTable = ({
     headCells,
@@ -6,34 +8,62 @@ export const DefaultTable = ({
     withStatus = false
 }) => {
     return (
-        <TableContainer>
+        <TableContainer sx={{ width: "max-content" }}>
             <Table>
-                <TableHead>
-                    <TableRow>
+                <TableHead sx={{ backgroundColor: "white", borderBottom: "2px solid rgb(181, 181, 181)" }}>
+                    <TableRow className="header-table-row">
                         {withStatus &&
-                            <TableCell>Status de Presença</TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>Status de Presença</TableCell>
                         }
                         {headCells.map((cell, index) => (
-                            <TableCell key={`header-cell-${index}`}>{cell.name}</TableCell>
+                            <TableCell key={`header-cell-${index}`}>{cell.description}</TableCell>
                         ))}
+                        {withStatus &&
+                            <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
+                        }
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {withStatus &&
-                        <TableCell>
-                            {row.status === true ?
-                                "🔵" : "🔘"
-                            }
-                        </TableCell>
-                    }
-                    {rowData.map((row, index) => (
+                    {rowData?.map((row, index) => (
                         <TableRow
                             key={`row-index-${index}`}
-                            sx={{ backgroundColor: index % 2 === 0 ? "#F8F8F8" : "white", }}
+                            className="body-table-row"
+                            sx={{ backgroundColor: index % 2 !== 0 ? "#d5dae0" : "white", }}
                         >
+                            {withStatus &&
+                                <TableCell sx={{ textAlign: "center" }}>
+                                    {row?.statusAluno === true ?
+                                        <CircleIcon sx={{ color: "#286DA8" }} /> :
+                                        <CircleIcon sx={{ color: "#989898" }} />
+                                    }
+                                </TableCell>
+                            }
                             {headCells.map((header) => (
-                                <TableCell>{row[header]}</TableCell>
+                                <TableCell sx={{
+                                    ...(withStatus && header.name === "nomeAluno" && {'&:hover': {
+                                        cursor: "pointer",
+                                        textDecoration: "underline",
+                                    }})
+                                }}>
+                                    {row[header.name]}
+                                </TableCell>
                             ))}
+                            {withStatus &&
+                                <TableCell sx={{ textAlign: "center" }}>
+                                    <Box
+                                        className="status-comprovante"
+                                        sx={{
+                                            backgroundColor: row?.statusComprovante === "Enviado" ?
+                                                "#2E7D32" :
+                                                row?.statusComprovante === "Pendente" ?
+                                                    "#989898" :
+                                                    "#FF0000",
+                                            color: row?.statusComprovante === "Pendente" ? "black" : "white",
+                                        }}>
+                                        {row?.statusComprovante}
+                                    </Box>
+                                </TableCell>
+                            }
                         </TableRow>
                     ))}
                 </TableBody>

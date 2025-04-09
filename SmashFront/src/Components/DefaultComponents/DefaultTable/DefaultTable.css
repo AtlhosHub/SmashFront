@@ -1,0 +1,19 @@
+.header-table-row th{
+    font-family: "Poppins", sans-serif;
+    text-wrap: nowrap;
+    padding-block: 15px;
+    padding-inline: 20px;
+}
+
+.body-table-row td{
+    font-family: "Poppins", sans-serif;
+    text-transform: uppercase;
+}
+
+.status-comprovante {
+    margin-inline: auto;
+    padding: 5px 25px;
+    width: 90px;
+    text-transform: uppercase;
+    clip-path: polygon(12.5% 0, 87.5% 0, 100% 50%, 87.5% 100%, 12.5% 100%, 0 50%);
+}
