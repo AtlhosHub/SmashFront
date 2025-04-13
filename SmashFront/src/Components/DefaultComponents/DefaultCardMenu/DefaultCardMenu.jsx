@@ -1,0 +1,68 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import CardActionArea from '@mui/material/CardActionArea';
+import team from './../../../assets/Team Management.svg';
+
+export const DefaultCardMenu = ({
+    label = "",
+    icon = <img src={team}
+    width={100} 
+    height={100}/>,
+    sidebarcolor="black",
+    onClick,
+    selected = false,
+    ...props
+}) => {
+    return (
+        <Card sx={{
+            width: 388,
+            height: 154,
+            backgroundColor: '#d6e9e9',
+            borderRadius: "10px",
+            borderLeft: `16px solid ${sidebarcolor}`,
+            display: "flex",
+            alignItems: "center",
+            transition: "0.3s",
+            cursor: "pointer",
+            '&:hover': { boxShadow: 6 }
+
+        }} {...props}>
+          
+                <CardActionArea onClick={onClick} sx={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "0 24px",
+
+                }}>
+                    <Box>
+
+
+                        <Typography sx={{
+                            whiteSpace: "pre-line",
+                            fontFamily: "Mohave, sans-serif",
+                            fontWeight: 600,
+                            fontSize: 40,
+                            color: "#0d3c53",
+                            lineHeight: 1.2,
+
+
+                        }}>
+                            {label}
+                        </Typography>
+                    </Box>
+            
+                   <Box>
+                    {icon}
+                    </Box>
+                </CardActionArea>
+           
+        </Card>
+    )
+}
+
