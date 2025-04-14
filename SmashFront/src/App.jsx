@@ -4,6 +4,9 @@ import { DefaultBreadcrumb } from './Components/DefaultComponents/DefaultBreadcr
 import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
 import { DefaultTable } from './Components/DefaultComponents/DefaultTable/DefaultTable';
 import { Description } from '@mui/icons-material';
+import { DefaultCardMenu } from './Components/DefaultComponents/DefaultCardMenu/DefaultCardMenu';
+import team from './assets/Team Management.svg';
+
 import { ListaAlunos } from './Components/ListaAlunos/ListaAlunos';
 
 function App() {
@@ -20,6 +23,11 @@ function App() {
   return (
     <>
       <ListaAlunos />
+      <DefaultCardMenu label={'CONTROLE DE\nUSUÁRIOS'}
+        icon = {<img src={team}
+          width={100} 
+          height={100}/>}
+      sidebarcolor='#17778D'/>
     </>
   )
 }
