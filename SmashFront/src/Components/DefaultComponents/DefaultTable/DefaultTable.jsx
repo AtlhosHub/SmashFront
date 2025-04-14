@@ -10,7 +10,7 @@ export const DefaultTable = ({
     return (
         <TableContainer sx={{ width: "max-content" }}>
             <Table>
-                <TableHead sx={{ backgroundColor: "white", borderBottom: "2px solid rgb(181, 181, 181)" }}>
+                <TableHead sx={{ backgroundColor: "white" }}>
                     <TableRow className="header-table-row">
                         {withStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Presença</TableCell>

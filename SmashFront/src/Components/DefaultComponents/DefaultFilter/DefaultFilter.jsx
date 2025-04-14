@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import "./DefaultFilter.css"
 
-const DefaultFilter = ({
+export const DefaultFilter = ({
     statusPagamento,
     statusPresenca,
     horarioPref,
@@ -62,7 +62,7 @@ const DefaultFilter = ({
                 PaperProps={{
                     style: {
                         width: "100vw",
-                        height: "100vh",
+                        height: "97.5vh",
                         maxHeight: "none",
                         overflow: "hidden",
                         boxShadow: "none",
@@ -73,7 +73,8 @@ const DefaultFilter = ({
             >
                 {rect && (
                     <>
-                        <Box className="filter-box"
+                        <Box
+                            className="filter-box"
                             position="absolute"
                             top={(rect.top + rect.height) + 10}
                             left={rect.left + window.scrollX}

@@ -21,7 +21,7 @@ export const DefaultButton = ({
                 border: variant === "outlined" ? "1px solid #286DA8" : 0,
                 color: variant === "outlined" ? "#286DA8" : "white",
                 fontWeight: 600,
-                borderRadius: "5px"
+                borderRadius: "8px"
             }}
             {...props}
         >

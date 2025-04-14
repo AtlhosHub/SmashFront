@@ -1,13 +1,15 @@
 .header-table-row th{
     font-family: "Poppins", sans-serif;
     text-wrap: nowrap;
-    padding-block: 15px;
-    padding-inline: 20px;
+    padding-block: 10px;
+    font-weight: 600;
 }
 
 .body-table-row td{
     font-family: "Poppins", sans-serif;
     text-transform: uppercase;
+    padding-block: 13px;
+    line-height: 15px;
 }
 
 .status-comprovante {

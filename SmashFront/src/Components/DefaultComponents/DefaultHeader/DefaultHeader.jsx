@@ -33,29 +33,23 @@ export const DefaultHeader = ({ pageTitle, userInfo }) => {
           >
             SMASH
           </Typography>
-          <Box sx={{display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px"}}>
-            <span
-              style={{
-                fontSize: "26px",
-                lineHeight: 0,
-                marginBottom: "5px",
-              }}
-            >
+          <Box sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            marginBottom: "5px",
+            fontFamily: "'Poppins', sans-serif",
+            }}>
+            <span style={{ fontSize: "26px", lineHeight: 0 }}>
               |
             </span>
-            <span
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                lineHeight: "10px",
-                marginTop: "3px",
-              }}
-            >
+            <span style={{ lineHeight: "10px" }}>
               {pageTitle}
             </span>
           </Box>
         </Box>
-        <Box sx={{display: "flex", alignItems: "center", gap: "10px"}}>
-              <span><b>Bem-vindo(a)</b>, {userInfo?.name ?? "carregando..."}</span>
+        <Box sx={{display: "flex", alignItems: "center", gap: "10px", fontFamily: "'Poppins', sans-serif", fontSize: "16px", color: "#F3F9F9"}}>
+              <span><span style={{fontWeight: 600}}>Bem-vindo(a)</span>, {userInfo?.name ?? "carregando..."}</span>
               <Avatar sx={{backgroundColor: "white"}}>{userInfo?.charAt(0) ?? <Person sx={{color: "black", fontSize: "30px"}} />}</Avatar>
         </Box>
       </Toolbar>

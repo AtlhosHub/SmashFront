@@ -1,0 +1,31 @@
+.main-content {
+    padding-top: 3rem;
+    padding-inline: 4rem;
+}
+
+.action-area {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.input-search {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 5px 5px 5px 15px;
+
+    input {
+        background-color: transparent;
+        border: none;
+        color: black;
+        font-family: "Poppins", sans-serif;
+        font-weight: 500;
+    }
+
+    input:focus {
+        outline: none;
+    }
+}
