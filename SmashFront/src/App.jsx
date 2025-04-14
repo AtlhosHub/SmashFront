@@ -1,9 +1,4 @@
 import './App.css'
-import { ToastContainer } from 'react-toastify';
-import { DefaultBreadcrumb } from './Components/DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
-import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
-import { DefaultTable } from './Components/DefaultComponents/DefaultTable/DefaultTable';
-import { Description } from '@mui/icons-material';
 import { DefaultCardMenu } from './Components/DefaultComponents/DefaultCardMenu/DefaultCardMenu';
 import team from './assets/Team Management.svg';
 
@@ -22,7 +17,6 @@ function App() {
 
   return (
     <>
-      <ListaAlunos />
       <DefaultCardMenu label={'CONTROLE DE\nUSUÁRIOS'}
         icon = {<img src={team}
           width={100} 
