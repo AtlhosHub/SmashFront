@@ -15,7 +15,7 @@ export const DefaultBreadcrumb = ({ rotas }) => {
         }}
       >
         <Breadcrumbs aria-label="breadcrumb" sx={{color: "#0D3C53"}}>
-          <Link underline="hover" color="inherit" href="/mainPage" sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <Link underline="hover" color="inherit" href="/" sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
             <KeyboardBackspaceIcon sx={{ marginTop: "1px" }} />
             Menu Principal
           </Link>

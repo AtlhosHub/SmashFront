@@ -8,7 +8,7 @@ export const DefaultTable = ({
     withStatus = false
 }) => {
     return (
-        <TableContainer sx={{ width: "max-content" }}>
+        <TableContainer sx={{ marginTop: "3rem", width: "100%" }}>
             <Table>
                 <TableHead sx={{ backgroundColor: "white" }}>
                     <TableRow className="header-table-row">
