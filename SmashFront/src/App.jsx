@@ -1,27 +1,17 @@
 import './App.css'
-import { DefaultCardMenu } from './Components/DefaultComponents/DefaultCardMenu/DefaultCardMenu';
-import team from './assets/Team Management.svg';
-
+import { Route, Routes } from 'react-router-dom';
 import { ListaAlunos } from './Components/ListaAlunos/ListaAlunos';
+import { TelaInicial } from './Components/TelaInicial/TelaInicial';
+import { TelaLogin } from './Components/TelaLogin/TelaLogin';
 
 function App() {
-  // const [dateRange, setDateRange] = useState([
-  //   dayjs().subtract(2, "day"),
-  //   dayjs()
-  // ])
-
-  // const handleDelete = () => {
-  //   toasterMsg("sucess", "Usuário excluído com sucesso!");
-  //   setIsModalDeleteOpen(false);
-  // }
-
   return (
     <>
-      <DefaultCardMenu label={'CONTROLE DE\nUSUÁRIOS'}
-        icon = {<img src={team}
-          width={100} 
-          height={100}/>}
-      sidebarcolor='#17778D'/>
+      <Routes>
+        <Route path="/" element={<TelaInicial />} />
+        <Route path="/login" element={<TelaLogin />} />
+        <Route path="/alunos" element={<ListaAlunos />} />
+      </Routes>
     </>
   )
 }
