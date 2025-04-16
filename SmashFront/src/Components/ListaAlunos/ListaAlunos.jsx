@@ -4,9 +4,16 @@ import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
 import DefaultFilter from "../DefaultComponents/DefaultFilter/DefaultFilter"
 import { ToastContainer } from "react-toastify"
-import { Box, InputAdornment, TextField } from "@mui/material"
+import {
+    Box,
+    InputAdornment,
+    TextField
+} from "@mui/material"
 import { useState } from "react"
-import { Download, Search, Widgets } from "@mui/icons-material"
+import {
+    Add,
+    Search
+} from "@mui/icons-material"
 
 export const ListaAlunos = () => {
     //Variáveis do filtro
@@ -55,7 +62,7 @@ export const ListaAlunos = () => {
         }
     ]
 
-    
+
     const handleApplyFilter = () => {
         const fitlerObj = {
             "statusPag": statusPagamento,
@@ -111,8 +118,8 @@ export const ListaAlunos = () => {
                     />
                     <DefaultButton
                         variant="contained"
-                        label="Exportar"
-                        endIcon={<Download />}
+                        label="Novo Cadastro"
+                        endIcon={<Add />}
                     />
                 </Box>
                 <Box>
