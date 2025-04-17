@@ -62,7 +62,6 @@ export const ListaAlunos = () => {
         }
     ]
 
-
     const handleApplyFilter = () => {
         const fitlerObj = {
             "statusPag": statusPagamento,

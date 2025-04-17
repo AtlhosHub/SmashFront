@@ -8,8 +8,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<TelaInicial />} />
-        <Route path="/login" element={<TelaLogin />} />
+        <Route path="/" element={<TelaLogin />} />
+        <Route path="/telaInicial" element={<TelaInicial />} />
         <Route path="/alunos" element={<ListaAlunos />} />
       </Routes>
     </>
