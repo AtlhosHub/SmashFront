@@ -4,7 +4,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import team from './../../../assets/Team Management.svg';
+
+
 
 export const DefaultCardMenu = ({
     label = "",
@@ -18,8 +19,8 @@ export const DefaultCardMenu = ({
 }) => {
     return (
         <Card sx={{
-            width: 388,
-            height: 154,
+            width: 300,
+            height: 120,
             backgroundColor: '#d6e9e9',
             borderRadius: "10px",
             borderLeft: `16px solid ${sidebarcolor}`,
@@ -47,7 +48,7 @@ export const DefaultCardMenu = ({
                             whiteSpace: "pre-line",
                             fontFamily: "Mohave, sans-serif",
                             fontWeight: 600,
-                            fontSize: 40,
+                            fontSize: 25,
                             color: "#0d3c53",
                             lineHeight: 1.2,
 
