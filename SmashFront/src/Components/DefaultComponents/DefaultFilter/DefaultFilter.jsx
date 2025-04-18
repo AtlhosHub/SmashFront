@@ -125,7 +125,7 @@ export const DefaultFilter = ({
                             </Box>
                             <Box sx={{ display: "flex", gap: "10px", marginLeft: "auto" }}>
                                 <DefaultButton size="small" label="Limpar" />
-                                <DefaultButton size="small" variant="contained" label="Aplicar" onClick={() => { setAnchorEl(null); handleApplyFilter }} />
+                                <DefaultButton size="small" variant="contained" label="Aplicar" onClick={() => { handleApplyFilter(); setAnchorEl(null) }} />
                             </Box>
                         </Box>
                         <Box

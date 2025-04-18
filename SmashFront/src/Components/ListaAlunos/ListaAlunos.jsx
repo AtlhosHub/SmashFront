@@ -35,26 +35,28 @@ export const ListaAlunos = () => {
             description: "Data de Envio"
         }
     ]
-    const rowData = [
-        {
-            statusAluno: true,
-            nomeAluno: "Carolina Timoteo Teixeira de Camargo",
-            dtEnvio: "02/03/25 - 15:59",
-            statusComprovante: "Enviado"
-        },
-        {
-            statusAluno: false,
-            nomeAluno: "Cauã Gouvea do Nascimento",
-            dtEnvio: "02/03/25 - 15:59",
-            statusComprovante: "Pendente"
-        },
-        {
-            statusAluno: false,
-            nomeAluno: "Juliana Murakami Oshikawa",
-            dtEnvio: "02/03/25 - 15:59",
-            statusComprovante: "Atrasado"
-        }
-    ]
+    // const rowData = [
+    //     {
+    //         statusAluno: true,
+    //         nomeAluno: "Carolina Timoteo Teixeira de Camargo",
+    //         dtEnvio: "02/03/25 - 15:59",
+    //         statusComprovante: "Enviado"
+    //     },
+    //     {
+    //         statusAluno: false,
+    //         nomeAluno: "Cauã Gouvea do Nascimento",
+    //         dtEnvio: "02/03/25 - 15:59",
+    //         statusComprovante: "Pendente"
+    //     },
+    //     {
+    //         statusAluno: false,
+    //         nomeAluno: "Juliana Murakami Oshikawa",
+    //         dtEnvio: "02/03/25 - 15:59",
+    //         statusComprovante: "Atrasado"
+    //     }
+    // ]
+
+    const [rowData, setRowData] = useState([{}])
 
     //Variável para o breadcrumb
     const rotas = [
@@ -72,7 +74,7 @@ export const ListaAlunos = () => {
         }
 
         //Passar o filterObj no fetch
-        fetch
+        fetchAlunos();
     }
 
     useEffect(() => {
@@ -81,7 +83,7 @@ export const ListaAlunos = () => {
 
     function fetchAlunos(
         nome = searchValue != "" ? searchValue : null, 
-        status = statusPagamento, 
+        status = statusPagamento?.label, 
         ativo = statusPresenca, 
         dataEnvioForm = dateRange?.[0], 
         dataEnvioTo = dateRange?.[1]) {
@@ -137,6 +139,8 @@ export const ListaAlunos = () => {
                         statusPagamento={statusPagamento}
                         statusPresenca={statusPresenca}
                         horarioPref={horarioPref}
+                        dateRange={dateRange}
+                        setDateRange={setDateRange}
                         setStatusPagamento={setStatusPagamento}
                         setStatusPresenca={setStatusPresenca}
                         setHorarioPref={setHorarioPref}
