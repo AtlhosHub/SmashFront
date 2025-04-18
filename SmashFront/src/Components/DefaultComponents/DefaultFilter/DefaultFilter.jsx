@@ -96,14 +96,16 @@ export const DefaultFilter = ({
                                     renderInput={(params) => <TextField {...params} label="Status de Presença" />}
                                     onChange={(e, newValue) => setStatusPresenca(newValue)}
                                 />
-                                <Autocomplete
-                                    size="small"
-                                    value={horarioPref}
-                                    options={horarioPrefArray}
-                                    getOptionLabel={(option) => option?.label || ""}
-                                    renderInput={(params) => <TextField {...params} label="Horario de Preferência" />}
-                                    onChange={(e, newValue) => setHorarioPref(newValue)}
-                                />
+                                {horarioPref && setHorarioPref &&
+                                    <Autocomplete
+                                        size="small"
+                                        value={horarioPref}
+                                        options={horarioPrefArray}
+                                        getOptionLabel={(option) => option?.label || ""}
+                                        renderInput={(params) => <TextField {...params} label="Horario de Preferência" />}
+                                        onChange={(e, newValue) => setHorarioPref(newValue)}
+                                    />
+                                }
                                 {setDateRange && dateRange &&
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DateRangePicker
