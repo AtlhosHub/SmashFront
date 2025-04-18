@@ -27,7 +27,7 @@ export const ListaAlunos = () => {
     //Variáveis de moc da tabela
     const headCells = [
         {
-            name: "nomeAluno",
+            name: "nome",
             description: "Nome do Aluno"
         },
         {
