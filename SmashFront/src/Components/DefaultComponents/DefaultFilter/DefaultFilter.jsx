@@ -34,8 +34,8 @@ export const DefaultFilter = ({
         { label: "Atrasado" }
     ];
     const statusPresencaArray = [
-        { id: "statPres", label: "Presente" },
-        { id: "statAuse", label: "Ausente" }
+        { label: "Presente", value: true, },
+        { label: "Ausente", value: false, }
     ];
     const horarioPrefArray = [
         { id: 1820, label: "18h - 20h" },

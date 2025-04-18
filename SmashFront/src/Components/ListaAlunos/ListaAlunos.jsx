@@ -4,7 +4,7 @@ import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
 import DefaultFilter from "../DefaultComponents/DefaultFilter/DefaultFilter"
 import { ToastContainer } from "react-toastify"
-import { api } from "../../provider/apiProvider"
+// import { api } from "../../provider/apiProvider"
 import {
     Box,
     InputAdornment,
@@ -56,7 +56,7 @@ export const ListaAlunos = () => {
     //     }
     // ]
 
-    const [rowData, setRowData] = useState([{}])
+    const [rowData, setRowData] = useState([])
 
     //Variável para o breadcrumb
     const rotas = [
@@ -74,33 +74,33 @@ export const ListaAlunos = () => {
         }
 
         //Passar o filterObj no fetch
-        fetchAlunos();
+        // fetchAlunos();
     }
 
-    useEffect(() => {
-        fetchAlunos()
-    }, []) 
+    // useEffect(() => {
+    //     fetchAlunos()
+    // }, []) 
 
-    function fetchAlunos(
-        nome = searchValue != "" ? searchValue : null, 
-        status = statusPagamento?.label, 
-        ativo = statusPresenca, 
-        dataEnvioForm = dateRange?.[0], 
-        dataEnvioTo = dateRange?.[1]) {
-        api.post("/alunos/comprovantes", {
-            nome,
-            status,
-            ativo,
-            dataEnvioForm,
-            dataEnvioTo,
-        })
-        .then((res) => {
-            console.log("Dados recebidos:", res.data);
-        })
-        .catch((err) => {
-            console.error("Erro ao buscar alunos:", err);
-        });
-    }
+    // function fetchAlunos(
+    //     nome = searchValue != "" ? searchValue : null, 
+    //     status = statusPagamento?.label, 
+    //     ativo = statusPresenca, 
+    //     dataEnvioForm = dateRange?.[0], 
+    //     dataEnvioTo = dateRange?.[1]) {
+    //     api.post("/alunos/comprovantes", {
+    //         nome,
+    //         status,
+    //         ativo,
+    //         dataEnvioForm,
+    //         dataEnvioTo,
+    //     })
+    //     .then((res) => {
+    //         console.log("Dados recebidos:", res.data);
+    //     })
+    //     .catch((err) => {
+    //         console.error("Erro ao buscar alunos:", err);
+    //     });
+    // }
 
     return (
         <>
