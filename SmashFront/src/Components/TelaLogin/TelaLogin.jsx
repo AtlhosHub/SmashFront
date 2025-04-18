@@ -8,7 +8,6 @@ import {
 } from "@mui/material"
 import bgImg from '../../assets/loginBg.png';
 import logo from '../../assets/logoACDNB.png';
-import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DefaultLoginCard } from "../DefaultComponents/DefaultLoginCard/DefaultLoginCard";

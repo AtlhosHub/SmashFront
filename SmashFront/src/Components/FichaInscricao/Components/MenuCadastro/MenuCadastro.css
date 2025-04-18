@@ -1,0 +1,50 @@
+.menu-cadastro-item {
+    font-family: 'Poppins', sans-serif;
+    color: #9B9B9B;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 400;
+    gap: 10px;
+    width: fit-content;
+    border-radius: 10px;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.menu-cadastro-item span{
+    font-size: 16px;
+    line-height: 0px;
+    margin-top: 1px;
+    padding: 0;
+    
+}
+
+.menu-cadastro-item span svg, .menu-cadastro-item svg{
+    font-size: 30px;
+    line-height: 0px;
+    margin-top: 1px;
+}
+
+.menu-cadastro-item.concluido span{
+    color: #07BC0C;
+    span {
+        color: white;
+        background-color: #07BC0C;
+        top: 4px;
+        right: 1px;
+
+        svg{
+            font-size: 18px;
+        }
+    }
+}
+
+.menu-cadastro-item.ativo{
+    color: black;
+}
+
+.menu-cadastro-item.desativado{
+    cursor: not-allowed;
+}

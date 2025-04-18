@@ -14,6 +14,7 @@ import {
     Add,
     Search
 } from "@mui/icons-material"
+import { href } from "react-router-dom";
 
 export const ListaAlunos = () => {
     //Variáveis do filtro
@@ -118,6 +119,7 @@ export const ListaAlunos = () => {
                     <DefaultButton
                         variant="contained"
                         label="Novo Cadastro"
+                        onClick={() => window.location.href = "/cadastrarAluno"}
                         endIcon={<Add />}
                     />
                 </Box>
