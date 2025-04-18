@@ -4,7 +4,7 @@ import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
 import DefaultFilter from "../DefaultComponents/DefaultFilter/DefaultFilter"
 import { ToastContainer } from "react-toastify"
-// import { api } from "../../provider/apiProvider"
+import { api } from "../../provider/apiProvider"
 import {
     Box,
     InputAdornment,
@@ -35,26 +35,6 @@ export const ListaAlunos = () => {
             description: "Data de Envio"
         }
     ]
-    // const rowData = [
-    //     {
-    //         statusAluno: true,
-    //         nomeAluno: "Carolina Timoteo Teixeira de Camargo",
-    //         dtEnvio: "02/03/25 - 15:59",
-    //         statusComprovante: "Enviado"
-    //     },
-    //     {
-    //         statusAluno: false,
-    //         nomeAluno: "Cauã Gouvea do Nascimento",
-    //         dtEnvio: "02/03/25 - 15:59",
-    //         statusComprovante: "Pendente"
-    //     },
-    //     {
-    //         statusAluno: false,
-    //         nomeAluno: "Juliana Murakami Oshikawa",
-    //         dtEnvio: "02/03/25 - 15:59",
-    //         statusComprovante: "Atrasado"
-    //     }
-    // ]
 
     const [rowData, setRowData] = useState([])
 
@@ -74,33 +54,34 @@ export const ListaAlunos = () => {
         }
 
         //Passar o filterObj no fetch
-        // fetchAlunos();
+        fetchAlunos();
     }
 
-    // useEffect(() => {
-    //     fetchAlunos()
-    // }, []) 
+    useEffect(() => {
+        fetchAlunos()
+    }, []) 
 
-    // function fetchAlunos(
-    //     nome = searchValue != "" ? searchValue : null, 
-    //     status = statusPagamento?.label, 
-    //     ativo = statusPresenca, 
-    //     dataEnvioForm = dateRange?.[0], 
-    //     dataEnvioTo = dateRange?.[1]) {
-    //     api.post("/alunos/comprovantes", {
-    //         nome,
-    //         status,
-    //         ativo,
-    //         dataEnvioForm,
-    //         dataEnvioTo,
-    //     })
-    //     .then((res) => {
-    //         console.log("Dados recebidos:", res.data);
-    //     })
-    //     .catch((err) => {
-    //         console.error("Erro ao buscar alunos:", err);
-    //     });
-    // }
+    function fetchAlunos(
+        nome = searchValue != "" ? searchValue : null, 
+        status = statusPagamento?.label, 
+        ativo = statusPresenca?.value, 
+        dataEnvioForm = dateRange?.[0], 
+        dataEnvioTo = dateRange?.[1]) {
+        api.post("/alunos/comprovantes", {
+            nome,
+            status,
+            ativo,
+            dataEnvioForm,
+            dataEnvioTo,
+        })
+        .then((res) => {
+            setRowData(res.data);
+            console.log("Dados recebidos:", res.data);
+        })
+        .catch((err) => {
+            console.error("Erro ao buscar alunos:", err);
+        });
+    }
 
     return (
         <>
