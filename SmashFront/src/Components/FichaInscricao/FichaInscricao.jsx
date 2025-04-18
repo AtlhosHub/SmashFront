@@ -26,10 +26,6 @@ export const FichaInscricao = () => {
         celular: ""
     });
 
-    useEffect(() => {
-        console.log(userInfo)
-    }, [userInfo])
-
     const rotas = [
         {
             route: "/alunos",

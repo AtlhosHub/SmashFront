@@ -14,9 +14,11 @@ import {
     Add,
     Search
 } from "@mui/icons-material"
-import { href } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const ListaAlunos = () => {
+    const navigate = useNavigate();
+
     //Variáveis do filtro
     const [searchValue, setSearchValue] = useState("");
     const [statusPagamento, setStatusPagamento] = useState(null);
@@ -119,7 +121,7 @@ export const ListaAlunos = () => {
                     <DefaultButton
                         variant="contained"
                         label="Novo Cadastro"
-                        onClick={() => window.location.href = "/cadastrarAluno"}
+                        onClick={() => navigate("/cadastrarAluno")}
                         endIcon={<Add />}
                     />
                 </Box>

@@ -33,9 +33,9 @@ export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade }) => 
     };
 
     return (
-        <FormControl sx={{ pt: "30px", pr: "30px", display: "flex", flexGrow: 1 }}>
-            <Box sx={{ display: "flex", flexDirection: "row", gap: "20px", width: "100%", flexGrow: 1, color: "black" }}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1.3 }}>
+        <FormControl sx={{ paddingBlock: "30px", pr: "30px", display: "flex", flex: 1, flexDirection: "column" }}>
+            <Box sx={{ display: "flex", flexDirection: "row", gap: "20px", width: "100%", color: "black" }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1.3, height: "fit-content" }}>
                     <Box>
                         <label>Nome do Aluno <span style={{ color: "red" }}>*</span></label>
                         <TextField
@@ -124,7 +124,7 @@ export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade }) => 
                     </Box>
                 </Box>
 
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1, height: "fit-content" }}>
                     <Box>
                         <label>Nacionalidade</label>
                         <TextField
@@ -175,7 +175,7 @@ export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade }) => 
                     </Box>
                 </Box>
 
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1, height: "fit-content" }}>
                     <Box>
                         <label>Naturalidade</label>
                         <TextField
@@ -211,6 +211,11 @@ export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade }) => 
                             sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
                         />
                     </Box>
+                </Box>
+            </Box>
+            <Box sx={{marginTop: "20px"}}>
+                <Box sx={{color: "black"}}>
+                    Status de Presença
                 </Box>
             </Box>
         </FormControl>

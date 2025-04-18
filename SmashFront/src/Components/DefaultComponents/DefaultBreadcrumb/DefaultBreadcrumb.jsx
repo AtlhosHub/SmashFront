@@ -1,8 +1,11 @@
 import { Box, Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import breadcrumb from "../../../assets/breadcrumb.png";
+import { useNavigate } from "react-router-dom";
 
 export const DefaultBreadcrumb = ({ rotas }) => {
+  const navigate = useNavigate();
+
   return (
     <Box className="breadcrumb-container">
       <Box
@@ -14,8 +17,18 @@ export const DefaultBreadcrumb = ({ rotas }) => {
           boxSizing: "border-box",
         }}
       >
-        <Breadcrumbs aria-label="breadcrumb" sx={{color: "#0D3C53"}}>
-          <Link underline="hover" color="inherit" href="/" sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
+        <Breadcrumbs aria-label="breadcrumb" sx={{ color: "#0D3C53" }}>
+          <Link
+            underline="hover"
+            color="inherit"
+            onClick={() => navigate("/telaInicial")}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              cursor: "pointer"
+            }}
+          >
             <KeyboardBackspaceIcon sx={{ marginTop: "1px" }} />
             Menu Principal
           </Link>
@@ -28,7 +41,8 @@ export const DefaultBreadcrumb = ({ rotas }) => {
               <Link
                 underline="hover"
                 color="inherit"
-                href={rota.route}
+                onClick={() => navigate(rota.route)}
+                sx={{ cursor: "pointer" }}
               >
                 {rota.description}
               </Link>

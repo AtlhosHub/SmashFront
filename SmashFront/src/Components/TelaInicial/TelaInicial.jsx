@@ -1,55 +1,51 @@
 import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
 import React from 'react';
 import { DefaultCardMenu } from '../DefaultComponents/DefaultCardMenu/DefaultCardMenu';
-import mensalidadeIcon from '../../assets/mensalidade.svg'; 
-import registrationIcon from '../../assets/registration.svg'; 
-import waitingListIcon from '../../assets/waitinglist.svg'; 
+import mensalidadeIcon from '../../assets/mensalidade.svg';
+import registrationIcon from '../../assets/registration.svg';
+import waitingListIcon from '../../assets/waitinglist.svg';
 import settingsIcon from '../../assets/settings.svg';
 import dashIcon from '../../assets/chart.svg';
 import team from '../../assets/Team Management.svg';
 
 export const TelaInicial = () => {
     const cards = [
-        { 
-            label: "MENSALIDADE", 
-            sidebarcolor: "#FFAE03", 
-            onClick: () => alert("MENSALIDADES"),
+        {
+            label: "MENSALIDADE",
+            sidebarcolor: "#FFAE03",
+            rota: "/alunos",
             icon: <img src={mensalidadeIcon} width={70} height={70} alt="Mensalidade" />
         },
-        { 
-            label: "FICHA DE INSCRIÇÃO", 
-            sidebarcolor: "#17778D", 
-            onClick: () => alert("INSCRIÇÕES"),
+        {
+            label: "FICHA DE INSCRIÇÃO",
+            sidebarcolor: "#17778D",
+            rota: "/cadastrarAluno",
             icon: <img src={registrationIcon} width={70} height={68} alt="Ficha de Inscrição" />
         },
-        { 
-            label: "LISTA DE ESPERA", 
-            sidebarcolor: "#FFAE03", 
-            onClick: () => alert("LISTA DE ESPERA"),
+        {
+            label: "LISTA DE ESPERA",
+            sidebarcolor: "#FFAE03",
+            rota: "/telaInicial",
             icon: <img src={waitingListIcon} width={70} height={70} alt="Lista de Espera" />
         },
-        { 
+        {
             label: "DASHBOARD",
-             sidebarcolor: "#17778D",
-              onClick: () => alert("DASH"),
-               icon: <img src={dashIcon} width={65} height={70} alt="Dashboard" />
-             },
-       
-        { 
-            label: "CONTROLE DE USUÁRIOS", 
-            sidebarcolor: "#FFAE03", 
-            onClick: () => alert("USERS"),
+            sidebarcolor: "#17778D",
+            rota: "/telaInicial",
+            icon: <img src={dashIcon} width={65} height={70} alt="Dashboard" />
+        },
+        {
+            label: "CONTROLE DE USUÁRIOS",
+            sidebarcolor: "#FFAE03",
+            rota: "/telaInicial",
             icon: <img src={team} width={70} height={70} alt="Controle de Usuários" />
-
-          
-         },
-        { 
+        },
+        {
             label: "CONFIGURAÇÕES DO SISTEMA",
-             sidebarcolor: "#17778D",
-              onClick: () => alert("SUPORTE"),
+            sidebarcolor: "#17778D",
+            rota: "/telaInicial",
             icon: <img src={settingsIcon} width={70} height={70} alt="Config" />
-
-         },
+        },
     ];
 
     return (
@@ -59,23 +55,23 @@ export const TelaInicial = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "calc(100vh - 64px)", // Altura total da página menos o header
+                height: "calc(100vh - 64px)",
                 padding: "24px",
-                boxSizing: "border-box", 
+                boxSizing: "border-box",
             }}>
                 <div style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)", 
+                    gridTemplateColumns: "repeat(3, 1fr)",
                     gap: "16px",
-                    justifyContent: "center", 
+                    justifyContent: "center",
                 }}>
                     {cards.map((card, index) => (
                         <DefaultCardMenu
                             key={index}
                             label={card.label}
                             sidebarcolor={card.sidebarcolor}
-                            onClick={card.onClick}
-                            icon={card.icon} 
+                            rota={card.rota}
+                            icon={card.icon}
                         />
                     ))}
                 </div>
