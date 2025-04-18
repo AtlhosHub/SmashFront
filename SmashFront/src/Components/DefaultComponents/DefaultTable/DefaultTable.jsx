@@ -32,7 +32,7 @@ export const DefaultTable = ({
                         >
                             {withStatus &&
                                 <TableCell sx={{ textAlign: "center" }}>
-                                    {row?.statusAluno === true ?
+                                    {row?.isAtivo === true ?
                                         <CircleIcon sx={{ color: "#286DA8" }} /> :
                                         <CircleIcon sx={{ color: "#989898" }} />
                                     }
@@ -53,14 +53,14 @@ export const DefaultTable = ({
                                     <Box
                                         className="status-comprovante"
                                         sx={{
-                                            backgroundColor: row?.statusComprovante === "Enviado" ?
+                                            backgroundColor: row?.status === "Enviado" ?
                                                 "#2E7D32" :
-                                                row?.statusComprovante === "Pendente" ?
+                                                row?.status === "Pendente" ?
                                                     "#989898" :
                                                     "#FF0000",
-                                            color: row?.statusComprovante === "Pendente" ? "black" : "white",
+                                            color: row?.status === "Pendente" ? "black" : "white",
                                         }}>
-                                        {row?.statusComprovante}
+                                        {row?.status}
                                     </Box>
                                 </TableCell>
                             }

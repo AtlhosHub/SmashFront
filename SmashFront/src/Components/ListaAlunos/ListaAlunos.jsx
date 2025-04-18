@@ -4,12 +4,13 @@ import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
 import DefaultFilter from "../DefaultComponents/DefaultFilter/DefaultFilter"
 import { ToastContainer } from "react-toastify"
+import { api } from "../../provider/apiProvider"
 import {
     Box,
     InputAdornment,
     TextField
 } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
     Add,
     Search
@@ -20,15 +21,16 @@ export const ListaAlunos = () => {
     const navigate = useNavigate();
 
     //Variáveis do filtro
-    const [searchValue, setSearchValue] = useState("");
+    const [searchValue, setSearchValue] = useState(null);
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [horarioPref, setHorarioPref] = useState(null);
+    const [dateRange, setDateRange] = useState([null, null]);
 
     //Variáveis de moc da tabela
     const headCells = [
         {
-            name: "nomeAluno",
+            name: "nome",
             description: "Nome do Aluno"
         },
         {
@@ -36,26 +38,8 @@ export const ListaAlunos = () => {
             description: "Data de Envio"
         }
     ]
-    const rowData = [
-        {
-            statusAluno: true,
-            nomeAluno: "Carolina Timoteo Teixeira de Camargo",
-            dtEnvio: "02/03/25 - 15:59",
-            statusComprovante: "Enviado"
-        },
-        {
-            statusAluno: false,
-            nomeAluno: "Cauã Gouvea do Nascimento",
-            dtEnvio: "02/03/25 - 15:59",
-            statusComprovante: "Pendente"
-        },
-        {
-            statusAluno: false,
-            nomeAluno: "Juliana Murakami Oshikawa",
-            dtEnvio: "02/03/25 - 15:59",
-            statusComprovante: "Atrasado"
-        }
-    ]
+
+    const [rowData, setRowData] = useState([])
 
     //Variável para o breadcrumb
     const rotas = [
@@ -73,7 +57,33 @@ export const ListaAlunos = () => {
         }
 
         //Passar o filterObj no fetch
-        fetch
+        fetchAlunos();
+    }
+
+    useEffect(() => {
+        fetchAlunos()
+    }, []) 
+
+    function fetchAlunos(
+        nome = searchValue != "" ? searchValue : null, 
+        status = statusPagamento?.label, 
+        ativo = statusPresenca?.value, 
+        dataEnvioForm = dateRange?.[0], 
+        dataEnvioTo = dateRange?.[1]) {
+        api.post("/alunos/comprovantes", {
+            nome,
+            status,
+            ativo,
+            dataEnvioForm,
+            dataEnvioTo,
+        })
+        .then((res) => {
+            setRowData(res.data);
+            console.log("Dados recebidos:", res.data);
+        })
+        .catch((err) => {
+            console.error("Erro ao buscar alunos:", err);
+        });
     }
 
     return (
@@ -113,6 +123,8 @@ export const ListaAlunos = () => {
                         statusPagamento={statusPagamento}
                         statusPresenca={statusPresenca}
                         horarioPref={horarioPref}
+                        dateRange={dateRange}
+                        setDateRange={setDateRange}
                         setStatusPagamento={setStatusPagamento}
                         setStatusPresenca={setStatusPresenca}
                         setHorarioPref={setHorarioPref}

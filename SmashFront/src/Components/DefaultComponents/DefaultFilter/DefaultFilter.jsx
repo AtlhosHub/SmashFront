@@ -34,8 +34,8 @@ export const DefaultFilter = ({
         { label: "Atrasado" }
     ];
     const statusPresencaArray = [
-        { id: "statPres", label: "Presente" },
-        { id: "statAuse", label: "Ausente" }
+        { label: "Presente", value: true, },
+        { label: "Ausente", value: false, }
     ];
     const horarioPrefArray = [
         { id: 1820, label: "18h - 20h" },
@@ -96,14 +96,16 @@ export const DefaultFilter = ({
                                     renderInput={(params) => <TextField {...params} label="Status de Presença" />}
                                     onChange={(e, newValue) => setStatusPresenca(newValue)}
                                 />
-                                <Autocomplete
-                                    size="small"
-                                    value={horarioPref}
-                                    options={horarioPrefArray}
-                                    getOptionLabel={(option) => option?.label || ""}
-                                    renderInput={(params) => <TextField {...params} label="Horario de Preferência" />}
-                                    onChange={(e, newValue) => setHorarioPref(newValue)}
-                                />
+                                {horarioPref && setHorarioPref &&
+                                    <Autocomplete
+                                        size="small"
+                                        value={horarioPref}
+                                        options={horarioPrefArray}
+                                        getOptionLabel={(option) => option?.label || ""}
+                                        renderInput={(params) => <TextField {...params} label="Horario de Preferência" />}
+                                        onChange={(e, newValue) => setHorarioPref(newValue)}
+                                    />
+                                }
                                 {setDateRange && dateRange &&
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DateRangePicker
@@ -123,7 +125,7 @@ export const DefaultFilter = ({
                             </Box>
                             <Box sx={{ display: "flex", gap: "10px", marginLeft: "auto" }}>
                                 <DefaultButton size="small" label="Limpar" />
-                                <DefaultButton size="small" variant="contained" label="Aplicar" onClick={() => { setAnchorEl(null); handleApplyFilter }} />
+                                <DefaultButton size="small" variant="contained" label="Aplicar" onClick={() => { handleApplyFilter(); setAnchorEl(null) }} />
                             </Box>
                         </Box>
                         <Box
