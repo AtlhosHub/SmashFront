@@ -4,12 +4,13 @@ import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
 import DefaultFilter from "../DefaultComponents/DefaultFilter/DefaultFilter"
 import { ToastContainer } from "react-toastify"
+import { api } from "../../provider/apiProvider"
 import {
     Box,
     InputAdornment,
     TextField
 } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
     Add,
     Search
@@ -17,10 +18,11 @@ import {
 
 export const ListaAlunos = () => {
     //Variáveis do filtro
-    const [searchValue, setSearchValue] = useState("");
+    const [searchValue, setSearchValue] = useState(null);
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [horarioPref, setHorarioPref] = useState(null);
+    const [dateRange, setDateRange] = useState([null, null]);
 
     //Variáveis de moc da tabela
     const headCells = [
@@ -71,6 +73,31 @@ export const ListaAlunos = () => {
 
         //Passar o filterObj no fetch
         fetch
+    }
+
+    useEffect(() => {
+        fetchAlunos()
+    }, []) 
+
+    function fetchAlunos(
+        nome = searchValue != "" ? searchValue : null, 
+        status = statusPagamento, 
+        ativo = statusPresenca, 
+        dataEnvioForm = dateRange?.[0], 
+        dataEnvioTo = dateRange?.[1]) {
+        api.post("/alunos/comprovantes", {
+            nome,
+            status,
+            ativo,
+            dataEnvioForm,
+            dataEnvioTo,
+        })
+        .then((res) => {
+            console.log("Dados recebidos:", res.data);
+        })
+        .catch((err) => {
+            console.error("Erro ao buscar alunos:", err);
+        });
     }
 
     return (
