@@ -16,18 +16,17 @@ import {
     Search
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
 
-    //Variáveis do filtro
     const [searchValue, setSearchValue] = useState(null);
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [horarioPref, setHorarioPref] = useState(null);
-    const [dateRange, setDateRange] = useState([null, null]);
+    const [dateRange, setDateRange] = useState([dayjs(), dayjs().add(7, 'day')]);
 
-    //Variáveis de moc da tabela
     const headCells = [
         {
             name: "nome",
@@ -41,7 +40,6 @@ export const ListaAlunos = () => {
 
     const [rowData, setRowData] = useState([])
 
-    //Variável para o breadcrumb
     const rotas = [
         {
             route: "/listaAlunos",
@@ -50,40 +48,30 @@ export const ListaAlunos = () => {
     ]
 
     const handleApplyFilter = () => {
-        const fitlerObj = {
-            "statusPag": statusPagamento,
-            "statusPres": statusPresenca,
-            "horarioPref": horarioPref
+        const objFilter = {
+            nome: searchValue != "" ? searchValue : null,
+            status: statusPagamento?.label,
+            ativo: statusPresenca?.value,
+            dataEnvioForm: dateRange?.[0],
+            dataEnvioTo: dateRange?.[1]
         }
 
-        //Passar o filterObj no fetch
-        fetchAlunos();
+        fetchAlunos(objFilter);
     }
 
     useEffect(() => {
         fetchAlunos()
-    }, []) 
+    }, [])
 
-    function fetchAlunos(
-        nome = searchValue != "" ? searchValue : null, 
-        status = statusPagamento?.label, 
-        ativo = statusPresenca?.value, 
-        dataEnvioForm = dateRange?.[0], 
-        dataEnvioTo = dateRange?.[1]) {
-        api.post("/alunos/comprovantes", {
-            nome,
-            status,
-            ativo,
-            dataEnvioForm,
-            dataEnvioTo,
-        })
-        .then((res) => {
-            setRowData(res.data);
-            console.log("Dados recebidos:", res.data);
-        })
-        .catch((err) => {
-            console.error("Erro ao buscar alunos:", err);
-        });
+    const fetchAlunos = (objFilter) => {
+        api.post("/alunos/comprovantes", objFilter)
+            .then((res) => {
+                setRowData(res.data);
+                console.log("Dados recebidos:", res.data);
+            })
+            .catch((err) => {
+                console.error("Erro ao buscar alunos:", err);
+            });
     }
 
     return (

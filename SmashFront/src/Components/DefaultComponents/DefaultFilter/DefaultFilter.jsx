@@ -22,7 +22,8 @@ export const DefaultFilter = ({
     setHorarioPref,
     dateRange,
     setDateRange,
-    handleApplyFilter
+    handleApplyFilter,
+    handleClearFilter
 }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl)
@@ -112,7 +113,8 @@ export const DefaultFilter = ({
                                             value={dateRange}
                                             onChange={(e) => setDateRange(e)}
                                             localeText={{ start: 'Início', end: 'Fim' }}
-                                            format="DD/MM/YYYY"
+                                            inputFormat="DD/MM/YYYY"
+                                            slotProps={{ textField: { size: 'small', placeholder: 'DD/MM/AAAA' } }}
                                             renderInput={(startProps, endProps) => (
                                                 <Box sx={{ display: 'flex', gap: 2 }}>
                                                     <TextField {...startProps} />
@@ -124,8 +126,15 @@ export const DefaultFilter = ({
                                 }
                             </Box>
                             <Box sx={{ display: "flex", gap: "10px", marginLeft: "auto" }}>
-                                <DefaultButton size="small" label="Limpar" />
-                                <DefaultButton size="small" variant="contained" label="Aplicar" onClick={() => { handleApplyFilter(); setAnchorEl(null) }} />
+                                <DefaultButton size="small" label="Limpar"
+                                    onClick={() => handleClearFilter()}
+                                />
+                                <DefaultButton size="small" variant="contained" label="Aplicar"
+                                    onClick={() => {
+                                        handleApplyFilter();
+                                        setAnchorEl(null)
+                                    }}
+                                />
                             </Box>
                         </Box>
                         <Box
