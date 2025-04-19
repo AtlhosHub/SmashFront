@@ -25,7 +25,7 @@ export const ListaAlunos = () => {
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [horarioPref, setHorarioPref] = useState(null);
-    const [dateRange, setDateRange] = useState([dayjs(), dayjs().add(7, 'day')]);
+    const [dateRange, setDateRange] = useState([null, null]);
 
     const headCells = [
         {
@@ -60,8 +60,12 @@ export const ListaAlunos = () => {
     }
 
     useEffect(() => {
-        fetchAlunos()
+        handleApplyFilter()
     }, [])
+
+    // useEffect(() => {
+    //     fetchAlunos()
+    // }, [searchValue])
 
     const fetchAlunos = (objFilter) => {
         api.post("/alunos/comprovantes", objFilter)
