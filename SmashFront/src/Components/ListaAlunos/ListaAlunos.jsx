@@ -67,9 +67,13 @@ export const ListaAlunos = () => {
         handleApplyFilter()
     }, [])
 
-    // useEffect(() => {
-    //     fetchAlunos()
-    // }, [searchValue])
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            handleApplyFilter();
+        }, 1000); // 1 segundo de delay
+    
+        return () => clearTimeout(timer);
+    }, [searchValue])
 
     const fetchAlunos = (objFilter) => {
         api.post("/alunos/comprovantes", objFilter)
