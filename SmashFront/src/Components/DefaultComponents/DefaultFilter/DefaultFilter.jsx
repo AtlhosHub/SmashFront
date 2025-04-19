@@ -12,6 +12,7 @@ import {
     TextField
 } from "@mui/material";
 import "./DefaultFilter.css"
+import dayjs from "dayjs";
 
 export const DefaultFilter = ({
     statusPagamento,
@@ -115,6 +116,8 @@ export const DefaultFilter = ({
                                             localeText={{ start: 'Início', end: 'Fim' }}
                                             format="DD/MM/YYYY"
                                             calendars={1}
+                                            minDate={dayjs().startOf('month')}
+                                            maxDate={dayjs().endOf('month')}                                          
                                             slotProps={{ textField: { size: 'small', placeholder: 'DD/MM/AAAA' } }}
                                             renderInput={(startProps, endProps) => (
                                                 <Box sx={{ display: 'flex', gap: 2 }}>

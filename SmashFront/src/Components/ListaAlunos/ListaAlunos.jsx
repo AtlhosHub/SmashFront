@@ -16,7 +16,6 @@ import {
     Search
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -24,7 +23,6 @@ export const ListaAlunos = () => {
     const [searchValue, setSearchValue] = useState(null);
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
-    const [horarioPref, setHorarioPref] = useState(null);
     const [dateRange, setDateRange] = useState([null, null]);
 
     const headCells = [
