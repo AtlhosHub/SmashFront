@@ -16,7 +16,6 @@ import {
     Search
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -24,8 +23,7 @@ export const ListaAlunos = () => {
     const [searchValue, setSearchValue] = useState(null);
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
-    const [horarioPref, setHorarioPref] = useState(null);
-    const [dateRange, setDateRange] = useState([dayjs(), dayjs().add(7, 'day')]);
+    const [dateRange, setDateRange] = useState([null, null]);
 
     const headCells = [
         {
@@ -59,9 +57,23 @@ export const ListaAlunos = () => {
         fetchAlunos(objFilter);
     }
 
+    const handleClearFilter = () => {
+        setStatusPagamento(null);
+        setStatusPresenca(null);
+        setDateRange([null, null]);
+    }
+
     useEffect(() => {
-        fetchAlunos()
+        handleApplyFilter()
     }, [])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            handleApplyFilter();
+        }, 1000); // 1 segundo de delay
+    
+        return () => clearTimeout(timer);
+    }, [searchValue])
 
     const fetchAlunos = (objFilter) => {
         api.post("/alunos/comprovantes", objFilter)
@@ -110,13 +122,12 @@ export const ListaAlunos = () => {
                     <DefaultFilter
                         statusPagamento={statusPagamento}
                         statusPresenca={statusPresenca}
-                        horarioPref={horarioPref}
                         dateRange={dateRange}
                         setDateRange={setDateRange}
                         setStatusPagamento={setStatusPagamento}
                         setStatusPresenca={setStatusPresenca}
-                        setHorarioPref={setHorarioPref}
                         handleApplyFilter={handleApplyFilter}
+                        handleClearFilter={handleClearFilter}
                     />
                     <DefaultButton
                         variant="contained"
