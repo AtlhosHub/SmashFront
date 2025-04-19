@@ -3,16 +3,31 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro"
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import HelpIcon from '@mui/icons-material/Help';
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 
-export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade, handleConfirmar }) => {
+export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, setTabAtiva }) => {
     const nomeSocialText = "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
     const statusPresText = "Use este campo para indicar se o aluno(a) ainda está frequentando as aulas, ou se parou de participar.";
     const atestadoText = "Use este campo para indicar se o aluno(a) entregou o atestado de capacitação para a prática de esportes.";
     const deficienciaText = "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
 
-    const [isDeficiente, setIsDeficiente] = useState(true)
+    const [isDeficiente, setIsDeficiente] = useState(true);
+    const [botaoLiberado, setBotaoLiberado] = useState(false);
+    const [cpfValidade, setCpfValidade] = useState(false);
+    const [emailValido, setEmailValido] = useState(false);
+    
+    useEffect(() => {
+        const camposPreenchidos =
+            userInfo.nome &&
+            userInfo.rg &&
+            userInfo.cpf &&
+            userInfo.dtNascimento;
+
+        const emailNecessario = maiorIdade ? userInfo.email : true;
+
+        setBotaoLiberado(camposPreenchidos && emailNecessario);
+    }, [userInfo, maiorIdade]);
 
     const isMaiorDeIdade = (dataNascimento) => {
         const hoje = new Date();
@@ -352,7 +367,7 @@ export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade, handl
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "end", alignItems: "end", flex: 1 }}>
                     <DefaultButton variant="outlined" label="Cancelar" />
-                    <DefaultButton variant="contained" label="Concluir" onClick={handleConfirmar}/>
+                    <DefaultButton disabled={!botaoLiberado} variant="contained" label="Prosseguir" onClick={() => setTabAtiva("ende")} />
                 </Box>
             </Box>
         </FormControl>

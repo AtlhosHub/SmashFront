@@ -3,7 +3,8 @@ import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/Defaul
 import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
 import { MenuCadastro } from "./Components/MenuCadastro/MenuCadastro";
 import { useEffect, useState } from "react";
-import { FormularioCadastro } from "./Components/FormularioCadastro/FormularioCadastro";
+import { FormInfo } from "./Components/FormularioCadastro/FormInfo";
+import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
 
 export const FichaInscricao = () => {
     const [tabAtiva, setTabAtiva] = useState("info");
@@ -26,7 +27,13 @@ export const FichaInscricao = () => {
         celular: "",
         isAtivo: true,
         isAtestado: true,
-        deficiencia: ""
+        deficiencia: "",
+        cep: "",
+        numero: "",
+        rua: "",
+        bairro: "",
+        estado: "",
+        cidade: ""
     });
 
     const rotas = [
@@ -39,6 +46,10 @@ export const FichaInscricao = () => {
             description: "Ficha de Inscrição"
         }
     ]
+
+    useEffect(() => {
+        console.log(userInfo)
+    }, [userInfo])
 
     return (
         <>
@@ -57,11 +68,21 @@ export const FichaInscricao = () => {
                         tabAtiva={tabAtiva}
                         setTabAtiva={setTabAtiva}
                     />
-                    <FormularioCadastro
-                        userInfo={userInfo}
-                        setUserInfo={setUserInfo}
-                        setMaiorIdade={setMaiorIdade}
-                    />
+                    {tabAtiva === "info" &&
+                        <FormInfo
+                            userInfo={userInfo}
+                            setUserInfo={setUserInfo}
+                            maiorIdade={maiorIdade}
+                            setMaiorIdade={setMaiorIdade}
+                            setTabAtiva={setTabAtiva}
+                        />
+                    }
+                    {tabAtiva === "ende" &&
+                        <FormEndereco
+                            userInfo={userInfo}
+                            setUserInfo={setUserInfo}
+                        />
+                    }
                 </Box>
             </Box >
         </>
