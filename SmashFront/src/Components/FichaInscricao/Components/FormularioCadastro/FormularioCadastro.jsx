@@ -1,12 +1,18 @@
-import { Box, FormControl, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, FormControl, FormControlLabel, Radio, RadioGroup, TextField, Tooltip, Typography } from "@mui/material"
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro"
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import HelpIcon from '@mui/icons-material/Help';
 import dayjs from "dayjs";
+import { useState } from "react";
+import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 
-export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade }) => {
+export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade, handleConfirmar }) => {
+    const nomeSocialText = "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
+    const statusPresText = "Use este campo para indicar se o aluno(a) ainda está frequentando as aulas, ou se parou de participar.";
+    const atestadoText = "Use este campo para indicar se o aluno(a) entregou o atestado de capacitação para a prática de esportes.";
+    const deficienciaText = "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
 
-    const nomeSocialText = "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal."
+    const [isDeficiente, setIsDeficiente] = useState(true)
 
     const isMaiorDeIdade = (dataNascimento) => {
         const hoje = new Date();
@@ -23,14 +29,30 @@ export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade }) => 
     }
 
     const formatarTelefone = (valor) => {
-        const numeros = valor.replace(/\D/g, '');
+        const numeros = valor.replace(/\D/g, '').slice(0, 11);
+
+        if (numeros.length < 3) {
+            return numeros;
+        }
+
+        if (numeros.length < 7) {
+            return `(${numeros.slice(0, 2)}) ${numeros.slice(2)}`;
+        }
 
         if (numeros.length <= 10) {
-            return numeros.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-        } else {
-            return numeros.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+            return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 6)}-${numeros.slice(6)}`;
         }
+
+        return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 7)}-${numeros.slice(7, 11)}`;
     };
+
+    const formatCPF = (value) => {
+        const digits = value.replace(/\D/g, '').slice(0, 11);
+        return digits
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
 
     return (
         <FormControl sx={{ paddingBlock: "30px", pr: "30px", display: "flex", flex: 1, flexDirection: "column" }}>
@@ -192,7 +214,10 @@ export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade }) => 
                         <TextField
                             required
                             value={userInfo.cpf}
-                            onChange={(e) => setUserInfo({ ...userInfo, cpf: e.target.value })}
+                            onChange={(e) => {
+                                const raw = e.target.value.replace(/\D/g, '');
+                                setUserInfo({ ...userInfo, cpf: formatCPF(raw) })
+                            }}
                             variant="outlined"
                             size="small"
                             sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
@@ -213,9 +238,121 @@ export const FormularioCadastro = ({ userInfo, setUserInfo, setMaiorIdade }) => 
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{marginTop: "20px"}}>
-                <Box sx={{color: "black"}}>
-                    Status de Presença
+            <Box sx={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+                <Box sx={{ color: "black" }}>
+                    <label
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px"
+                        }}
+                    >
+                        Status de Presença
+                        <Tooltip
+                            title={<Typography sx={{ fontSize: '14px' }}>{statusPresText}</Typography>}
+                            placement="right"
+                            arrow
+                        >
+                            <HelpIcon
+                                sx={{
+                                    marginTop: "1px",
+                                    color: "#286DA8",
+                                    fontSize: "18px"
+                                }}
+                            />
+                        </Tooltip>
+                    </label>
+                    <RadioGroup
+                        row
+                        defaultValue="true"
+                        value={userInfo.isAtivo}
+                        onChange={
+                            (e) => setUserInfo({ ...userInfo, isAtivo: e.target.value })
+                        }
+                    >
+                        <FormControlLabel value={true} control={<Radio />} label="Ativo" />
+                        <FormControlLabel value={false} control={<Radio />} label="Inativo" />
+                    </RadioGroup>
+                </Box>
+                <Box sx={{ color: "black" }}>
+                    <label
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px"
+                        }}
+                    >
+                        Atestados
+                        <Tooltip
+                            title={<Typography sx={{ fontSize: '14px' }}>{atestadoText}</Typography>}
+                            placement="right"
+                            arrow
+
+                        >
+                            <HelpIcon
+                                sx={{
+                                    marginTop: "1px",
+                                    color: "#286DA8",
+                                    fontSize: "18px"
+                                }}
+                            />
+                        </Tooltip>
+                    </label>
+                    <RadioGroup
+                        row
+                        defaultValue="true"
+                        value={userInfo.isAtestado}
+                        onChange={
+                            (e) => setUserInfo({ ...userInfo, isAtestado: e.target.value })
+                        }
+                    >
+                        <FormControlLabel value={true} control={<Radio />} label="Sim" />
+                        <FormControlLabel value={false} control={<Radio />} label="Não" />
+                    </RadioGroup>
+                </Box>
+                <Box sx={{ color: "black" }}>
+                    <label
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px"
+                        }}
+                    >
+                        Possui Deficiência e/ou Neurodivergência
+                        <Tooltip
+                            title={<Typography sx={{ fontSize: '14px' }}>{deficienciaText}</Typography>}
+                            placement="right"
+                            arrow
+                        >
+                            <HelpIcon
+                                sx={{
+                                    marginTop: "1px",
+                                    color: "#286DA8",
+                                    fontSize: "18px"
+                                }}
+                            />
+                        </Tooltip>
+                    </label>
+                    <RadioGroup
+                        row
+                        defaultValue={true}
+                        value={isDeficiente}
+                        onChange={(e) => setIsDeficiente(e.target.value === "true")}
+                    >
+                        <FormControlLabel value={true} control={<Radio />} label="Sim" />
+                        <FormControlLabel value={false} control={<Radio />} label="Não" />
+                        {isDeficiente && (
+                            <TextField
+                                size="small"
+                                value={userInfo.deficiencia}
+                                onChange={(e) => setUserInfo({ ...userInfo, deficiencia: e.target.value })}
+                            />
+                        )}
+                    </RadioGroup>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "end", alignItems: "end", flex: 1 }}>
+                    <DefaultButton variant="outlined" label="Cancelar" />
+                    <DefaultButton variant="contained" label="Concluir" onClick={handleConfirmar}/>
                 </Box>
             </Box>
         </FormControl>

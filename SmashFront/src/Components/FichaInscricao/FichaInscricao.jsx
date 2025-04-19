@@ -23,7 +23,10 @@ export const FichaInscricao = () => {
         email: "",
         naturalidade: "",
         cpf: "",
-        celular: ""
+        celular: "",
+        isAtivo: true,
+        isAtestado: true,
+        deficiencia: ""
     });
 
     const rotas = [
