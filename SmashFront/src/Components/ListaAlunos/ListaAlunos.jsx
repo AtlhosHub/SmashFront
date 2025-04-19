@@ -59,6 +59,12 @@ export const ListaAlunos = () => {
         fetchAlunos(objFilter);
     }
 
+    const handleClearFilter = () => {
+        setStatusPagamento(null);
+        setStatusPresenca(null);
+        setDateRange([null, null]);
+    }
+
     useEffect(() => {
         handleApplyFilter()
     }, [])
@@ -114,13 +120,12 @@ export const ListaAlunos = () => {
                     <DefaultFilter
                         statusPagamento={statusPagamento}
                         statusPresenca={statusPresenca}
-                        horarioPref={horarioPref}
                         dateRange={dateRange}
                         setDateRange={setDateRange}
                         setStatusPagamento={setStatusPagamento}
                         setStatusPresenca={setStatusPresenca}
-                        setHorarioPref={setHorarioPref}
                         handleApplyFilter={handleApplyFilter}
+                        handleClearFilter={handleClearFilter}
                     />
                     <DefaultButton
                         variant="contained"
