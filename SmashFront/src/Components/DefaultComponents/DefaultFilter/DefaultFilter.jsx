@@ -113,7 +113,8 @@ export const DefaultFilter = ({
                                             value={dateRange}
                                             onChange={(e) => setDateRange(e)}
                                             localeText={{ start: 'Início', end: 'Fim' }}
-                                            inputFormat="DD/MM/YYYY"
+                                            format="DD/MM/YYYY"
+                                            calendars={1}
                                             slotProps={{ textField: { size: 'small', placeholder: 'DD/MM/AAAA' } }}
                                             renderInput={(startProps, endProps) => (
                                                 <Box sx={{ display: 'flex', gap: 2 }}>
