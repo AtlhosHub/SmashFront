@@ -22,7 +22,7 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
             userInfo.nome &&
             userInfo.rg &&
             userInfo.cpf &&
-            userInfo.dtNascimento;
+            userInfo.dataNascimento;
 
         const emailNecessario = maiorIdade ? userInfo.email : true;
 

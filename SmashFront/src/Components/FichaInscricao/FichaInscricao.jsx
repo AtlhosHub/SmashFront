@@ -33,11 +33,27 @@ export const FichaInscricao = () => {
         autorizado: null,
         dataInclusao: null,
         endereco: {
-          logradouro: null,
-          numLogradouro: null,
-          bairro: null,
-          cidade: null,
-          cep: null
+            logradouro: null,
+            numLogradouro: null,
+            bairro: null,
+            cidade: null,
+            cep: null
+        },
+        responsavel: [
+            {
+                nome: null,
+                nomeSocial: null,
+                CPF: null,
+                RG: null,
+                profissao: null,
+                genero: null,
+                telefone: null,
+                celular: null,
+                email: null
+            }
+        ],
+        usuarioInclusao: {
+            id: null
         }
     });
 
@@ -62,35 +78,35 @@ export const FichaInscricao = () => {
 
     function cadastrarAluno() {
         api
-          .post("/alunos", {
-            nome: "Lucas Almeida Ferreira",
-            email: "lucas.ferreira@example.com",
-            dataNascimento: "1987-11-22",
-            cpf: "48249488008",
-            rg: "298765432",
-            nomeSocial: "Lucas Ferreira",
-            genero: "Masculino",
-            celular: "(21) 99876-5432",
-            nacionalidade: "Brasileira",
-            naturalidade: "Rio de Janeiro",
-            telefone: "(21) 3222-3344",
-            profissao: "Engenheiro Civil",
-            ativo: true,
-            temAtestado: true,
-            temAssinatura: false,
-            deficiencia: "Visual parcial",
-            autorizado: true,
-            dataInclusao: "2025-04-18T14:45:00Z",
-            endereco: {
-              logradouro: "Avenida Central",
-              numLogradouro: "456",
-              bairro: "Centro",
-              cidade: "Rio de Janeiro",
-              cep: "20010-000"
-            }
-          })
-          .then((response) => console.log(response.data))
-          .catch((error) => console.error("Erro ao adicionar aluno:", error));
+            .post("/alunos", {
+                nome: "Lucas Almeida Ferreira",
+                email: "lucas.ferreira@example.com",
+                dataNascimento: "1987-11-22",
+                cpf: "48249488008",
+                rg: "298765432",
+                nomeSocial: "Lucas Ferreira",
+                genero: "Masculino",
+                celular: "(21) 99876-5432",
+                nacionalidade: "Brasileira",
+                naturalidade: "Rio de Janeiro",
+                telefone: "(21) 3222-3344",
+                profissao: "Engenheiro Civil",
+                ativo: true,
+                temAtestado: true,
+                temAssinatura: false,
+                deficiencia: "Visual parcial",
+                autorizado: true,
+                dataInclusao: "2025-04-18T14:45:00Z",
+                endereco: {
+                    logradouro: "Avenida Central",
+                    numLogradouro: "456",
+                    bairro: "Centro",
+                    cidade: "Rio de Janeiro",
+                    cep: "20010-000"
+                }
+            })
+            .then((response) => console.log(response.data))
+            .catch((error) => console.error("Erro ao adicionar aluno:", error));
     }
 
     return (

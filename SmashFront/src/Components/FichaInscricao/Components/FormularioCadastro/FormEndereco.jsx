@@ -1,6 +1,6 @@
-import { Box, FormControl, FormControlLabel, Radio, RadioGroup, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, FormControl, TextField, } from "@mui/material"
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { toasterMsg } from "../../../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
 
@@ -26,7 +26,8 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
             ...prev,
             endereco:{
                 cep: valorFormatado,
-                rua: "",
+                logradouro: "",
+                numLogradouro: "",
                 bairro: "",
                 cidade: "",
                 estado: ""
@@ -42,7 +43,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                     setUserInfo({
                         ...userInfo,
                         cep: data.cep,
-                        rua: data.logradouro,
+                        logradouro: data.logradouro,
                         bairro: data.bairro,
                         cidade: data.localidade,
                         estado: data.uf
@@ -87,8 +88,8 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>Número <span style={{ color: "red" }}>*</span></label>
                         <TextField
                             required
-                            value={userInfo.numero}
-                            onChange={(e) => setUserInfo({ ...userInfo, numero: e.target.value })}
+                            value={userInfo.numLogradouro}
+                            onChange={(e) => setUserInfo({ ...userInfo, numLogradouro: e.target.value })}
                             variant="outlined"
                             size="small"
                             sx={{
