@@ -8,6 +8,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
     const messagemErroCEP = useRef();
 
     const formatarCep = (valor) => {
+        if (!valor) return;
         const apenasNumeros = valor.replace(/\D/g, "").slice(0, 8);
 
         if (apenasNumeros.length <= 5) {
@@ -24,7 +25,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
 
         setUserInfo((prev) => ({
             ...prev,
-            endereco:{
+            endereco: {
                 cep: valorFormatado,
                 logradouro: "",
                 numLogradouro: "",
@@ -42,11 +43,13 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                 if (!data.erro) {
                     setUserInfo({
                         ...userInfo,
-                        cep: data.cep,
-                        logradouro: data.logradouro,
-                        bairro: data.bairro,
-                        cidade: data.localidade,
-                        estado: data.uf
+                        endereco: {
+                            cep: data.cep,
+                            logradouro: data.logradouro,
+                            bairro: data.bairro,
+                            cidade: data.localidade,
+                            estado: data.uf
+                        }
                     })
                 } else {
                     toasterMsg("error", "CEP não encontrado!");

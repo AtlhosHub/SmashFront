@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 
-export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, setTabAtiva }) => {
+export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, setTabAtiva}) => {
     const nomeSocialText = "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
     const statusPresText = "Use este campo para indicar se o aluno(a) ainda está frequentando as aulas, ou se parou de participar.";
     const atestadoText = "Use este campo para indicar se o aluno(a) entregou o atestado de capacitação para a prática de esportes.";
@@ -44,6 +44,7 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
     }
 
     const formatarTelefone = (valor) => {
+        if(!valor) return;
         const numeros = valor.replace(/\D/g, '').slice(0, 11);
 
         if (numeros.length < 3) {

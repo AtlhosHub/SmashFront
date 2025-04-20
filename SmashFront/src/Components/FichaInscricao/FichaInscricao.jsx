@@ -28,7 +28,6 @@ export const FichaInscricao = () => {
         profissao: null,
         ativo: null,
         temAtestado: null,
-        temAssinatura: null,
         deficiencia: null,
         autorizado: null,
         dataInclusao: null,
@@ -72,38 +71,47 @@ export const FichaInscricao = () => {
         console.log(userInfo)
     }, [userInfo])
 
-    useEffect(() => {
-        cadastrarAluno()
-    }, [])
 
     function cadastrarAluno() {
         api
             .post("/alunos", {
-                nome: "Lucas Almeida Ferreira",
-                email: "lucas.ferreira@example.com",
-                dataNascimento: "1987-11-22",
-                cpf: "48249488008",
-                rg: "298765432",
-                nomeSocial: "Lucas Ferreira",
-                genero: "Masculino",
-                celular: "(21) 99876-5432",
-                nacionalidade: "Brasileira",
-                naturalidade: "Rio de Janeiro",
-                telefone: "(21) 3222-3344",
-                profissao: "Engenheiro Civil",
-                ativo: true,
-                temAtestado: true,
-                temAssinatura: false,
-                deficiencia: "Visual parcial",
-                autorizado: true,
-                dataInclusao: "2025-04-18T14:45:00Z",
+                nome: userInfo.nome,
+                email: userInfo.email,
+                dataNascimento: userInfo.dataNascimento,
+                cpf: userInfo.cpf,
+                rg: userInfo.rg,
+                nomeSocial: userInfo.nomeSocial,
+                genero: userInfo.genero,
+                celular: userInfo.celular,
+                nacionalidade: userInfo.nacionalidade,
+                naturalidade: userInfo.naturalidade,
+                telefone: userInfo.telefone,
+                profissao: userInfo.profissao,
+                ativo: userInfo.ativo,
+                temAtestado: userInfo.temAtestado,
+                deficiencia: userInfo.deficiencia,
+                autorizado: userInfo.autorizado,
+                dataInclusao: userInfo.dataInclusao,
                 endereco: {
-                    logradouro: "Avenida Central",
-                    numLogradouro: "456",
-                    bairro: "Centro",
-                    cidade: "Rio de Janeiro",
-                    cep: "20010-000"
-                }
+                    logradouro: userInfo.endereco.logradouro,
+                    numLogradouro: userInfo.endereco.numLogradouro,
+                    bairro: userInfo.endereco.bairro,
+                    cidade: userInfo.endereco.cidade,
+                    cep: userInfo.endereco.cep
+                },
+                responsavel: [
+                    {
+                        nome: null,
+                        nomeSocial: null,
+                        CPF: null,
+                        RG: null,
+                        profissao: null,
+                        genero: null,
+                        telefone: null,
+                        celular: null,
+                        email: null
+                    }
+                ],
             })
             .then((response) => console.log(response.data))
             .catch((error) => console.error("Erro ao adicionar aluno:", error));
@@ -139,6 +147,7 @@ export const FichaInscricao = () => {
                         <FormEndereco
                             userInfo={userInfo}
                             setUserInfo={setUserInfo}
+                            handleConfirmar={cadastrarAluno}
                         />
                     }
                 </Box>
