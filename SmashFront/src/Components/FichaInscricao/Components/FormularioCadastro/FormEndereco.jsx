@@ -24,11 +24,13 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
 
         setUserInfo((prev) => ({
             ...prev,
-            cep: valorFormatado,
-            rua: "",
-            bairro: "",
-            cidade: "",
-            estado: ""
+            endereco:{
+                cep: valorFormatado,
+                rua: "",
+                bairro: "",
+                cidade: "",
+                estado: ""
+            }
         }));
 
         if (cepNumerico.length === 8) {

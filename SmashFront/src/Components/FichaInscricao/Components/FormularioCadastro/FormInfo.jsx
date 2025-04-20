@@ -123,10 +123,10 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     size="small"
-                                    value={userInfo.dtNascimento ? dayjs(userInfo.dtNascimento) : null}
+                                    value={userInfo.dataNascimento ? dayjs(userInfo.dataNascimento) : null}
                                     onChange={(newValue) => {
                                         isMaiorDeIdade(newValue)
-                                        setUserInfo({ ...userInfo, dtNascimento: newValue });
+                                        setUserInfo({ ...userInfo, dataNascimento: newValue });
                                     }}
                                     slotProps={{ textField: { size: 'small', placeholder: 'DD/MM/AAAA' } }}
                                     sx={{
@@ -280,9 +280,9 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                     <RadioGroup
                         row
                         defaultValue="true"
-                        value={userInfo.isAtivo}
+                        value={userInfo.ativo}
                         onChange={
-                            (e) => setUserInfo({ ...userInfo, isAtivo: e.target.value })
+                            (e) => setUserInfo({ ...userInfo, ativo: e.target.value })
                         }
                     >
                         <FormControlLabel value={true} control={<Radio />} label="Ativo" />
@@ -316,9 +316,9 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                     <RadioGroup
                         row
                         defaultValue="true"
-                        value={userInfo.isAtestado}
+                        value={userInfo.temAtestado}
                         onChange={
-                            (e) => setUserInfo({ ...userInfo, isAtestado: e.target.value })
+                            (e) => setUserInfo({ ...userInfo, temAtestado: e.target.value })
                         }
                     >
                         <FormControlLabel value={true} control={<Radio />} label="Sim" />
