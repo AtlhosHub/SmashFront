@@ -1,11 +1,22 @@
 import { Box, FormControl, TextField, } from "@mui/material"
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toasterMsg } from "../../../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
 
-export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
+export const FormEndereco = ({ userInfo, setUserInfo, setEnderecoConcluido, setTabAtiva, setInfoConcluido, handleConfirmar }) => {
     const messagemErroCEP = useRef();
+    
+    const [botaoLiberado, setBotaoLiberado] = useState(false)
+    const [cepValido, setCepValido] = useState(false);
+
+    useEffect(() => {
+        console.log(cepValido)
+        console.log(userInfo.numLogradouro)
+
+        setBotaoLiberado(camposPreenchidos);
+        setEnderecoConcluido(camposPreenchidos);
+    }, [userInfo]);
 
     const formatarCep = (valor) => {
         if (!valor) return;
@@ -53,8 +64,10 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                             estado: data.uf
                         }
                     })
+                    setCepValido(true);
                 } else {
                     toasterMsg("error", "CEP não encontrado!");
+                    setCepValido(false);
                 }
             } catch (error) {
                 console.error("Erro ao buscar CEP:", error);
@@ -94,7 +107,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <TextField
                             required
                             value={userInfo.endereco.numLogradouro}
-                            onChange={(e) => setUserInfo({ ...userInfo, endereco: {...userInfo.endereco, numLogradouro: e.target.value }})}
+                            onChange={(e) => setUserInfo({ ...userInfo, endereco: { ...userInfo.endereco, numLogradouro: e.target.value } })}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -105,7 +118,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         />
                     </Box>
                     <Box>
-                        <label>Rua <span style={{ color: "red" }}>*</span></label>
+                        <label>Rua</label>
                         <TextField
                             required
                             disabled
@@ -173,8 +186,20 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
             </Box>
             <Box sx={{ marginTop: "20px", display: "flex", gap: "10px" }}>
                 <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "end", alignItems: "end", flex: 1 }}>
-                    <DefaultButton variant="outlined" label="Cancelar" />
-                    <DefaultButton variant="contained" label="Concluir" onClick={handleConfirmar} />
+                    <DefaultButton
+                        variant="outlined"
+                        label="Voltar"
+                        onClick={() => {
+                            setTabAtiva("info");
+                            setInfoConcluido(false);
+                        }}
+                    />
+                    <DefaultButton
+                        variant="contained"
+                        label="Concluir"
+                        disabled={!botaoLiberado}
+                        onClick={handleConfirmar}
+                    />
                 </Box>
             </Box>
             <ToastContainer></ToastContainer>

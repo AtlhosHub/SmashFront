@@ -6,17 +6,17 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 
-export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, setTabAtiva}) => {
+export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, setTabAtiva, setInfoConcluido }) => {
     const nomeSocialText = "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
     const statusPresText = "Use este campo para indicar se o aluno(a) ainda está frequentando as aulas, ou se parou de participar.";
     const atestadoText = "Use este campo para indicar se o aluno(a) entregou o atestado de capacitação para a prática de esportes.";
     const deficienciaText = "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
 
-    const [isDeficiente, setIsDeficiente] = useState(true);
+    const [isDeficiente, setIsDeficiente] = useState(null);
     const [botaoLiberado, setBotaoLiberado] = useState(false);
     const [cpfValidade, setCpfValidade] = useState(false);
     const [emailValido, setEmailValido] = useState(false);
-    
+
     useEffect(() => {
         const camposPreenchidos =
             userInfo.nome &&
@@ -25,9 +25,13 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
             userInfo.dataNascimento;
 
         const emailNecessario = maiorIdade ? userInfo.email : true;
+        const deficienciaNecessaria = isDeficiente ? userInfo.deficiencia : true
 
-        setBotaoLiberado(camposPreenchidos && emailNecessario);
-    }, [userInfo, maiorIdade]);
+        const condicionalLiberacao = camposPreenchidos && emailNecessario && deficienciaNecessaria;
+
+        setBotaoLiberado(condicionalLiberacao);
+        setInfoConcluido(condicionalLiberacao);
+    }, [userInfo, maiorIdade, isDeficiente]);
 
     const isMaiorDeIdade = (dataNascimento) => {
         const hoje = new Date();
@@ -44,7 +48,7 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
     }
 
     const formatarTelefone = (valor) => {
-        if(!valor) return;
+        if (!valor) return;
         const numeros = valor.replace(/\D/g, '').slice(0, 11);
 
         if (numeros.length < 3) {
@@ -280,7 +284,7 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                     </label>
                     <RadioGroup
                         row
-                        defaultValue="true"
+                        defaultValue={true}
                         value={userInfo.ativo}
                         onChange={
                             (e) => setUserInfo({ ...userInfo, ativo: e.target.value })
@@ -351,7 +355,7 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                     </label>
                     <RadioGroup
                         row
-                        defaultValue={true}
+                        defaultValue={null}
                         value={isDeficiente}
                         onChange={(e) => setIsDeficiente(e.target.value === "true")}
                     >
@@ -360,6 +364,7 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                         {isDeficiente && (
                             <TextField
                                 size="small"
+                                placeholder="Especifique"
                                 value={userInfo.deficiencia}
                                 onChange={(e) => setUserInfo({ ...userInfo, deficiencia: e.target.value })}
                             />
@@ -368,7 +373,14 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "end", alignItems: "end", flex: 1 }}>
                     <DefaultButton variant="outlined" label="Cancelar" />
-                    <DefaultButton disabled={!botaoLiberado} variant="contained" label="Prosseguir" onClick={() => setTabAtiva("ende")} />
+                    <DefaultButton
+                        disabled={!botaoLiberado}
+                        variant="contained"
+                        label="Prosseguir"
+                        onClick={() => {
+                            setTabAtiva("ende");
+                        }}
+                    />
                 </Box>
             </Box>
         </FormControl>

@@ -26,8 +26,8 @@ export const FichaInscricao = () => {
         naturalidade: null,
         telefone: null,
         profissao: null,
-        ativo: null,
-        temAtestado: null,
+        ativo: true,
+        temAtestado: true,
         deficiencia: null,
         autorizado: null,
         dataInclusao: null,
@@ -66,11 +66,6 @@ export const FichaInscricao = () => {
             description: "Ficha de Inscrição"
         }
     ]
-
-    useEffect(() => {
-        console.log(userInfo)
-    }, [userInfo])
-
 
     function cadastrarAluno() {
         api
@@ -141,6 +136,8 @@ export const FichaInscricao = () => {
                             maiorIdade={maiorIdade}
                             setMaiorIdade={setMaiorIdade}
                             setTabAtiva={setTabAtiva}
+                            setInfoConcluido={setInfoConcluido}
+                            infoConcluido={infoConcluido}
                         />
                     }
                     {tabAtiva === "ende" &&
@@ -148,6 +145,10 @@ export const FichaInscricao = () => {
                             userInfo={userInfo}
                             setUserInfo={setUserInfo}
                             handleConfirmar={cadastrarAluno}
+                            setInfoConcluido={setInfoConcluido}
+                            setEnderecoConcluido={setEnderecoConcluido}
+                            setTabAtiva={setTabAtiva}
+
                         />
                     }
                 </Box>
