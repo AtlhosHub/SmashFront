@@ -9,6 +9,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
 
     const formatarCep = (valor) => {
         if (!valor) return;
+        console.log("bananae")
         const apenasNumeros = valor.replace(/\D/g, "").slice(0, 8);
 
         if (apenasNumeros.length <= 5) {
@@ -46,6 +47,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         endereco: {
                             cep: data.cep,
                             logradouro: data.logradouro,
+                            numLogradouro: null,
                             bairro: data.bairro,
                             cidade: data.localidade,
                             estado: data.uf
@@ -76,7 +78,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>CEP <span style={{ color: "red" }}>*</span></label>
                         <TextField
                             required
-                            value={formatarCep(userInfo.cep)}
+                            value={formatarCep(userInfo.endereco.cep)}
                             onChange={(e) => {
                                 handleCepChange(e)
                             }}
@@ -91,8 +93,8 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>Número <span style={{ color: "red" }}>*</span></label>
                         <TextField
                             required
-                            value={userInfo.numLogradouro}
-                            onChange={(e) => setUserInfo({ ...userInfo, numLogradouro: e.target.value })}
+                            value={userInfo.endereco.numLogradouro}
+                            onChange={(e) => setUserInfo({ ...userInfo, endereco: {...userInfo.endereco, numLogradouro: e.target.value }})}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -107,7 +109,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <TextField
                             required
                             disabled
-                            value={userInfo.rua}
+                            value={userInfo.endereco.logradouro}
                             onChange={(e) => setUserInfo({ ...userInfo, rua: e.target.value })}
                             variant="outlined"
                             size="small"
@@ -123,7 +125,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>Bairro</label>
                         <TextField
                             disabled
-                            value={userInfo.bairro}
+                            value={userInfo.endereco.bairro}
                             onChange={(e) => setUserInfo({ ...userInfo, bairro: e.target.value })}
                             variant="outlined"
                             size="small"
@@ -139,7 +141,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>Estado</label>
                         <TextField
                             disabled
-                            value={userInfo.estado}
+                            value={userInfo.endereco.estado}
                             onChange={(e) => setUserInfo({ ...userInfo, estado: e.target.value })}
                             variant="outlined"
                             size="small"
@@ -155,7 +157,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>Cidade</label>
                         <TextField
                             disabled
-                            value={userInfo.cidade}
+                            value={userInfo.endereco.cidade}
                             onChange={(e) => setUserInfo({ ...userInfo, cidade: e.target.value })}
                             variant="outlined"
                             size="small"
