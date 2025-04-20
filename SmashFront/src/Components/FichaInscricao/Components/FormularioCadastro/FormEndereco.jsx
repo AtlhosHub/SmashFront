@@ -13,6 +13,7 @@ export const FormEndereco = ({ userInfo, setUserInfo, setEnderecoConcluido, setT
     useEffect(() => {
         console.log(cepValido)
         console.log(userInfo.numLogradouro)
+        const camposPreenchidos = cepValido && userInfo.endereco.numLogradouro;
 
         setBotaoLiberado(camposPreenchidos);
         setEnderecoConcluido(camposPreenchidos);
