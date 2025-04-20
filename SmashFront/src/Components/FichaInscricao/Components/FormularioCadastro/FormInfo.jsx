@@ -14,20 +14,23 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
 
     const [isDeficiente, setIsDeficiente] = useState(true);
     const [botaoLiberado, setBotaoLiberado] = useState(false);
-    const [cpfValidade, setCpfValidade] = useState(false);
+    const [cpfValido, setCpfValido] = useState(false);
     const [emailValido, setEmailValido] = useState(false);
-    
+
     useEffect(() => {
         const camposPreenchidos =
             userInfo.nome &&
             userInfo.rg &&
-            userInfo.cpf &&
+            cpfValido &&
             userInfo.dtNascimento;
 
-        const emailNecessario = maiorIdade ? userInfo.email : true;
+        const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        const emailValido = regexEmail.test(userInfo.email);
+
+        const emailNecessario = maiorIdade ? emailValido : true;
 
         setBotaoLiberado(camposPreenchidos && emailNecessario);
-    }, [userInfo, maiorIdade]);
+    }, [userInfo]);
 
     const isMaiorDeIdade = (dataNascimento) => {
         const hoje = new Date();
@@ -63,6 +66,12 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
 
     const formatCPF = (value) => {
         const digits = value.replace(/\D/g, '').slice(0, 11);
+        if (digits.length === 11) {
+            setCpfValido(true);
+        } else {
+            setCpfValido(false);
+        }
+
         return digits
             .replace(/(\d{3})(\d)/, '$1.$2')
             .replace(/(\d{3})(\d)/, '$1.$2')
@@ -199,7 +208,7 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                     </Box>
 
                     <Box>
-                        <label>Email <span style={{ color: "red" }}>*</span></label>
+                        <label>Email {!maiorIdade && <span style={{ color: "red" }}>*</span>}</label>
                         <TextField
                             required
                             value={userInfo.email}

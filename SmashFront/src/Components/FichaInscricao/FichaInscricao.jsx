@@ -47,10 +47,6 @@ export const FichaInscricao = () => {
         }
     ]
 
-    useEffect(() => {
-        console.log(userInfo)
-    }, [userInfo])
-
     return (
         <>
             <Box sx={{
