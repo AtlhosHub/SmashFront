@@ -110,6 +110,11 @@ export const FichaInscricao = () => {
                         email: null
                     }
                 ],
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                }
             })
             .then((response) => console.log(response.data))
             .catch((error) => console.error("Erro ao adicionar aluno:", error));
