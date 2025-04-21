@@ -1,96 +1,139 @@
-import { Box, FormControl, FormControlLabel, Radio, RadioGroup, TextField, Tooltip, Typography } from "@mui/material"
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro"
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import HelpIcon from '@mui/icons-material/Help';
+import {
+    Box,
+    FormControl,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+    TextField,
+    Tooltip,
+    Typography,
+} from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import HelpIcon from "@mui/icons-material/Help";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
+import { formatarTelefone } from "../../utils/validacaoForm";
 
-export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, setTabAtiva }) => {
-    const nomeSocialText = "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
-    const statusPresText = "Use este campo para indicar se o aluno(a) ainda está frequentando as aulas, ou se parou de participar.";
-    const atestadoText = "Use este campo para indicar se o aluno(a) entregou o atestado de capacitação para a prática de esportes.";
-    const deficienciaText = "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
+export const FormInfo = ({
+    userInfo,
+    setUserInfo,
+    maiorIdade,
+    setMaiorIdade,
+    setTabAtiva,
+    setInfoConcluido,
+    cpfValido,
+    setCpfValido
+}) => {
+    const nomeSocialText =
+        "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
+    const statusPresText =
+        "Use este campo para indicar se o aluno(a) ainda está frequentando as aulas, ou se parou de participar.";
+    const atestadoText =
+        "Use este campo para indicar se o aluno(a) entregou o atestado de capacitação para a prática de esportes.";
+    const deficienciaText =
+        "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
 
-    const [isDeficiente, setIsDeficiente] = useState(true);
+    const [isDeficiente, setIsDeficiente] = useState(null);
     const [botaoLiberado, setBotaoLiberado] = useState(false);
-    const [cpfValido, setCpfValido] = useState(false);
-    const [emailValido, setEmailValido] = useState(false);
 
     useEffect(() => {
-        const camposPreenchidos =
-            userInfo.nome &&
-            userInfo.rg &&
-            cpfValido &&
-            userInfo.dtNascimento;
+        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && userInfo.dataNascimento;
 
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         const emailValido = regexEmail.test(userInfo.email);
 
         const emailNecessario = maiorIdade ? emailValido : true;
+        const deficienciaNecessaria =
+            isDeficiente === true
+                ? !!userInfo.deficiencia
+                : isDeficiente === false
+                    ? true
+                    : false;
 
-        setBotaoLiberado(camposPreenchidos && emailNecessario);
-    }, [userInfo]);
+        const condicionalLiberacao = camposPreenchidos && emailNecessario && deficienciaNecessaria;
+
+        setBotaoLiberado(condicionalLiberacao);
+        setInfoConcluido(condicionalLiberacao);
+    }, [userInfo, maiorIdade, isDeficiente]);
+
+    useEffect(() => {
+        if (!isDeficiente) setUserInfo({ ...userInfo, deficiencia: null })
+    }, [isDeficiente])
 
     const isMaiorDeIdade = (dataNascimento) => {
         const hoje = new Date();
         const nascimento = dayjs(dataNascimento).toDate();
-        const idade = hoje.getFullYear() - nascimento.getFullYear();
+        let idade = hoje.getFullYear() - nascimento.getFullYear();
         const mes = hoje.getMonth() - nascimento.getMonth();
         const dia = hoje.getDate() - nascimento.getDate();
 
         if (mes < 0 || (mes === 0 && dia < 0)) {
-            return idade - 1 >= 18;
+            idade--;
         }
 
         setMaiorIdade(idade >= 18);
-    }
-
-    const formatarTelefone = (valor) => {
-        const numeros = valor.replace(/\D/g, '').slice(0, 11);
-
-        if (numeros.length < 3) {
-            return numeros;
-        }
-
-        if (numeros.length < 7) {
-            return `(${numeros.slice(0, 2)}) ${numeros.slice(2)}`;
-        }
-
-        if (numeros.length <= 10) {
-            return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 6)}-${numeros.slice(6)}`;
-        }
-
-        return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 7)}-${numeros.slice(7, 11)}`;
     };
 
     const formatCPF = (value) => {
-        const digits = value.replace(/\D/g, '').slice(0, 11);
+        const digits = value.replace(/\D/g, "").slice(0, 11);
         if (digits.length === 11) {
             setCpfValido(true);
         } else {
             setCpfValido(false);
         }
-
+    
         return digits
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-    }
+            .replace(/(\d{3})(\d)/, "$1.$2")
+            .replace(/(\d{3})(\d)/, "$1.$2")
+            .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    };
 
     return (
-        <FormControl sx={{ paddingBlock: "30px", pr: "30px", display: "flex", flex: 1, flexDirection: "column" }}>
-            <Box sx={{ display: "flex", flexDirection: "row", gap: "20px", width: "100%", color: "black" }}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1.3, height: "fit-content" }}>
+        <FormControl
+            sx={{
+                paddingBlock: "30px",
+                pr: "30px",
+                display: "flex",
+                flex: 1,
+                flexDirection: "column",
+            }}
+        >
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "20px",
+                    width: "100%",
+                    color: "black",
+                }}
+            >
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                        flex: 1.3,
+                        height: "fit-content",
+                    }}
+                >
                     <Box>
-                        <label>Nome do Aluno <span style={{ color: "red" }}>*</span></label>
+                        <label>
+                            Nome do Aluno <span style={{ color: "red" }}>*</span>
+                        </label>
                         <TextField
                             required
                             value={userInfo.nome}
-                            onChange={(e) => setUserInfo({ ...userInfo, nome: e.target.value })}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, nome: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
 
@@ -99,12 +142,16 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                             style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "5px"
+                                gap: "5px",
                             }}
                         >
                             Nome Social
                             <Tooltip
-                                title={<Typography sx={{ fontSize: '14px' }}>{nomeSocialText}</Typography>}
+                                title={
+                                    <Typography sx={{ fontSize: "14px" }}>
+                                        {nomeSocialText}
+                                    </Typography>
+                                }
                                 placement="right"
                                 arrow
                             >
@@ -112,48 +159,66 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                                     sx={{
                                         marginTop: "1px",
                                         color: "#286DA8",
-                                        fontSize: "18px"
+                                        fontSize: "18px",
                                     }}
                                 />
                             </Tooltip>
                         </label>
                         <TextField
                             value={userInfo.nomeSocial}
-                            onChange={(e) => setUserInfo({ ...userInfo, nomeSocial: e.target.value })}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, nomeSocial: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
 
                     <Box display={"flex"} gap={2}>
-                        <Box sx={{ width: '100%' }}>
-                            <label>Data de Nascimento <span style={{ color: "red" }}>*</span></label>
+                        <Box sx={{ width: "100%" }}>
+                            <label>
+                                Data de Nascimento <span style={{ color: "red" }}>*</span>
+                            </label>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     size="small"
-                                    value={userInfo.dtNascimento ? dayjs(userInfo.dtNascimento) : null}
+                                    value={
+                                        userInfo.dataNascimento
+                                            ? dayjs(userInfo.dataNascimento)
+                                            : null
+                                    }
                                     onChange={(newValue) => {
-                                        isMaiorDeIdade(newValue)
-                                        setUserInfo({ ...userInfo, dtNascimento: newValue });
+                                        isMaiorDeIdade(newValue);
+                                        setUserInfo({ ...userInfo, dataNascimento: newValue });
                                     }}
-                                    slotProps={{ textField: { size: 'small', placeholder: 'DD/MM/AAAA' } }}
+                                    slotProps={{
+                                        textField: { size: "small", placeholder: "DD/MM/AAAA" },
+                                    }}
                                     sx={{
                                         width: "100%",
-                                        '& .MuiInputBase-root': { borderRadius: '8px' },
+                                        "& .MuiInputBase-root": { borderRadius: "8px" },
                                     }}
                                 />
                             </LocalizationProvider>
                         </Box>
 
-                        <Box sx={{ width: '100%' }}>
+                        <Box sx={{ width: "100%" }}>
                             <label>Gênero</label>
                             <TextField
                                 value={userInfo.genero}
-                                onChange={(e) => setUserInfo({ ...userInfo, genero: e.target.value })}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, genero: e.target.value })
+                                }
                                 variant="outlined"
                                 size="small"
-                                sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                                sx={{
+                                    "& .MuiInputBase-root": { borderRadius: "8px" },
+                                    width: "100%",
+                                }}
                             />
                         </Box>
                     </Box>
@@ -162,35 +227,58 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                         <label>Profissão</label>
                         <TextField
                             value={userInfo.profissao}
-                            onChange={(e) => setUserInfo({ ...userInfo, profissao: e.target.value })}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, profissao: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
                 </Box>
 
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1, height: "fit-content" }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                        flex: 1,
+                        height: "fit-content",
+                    }}
+                >
                     <Box>
                         <label>Nacionalidade</label>
                         <TextField
                             value={userInfo.nacionalidade}
-                            onChange={(e) => setUserInfo({ ...userInfo, nacionalidade: e.target.value })}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, nacionalidade: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
 
                     <Box>
-                        <label>RG <span style={{ color: "red" }}>*</span></label>
+                        <label>
+                            RG <span style={{ color: "red" }}>*</span>
+                        </label>
                         <TextField
                             required
                             value={userInfo.rg}
                             onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value })}
                             variant="outlined"
                             size="small"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
 
@@ -198,53 +286,83 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                         <label>Telefone</label>
                         <TextField
                             value={formatarTelefone(userInfo.telefone)}
-                            onChange={(e) => setUserInfo({ ...userInfo, telefone: e.target.value })}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, telefone: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
                             type="tel"
                             placeholder="(00) 00000-0000"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
 
                     <Box>
-                        <label>Email {!maiorIdade && <span style={{ color: "red" }}>*</span>}</label>
+                        <label>
+                            Email {maiorIdade && <span style={{ color: "red" }}>*</span>}
+                        </label>
                         <TextField
                             required
                             value={userInfo.email}
-                            onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, email: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
                             type="email"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
                 </Box>
 
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1, height: "fit-content" }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                        flex: 1,
+                        height: "fit-content",
+                    }}
+                >
                     <Box>
                         <label>Naturalidade</label>
                         <TextField
                             value={userInfo.naturalidade}
-                            onChange={(e) => setUserInfo({ ...userInfo, naturalidade: e.target.value })}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, naturalidade: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
 
                     <Box>
-                        <label>CPF <span style={{ color: "red" }}>*</span></label>
+                        <label>
+                            CPF <span style={{ color: "red" }}>*</span>
+                        </label>
                         <TextField
                             required
                             value={userInfo.cpf}
                             onChange={(e) => {
-                                const raw = e.target.value.replace(/\D/g, '');
-                                setUserInfo({ ...userInfo, cpf: formatCPF(raw) })
+                                const raw = e.target.value.replace(/\D/g, "");
+                                setUserInfo({ ...userInfo, cpf: formatCPF(raw) });
                             }}
                             variant="outlined"
                             size="small"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
 
@@ -252,12 +370,17 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                         <label>Celular</label>
                         <TextField
                             value={formatarTelefone(userInfo.celular)}
-                            onChange={(e) => setUserInfo({ ...userInfo, celular: e.target.value })}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, celular: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
                             type="tel"
                             placeholder="(00) 00000-0000"
-                            sx={{ '& .MuiInputBase-root': { borderRadius: '8px' }, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                width: "100%",
+                            }}
                         />
                     </Box>
                 </Box>
@@ -268,12 +391,16 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: "5px"
+                            gap: "5px",
                         }}
                     >
                         Status de Presença
                         <Tooltip
-                            title={<Typography sx={{ fontSize: '14px' }}>{statusPresText}</Typography>}
+                            title={
+                                <Typography sx={{ fontSize: "14px" }}>
+                                    {statusPresText}
+                                </Typography>
+                            }
                             placement="right"
                             arrow
                         >
@@ -281,21 +408,25 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                                 sx={{
                                     marginTop: "1px",
                                     color: "#286DA8",
-                                    fontSize: "18px"
+                                    fontSize: "18px",
                                 }}
                             />
                         </Tooltip>
                     </label>
                     <RadioGroup
                         row
-                        defaultValue="true"
-                        value={userInfo.isAtivo}
-                        onChange={
-                            (e) => setUserInfo({ ...userInfo, isAtivo: e.target.value })
+                        defaultValue={true}
+                        value={userInfo.ativo}
+                        onChange={(e) =>
+                            setUserInfo({ ...userInfo, ativo: e.target.value })
                         }
                     >
                         <FormControlLabel value={true} control={<Radio />} label="Ativo" />
-                        <FormControlLabel value={false} control={<Radio />} label="Inativo" />
+                        <FormControlLabel
+                            value={false}
+                            control={<Radio />}
+                            label="Inativo"
+                        />
                     </RadioGroup>
                 </Box>
                 <Box sx={{ color: "black" }}>
@@ -303,21 +434,24 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: "5px"
+                            gap: "5px",
                         }}
                     >
                         Atestados
                         <Tooltip
-                            title={<Typography sx={{ fontSize: '14px' }}>{atestadoText}</Typography>}
+                            title={
+                                <Typography sx={{ fontSize: "14px" }}>
+                                    {atestadoText}
+                                </Typography>
+                            }
                             placement="right"
                             arrow
-
                         >
                             <HelpIcon
                                 sx={{
                                     marginTop: "1px",
                                     color: "#286DA8",
-                                    fontSize: "18px"
+                                    fontSize: "18px",
                                 }}
                             />
                         </Tooltip>
@@ -325,9 +459,9 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                     <RadioGroup
                         row
                         defaultValue="true"
-                        value={userInfo.isAtestado}
-                        onChange={
-                            (e) => setUserInfo({ ...userInfo, isAtestado: e.target.value })
+                        value={userInfo.temAtestado}
+                        onChange={(e) =>
+                            setUserInfo({ ...userInfo, temAtestado: e.target.value })
                         }
                     >
                         <FormControlLabel value={true} control={<Radio />} label="Sim" />
@@ -339,12 +473,19 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: "5px"
+                            gap: "5px",
                         }}
                     >
-                        Possui Deficiência e/ou Neurodivergência
+                        <span>
+                            Possui Deficiência e/ou Neurodivergência{" "}
+                            <span style={{ color: "red" }}>*</span>
+                        </span>
                         <Tooltip
-                            title={<Typography sx={{ fontSize: '14px' }}>{deficienciaText}</Typography>}
+                            title={
+                                <Typography sx={{ fontSize: "14px" }}>
+                                    {deficienciaText}
+                                </Typography>
+                            }
                             placement="right"
                             arrow
                         >
@@ -352,14 +493,20 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                                 sx={{
                                     marginTop: "1px",
                                     color: "#286DA8",
-                                    fontSize: "18px"
+                                    fontSize: "18px",
                                 }}
                             />
                         </Tooltip>
                     </label>
                     <RadioGroup
                         row
-                        defaultValue={true}
+                        defaultValue={
+                            userInfo.deficiencia === null
+                                ? "false"
+                                : userInfo.deficiencia === ""
+                                    ? "true"
+                                    : "true"
+                        }
                         value={isDeficiente}
                         onChange={(e) => setIsDeficiente(e.target.value === "true")}
                     >
@@ -368,17 +515,36 @@ export const FormInfo = ({ userInfo, setUserInfo, maiorIdade, setMaiorIdade, set
                         {isDeficiente && (
                             <TextField
                                 size="small"
+                                placeholder="Especifique"
                                 value={userInfo.deficiencia}
-                                onChange={(e) => setUserInfo({ ...userInfo, deficiencia: e.target.value })}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, deficiencia: e.target.value })
+                                }
                             />
                         )}
                     </RadioGroup>
                 </Box>
-                <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "end", alignItems: "end", flex: 1 }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "10px",
+                        justifyContent: "end",
+                        alignItems: "end",
+                        flex: 1,
+                    }}
+                >
                     <DefaultButton variant="outlined" label="Cancelar" />
-                    <DefaultButton disabled={!botaoLiberado} variant="contained" label="Prosseguir" onClick={() => setTabAtiva("ende")} />
+                    <DefaultButton
+                        disabled={!botaoLiberado}
+                        variant="contained"
+                        label="Prosseguir"
+                        onClick={() => {
+                            setTabAtiva("ende");
+                        }}
+                    />
                 </Box>
             </Box>
         </FormControl>
-    )
-}
+    );
+};

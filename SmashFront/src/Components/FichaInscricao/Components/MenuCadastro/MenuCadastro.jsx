@@ -3,7 +3,7 @@ import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import { Badge, Box } from '@mui/material';
 import './MenuCadastro.css';
-import { Check, MailRounded } from '@mui/icons-material';
+import { Check } from '@mui/icons-material';
 
 export const MenuCadastro = ({ infoConcluido, enderecoConcluido, tabAtiva, setTabAtiva, maiorIdade }) => {
     return (
@@ -23,8 +23,8 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, tabAtiva, setTa
                     <span>Informações</span>
                 </Box>
                 <Box
-                    className={enderecoConcluido ? "menu-cadastro-item concluido" : tabAtiva === "ende" ? "menu-cadastro-item ativo" : "menu-cadastro-item"}
-                    onClick={() => setTabAtiva("ende")}
+                    className={enderecoConcluido ? "menu-cadastro-item concluido" : tabAtiva === "ende" ? "menu-cadastro-item ativo" : infoConcluido ? "menu-cadastro-item" : "menu-cadastro-item desativado"}
+                    onClick={() => infoConcluido && setTabAtiva("ende")}
                 >
                     {enderecoConcluido ? (
                         <Badge badgeContent={<Check />}>

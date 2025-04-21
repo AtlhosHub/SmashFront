@@ -1,20 +1,39 @@
-import { Box, FormControl, FormControlLabel, Radio, RadioGroup, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, FormControl, TextField } from "@mui/material";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { useEffect, useRef, useState } from "react";
 import { toasterMsg } from "../../../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
 
-export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
+export const FormEndereco = ({
+    userInfo,
+    setUserInfo,
+    setEnderecoConcluido,
+    setTabAtiva,
+    setInfoConcluido,
+    maiorIdade,
+    handleConfirmar,
+}) => {
+    const [botaoLiberado, setBotaoLiberado] = useState(false);
+    const [cepValido, setCepValido] = useState(false);
     const messagemErroCEP = useRef();
 
+    useEffect(() => {
+        const camposPreenchidos = cepValido && userInfo.endereco.numLogradouro;
+
+        setBotaoLiberado(camposPreenchidos);
+        setEnderecoConcluido(camposPreenchidos);
+    }, [userInfo]);
+
     const formatarCep = (valor) => {
+        if (!valor) return;
+        console.log("bananae");
         const apenasNumeros = valor.replace(/\D/g, "").slice(0, 8);
 
         if (apenasNumeros.length <= 5) {
             return apenasNumeros;
         }
 
-        return apenasNumeros.slice(0, 5) + '-' + apenasNumeros.slice(5);
+        return apenasNumeros.slice(0, 5) + "-" + apenasNumeros.slice(5);
     };
 
     const handleCepChange = async (e) => {
@@ -24,29 +43,39 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
 
         setUserInfo((prev) => ({
             ...prev,
-            cep: valorFormatado,
-            rua: "",
-            bairro: "",
-            cidade: "",
-            estado: ""
+            endereco: {
+                cep: valorFormatado,
+                logradouro: "",
+                numLogradouro: "",
+                bairro: "",
+                cidade: "",
+                estado: "",
+            },
         }));
 
         if (cepNumerico.length === 8) {
             try {
-                const response = await fetch(`https://viacep.com.br/ws/${cepNumerico}/json/`);
+                const response = await fetch(
+                    `https://viacep.com.br/ws/${cepNumerico}/json/`
+                );
                 const data = await response.json();
 
                 if (!data.erro) {
                     setUserInfo({
                         ...userInfo,
-                        cep: data.cep,
-                        rua: data.logradouro,
-                        bairro: data.bairro,
-                        cidade: data.localidade,
-                        estado: data.uf
-                    })
+                        endereco: {
+                            cep: data.cep,
+                            logradouro: data.logradouro,
+                            numLogradouro: null,
+                            bairro: data.bairro,
+                            cidade: data.localidade,
+                            estado: data.uf,
+                        },
+                    });
+                    setCepValido(true);
                 } else {
                     toasterMsg("error", "CEP não encontrado!");
+                    setCepValido(false);
                 }
             } catch (error) {
                 console.error("Erro ao buscar CEP:", error);
@@ -55,61 +84,100 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
     };
 
     return (
-        <FormControl sx={{ paddingBlock: "30px", pr: "30px", display: "flex", flex: 1, flexDirection: "column" }}>
-            <Box sx={{ display: "flex", flexDirection: "row", gap: "20px", width: "100%", color: "black" }}>
-                <Box sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr 1fr 1fr",
+        <FormControl
+            sx={{
+                paddingBlock: "30px",
+                pr: "30px",
+                display: "flex",
+                flex: 1,
+                flexDirection: "column",
+            }}
+        >
+            <Box
+                sx={{
+                    display: "flex",
                     flexDirection: "row",
-                    columnGap: "15px",
-                    rowGap: "10px",
-                    flex: 1.3,
-                    height: "fit-content"
-                }}>
+                    gap: "20px",
+                    width: "100%",
+                    color: "black",
+                }}
+            >
+                <Box
+                    sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                        flexDirection: "row",
+                        columnGap: "15px",
+                        rowGap: "10px",
+                        flex: 1.3,
+                        height: "fit-content",
+                    }}
+                >
                     <Box>
-                        <label>CEP <span style={{ color: "red" }}>*</span></label>
+                        <label>
+                            CEP <span style={{ color: "red" }}>*</span>
+                        </label>
                         <TextField
                             required
-                            value={formatarCep(userInfo.cep)}
+                            value={formatarCep(userInfo.endereco.cep)}
                             onChange={(e) => {
-                                handleCepChange(e)
+                                handleCepChange(e);
                             }}
                             maxLength={9}
                             variant="outlined"
                             size="small"
-                            sx={{ '& .MuiInputBase-root': {}, width: '100%' }}
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px",
+                                },
+                                width: "100%",
+                            }}
                         />
                         <span>{messagemErroCEP.current}</span>
                     </Box>
                     <Box>
-                        <label>Número <span style={{ color: "red" }}>*</span></label>
+                        <label>
+                            Número <span style={{ color: "red" }}>*</span>
+                        </label>
                         <TextField
                             required
-                            value={userInfo.numero}
-                            onChange={(e) => setUserInfo({ ...userInfo, numero: e.target.value })}
+                            value={userInfo.endereco.numLogradouro}
+                            onChange={(e) =>
+                                setUserInfo({
+                                    ...userInfo,
+                                    endereco: {
+                                        ...userInfo.endereco,
+                                        numLogradouro: e.target.value,
+                                    },
+                                })
+                            }
                             variant="outlined"
                             size="small"
                             sx={{
-                                '& .MuiInputBase-root': {
-                                    borderRadius: '8px'
-                                }, width: '100%'
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px",
+                                },
+                                width: "100%",
                             }}
                         />
                     </Box>
                     <Box>
-                        <label>Rua <span style={{ color: "red" }}>*</span></label>
+                        <label>Rua</label>
                         <TextField
                             required
                             disabled
-                            value={userInfo.rua}
-                            onChange={(e) => setUserInfo({ ...userInfo, rua: e.target.value })}
+                            value={userInfo.endereco.logradouro}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, rua: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
                             sx={{
-                                '& .MuiInputBase-root': {
-                                    borderRadius: '8px',
-                                    backgroundColor: "#00000015"
-                                }, width: '100%'
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px",
+                                    backgroundColor: "#00000015",
+                                },
+                                width: "100%",
                             }}
                         />
                     </Box>
@@ -117,15 +185,18 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>Bairro</label>
                         <TextField
                             disabled
-                            value={userInfo.bairro}
-                            onChange={(e) => setUserInfo({ ...userInfo, bairro: e.target.value })}
+                            value={userInfo.endereco.bairro}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, bairro: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
                             sx={{
-                                '& .MuiInputBase-root': {
-                                    borderRadius: '8px',
-                                    backgroundColor: "#00000015"
-                                }, width: '100%'
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px",
+                                    backgroundColor: "#00000015",
+                                },
+                                width: "100%",
                             }}
                         />
                     </Box>
@@ -133,15 +204,18 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>Estado</label>
                         <TextField
                             disabled
-                            value={userInfo.estado}
-                            onChange={(e) => setUserInfo({ ...userInfo, estado: e.target.value })}
+                            value={userInfo.endereco.estado}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, estado: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
                             sx={{
-                                '& .MuiInputBase-root': {
-                                    borderRadius: '8px',
-                                    backgroundColor: "#00000015"
-                                }, width: '100%'
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px",
+                                    backgroundColor: "#00000015",
+                                },
+                                width: "100%",
                             }}
                         />
                     </Box>
@@ -149,27 +223,57 @@ export const FormEndereco = ({ userInfo, setUserInfo, handleConfirmar }) => {
                         <label>Cidade</label>
                         <TextField
                             disabled
-                            value={userInfo.cidade}
-                            onChange={(e) => setUserInfo({ ...userInfo, cidade: e.target.value })}
+                            value={userInfo.endereco.cidade}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, cidade: e.target.value })
+                            }
                             variant="outlined"
                             size="small"
                             sx={{
-                                '& .MuiInputBase-root': {
-                                    borderRadius: '8px',
-                                    backgroundColor: "#00000015"
-                                }, width: '100%'
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px",
+                                    backgroundColor: "#00000015",
+                                },
+                                width: "100%",
                             }}
                         />
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-                <Box sx={{ display: "flex", flexDirection: "row", gap: "10px", justifyContent: "end", alignItems: "end", flex: 1 }}>
-                    <DefaultButton variant="outlined" label="Cancelar" />
-                    <DefaultButton variant="contained" label="Concluir" onClick={handleConfirmar} />
+            <Box
+                sx={{
+                    marginTop: "20px",
+                    display: "flex",
+                    gap: "10px",
+                }}
+            >
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "10px",
+                        justifyContent: "end",
+                        alignItems: "end",
+                        flex: 1,
+                    }}
+                >
+                    <DefaultButton
+                        variant="outlined"
+                        label="Voltar"
+                        onClick={() => {
+                            setTabAtiva("info");
+                            setInfoConcluido(false);
+                        }}
+                    />
+                    <DefaultButton
+                        variant="contained"
+                        label={maiorIdade ? "Concluir" : "Prosseguir"}
+                        disabled={!botaoLiberado}
+                        onClick={maiorIdade ? handleConfirmar : () => setTabAtiva("resp")}
+                    />
                 </Box>
             </Box>
             <ToastContainer></ToastContainer>
         </FormControl>
-    )
-}
+    );
+};
