@@ -1,8 +1,8 @@
 export const getUserName = () => {
-    return localStorage.getItem("usuario") || "";
+    return sessionStorage.getItem("usuario") || "";
 };
 
 export const getUserInicial = () => {
-    const user = localStorage.getItem("usuario");
+    const user = sessionStorage.getItem("usuario");
     return user ? user.charAt(0) : "";
 };
