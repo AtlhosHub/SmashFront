@@ -16,12 +16,13 @@ import { formatarTelefone } from "../../utils/validacaoForm";
 
 export const FormResponsavel = ({
     userInfo,
+    cpfValido,
+    infoConcluido,
+    enderecoConcluido,
     setUserInfo,
-    setEnderecoConcluido,
+    setCpfValido,
     setTabAtiva,
     handleConfirmar,
-    setCpfValido,
-    cpfValido
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
 
@@ -44,20 +45,16 @@ export const FormResponsavel = ({
             .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     };
 
+    const [cpfUser, setCpfUser] = useState(userInfo.responsavel[0].cpf && formatCPF(userInfo.responsavel[0].cpf));
+
     useEffect(() => {
         const camposPreenchidos =
-        userInfo.responsavel[0].nome
-        && userInfo.responsavel[0].cpf
-        && cpfValido
-        && userInfo.autorizado !== null;
+            userInfo.responsavel[0].nome
+            && cpfValido
+            && userInfo.autorizado !== null;
 
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         const emailValido = regexEmail.test(userInfo.responsavel[0].email);
-
-        console.log(camposPreenchidos);
-        console.log(userInfo.autorizado)
-        console.log(userInfo.responsavel[0].cpf)
-        console.log(userInfo.responsavel[0].nome)
 
         const condicionalLiberacao = camposPreenchidos && emailValido;
 
@@ -151,15 +148,16 @@ export const FormResponsavel = ({
                             CPF <span style={{ color: "red" }}>*</span>
                         </label>
                         <TextField
-                            value={userInfo.responsavel[0].cpf}
+                            value={cpfUser}
                             onChange={(e) => {
                                 const raw = e.target.value.replace(/\D/g, "");
+                                setCpfUser(formatCPF(raw))
                                 setUserInfo({
                                     ...userInfo,
                                     responsavel: [
                                         {
                                             ...userInfo.responsavel[0],
-                                            cpf: formatCPF(raw),
+                                            cpf: raw,
                                         },
                                     ],
                                 })
@@ -360,7 +358,7 @@ export const FormResponsavel = ({
                         gap: "5px",
                     }}
                 >
-                    Autorização
+                    Autorização <span style={{ color: "red" }}>*</span>
                     <Tooltip
                         title={
                             <Typography sx={{ fontSize: "14px" }}>
@@ -413,7 +411,6 @@ export const FormResponsavel = ({
                         label="Voltar"
                         onClick={() => {
                             setTabAtiva("ende");
-                            setEnderecoConcluido(false);
                         }}
                     />
                     <DefaultButton

@@ -15,17 +15,24 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { formatarTelefone } from "../../utils/validacaoForm";
+import { useNavigate } from "react-router-dom";
 
 export const FormInfo = ({
     userInfo,
-    setUserInfo,
     maiorIdade,
+    cpfValido,
+    isDeficiente, 
     setMaiorIdade,
     setTabAtiva,
     setInfoConcluido,
-    cpfValido,
+    setIsDeficiente,
+    setUserInfo,
     setCpfValido
 }) => {
+    const navigate = useNavigate();
+
+    const [botaoLiberado, setBotaoLiberado] = useState(false);
+
     const nomeSocialText =
         "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
     const statusPresText =
@@ -35,8 +42,21 @@ export const FormInfo = ({
     const deficienciaText =
         "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
 
-    const [isDeficiente, setIsDeficiente] = useState(null);
-    const [botaoLiberado, setBotaoLiberado] = useState(false);
+    const formatCPF = (value) => {
+        const digits = value.replace(/\D/g, "").slice(0, 11);
+        if (digits.length === 11) {
+            setCpfValido(true);
+        } else {
+            setCpfValido(false);
+        }
+
+        return digits
+            .replace(/(\d{3})(\d)/, "$1.$2")
+            .replace(/(\d{3})(\d)/, "$1.$2")
+            .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    };
+
+    const [cpfUser, setCpfUser] = useState(userInfo?.cpf && formatCPF(userInfo?.cpf));
 
     useEffect(() => {
         const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && userInfo.dataNascimento;
@@ -45,14 +65,7 @@ export const FormInfo = ({
         const emailValido = regexEmail.test(userInfo.email);
 
         const emailNecessario = maiorIdade ? emailValido : true;
-        const deficienciaNecessaria =
-            isDeficiente === true
-                ? !!userInfo.deficiencia
-                : isDeficiente === false
-                    ? true
-                    : false;
-
-        const condicionalLiberacao = camposPreenchidos && emailNecessario && deficienciaNecessaria;
+        const condicionalLiberacao = camposPreenchidos && emailNecessario && (!isDeficiente ? true : !!userInfo.deficiencia === true);
 
         setBotaoLiberado(condicionalLiberacao);
         setInfoConcluido(condicionalLiberacao);
@@ -74,20 +87,6 @@ export const FormInfo = ({
         }
 
         setMaiorIdade(idade >= 18);
-    };
-
-    const formatCPF = (value) => {
-        const digits = value.replace(/\D/g, "").slice(0, 11);
-        if (digits.length === 11) {
-            setCpfValido(true);
-        } else {
-            setCpfValido(false);
-        }
-    
-        return digits
-            .replace(/(\d{3})(\d)/, "$1.$2")
-            .replace(/(\d{3})(\d)/, "$1.$2")
-            .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     };
 
     return (
@@ -352,10 +351,11 @@ export const FormInfo = ({
                         </label>
                         <TextField
                             required
-                            value={userInfo.cpf}
+                            value={cpfUser}
                             onChange={(e) => {
                                 const raw = e.target.value.replace(/\D/g, "");
-                                setUserInfo({ ...userInfo, cpf: formatCPF(raw) });
+                                setCpfUser(formatCPF(raw));
+                                setUserInfo({ ...userInfo, cpf: raw });
                             }}
                             variant="outlined"
                             size="small"
@@ -500,13 +500,7 @@ export const FormInfo = ({
                     </label>
                     <RadioGroup
                         row
-                        defaultValue={
-                            userInfo.deficiencia === null
-                                ? "false"
-                                : userInfo.deficiencia === ""
-                                    ? "true"
-                                    : "true"
-                        }
+                        defaultValue={false}
                         value={isDeficiente}
                         onChange={(e) => setIsDeficiente(e.target.value === "true")}
                     >
@@ -534,7 +528,7 @@ export const FormInfo = ({
                         flex: 1,
                     }}
                 >
-                    <DefaultButton variant="outlined" label="Cancelar" />
+                    <DefaultButton variant="outlined" label="Cancelar" onClick={() => navigate("/alunos")} />
                     <DefaultButton
                         disabled={!botaoLiberado}
                         variant="contained"
