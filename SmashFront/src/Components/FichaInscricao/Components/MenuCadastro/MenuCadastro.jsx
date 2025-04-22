@@ -10,7 +10,12 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, tabAtiva, setTa
         <Box sx={{ display: "flex", flexDirection: "row", pl: "30px" }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: "5px", pt: "35px" }}>
                 <Box
-                    className={infoConcluido ? "menu-cadastro-item concluido" : tabAtiva === "info" ? "menu-cadastro-item ativo" : "menu-cadastro-item"}
+                    className={infoConcluido
+                        ? "menu-cadastro-item concluido"
+                        : tabAtiva === "info"
+                            ? "menu-cadastro-item ativo"
+                            : "menu-cadastro-item"
+                    }
                     onClick={() => setTabAtiva("info")}
                 >
                     {infoConcluido ? (
@@ -23,7 +28,13 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, tabAtiva, setTa
                     <span>Informações</span>
                 </Box>
                 <Box
-                    className={enderecoConcluido ? "menu-cadastro-item concluido" : tabAtiva === "ende" ? "menu-cadastro-item ativo" : infoConcluido ? "menu-cadastro-item" : "menu-cadastro-item desativado"}
+                    className={enderecoConcluido
+                        ? "menu-cadastro-item concluido"
+                        : tabAtiva === "ende"
+                            ? "menu-cadastro-item ativo"
+                            : infoConcluido
+                                ? "menu-cadastro-item"
+                                : "menu-cadastro-item desativado"}
                     onClick={() => infoConcluido && setTabAtiva("ende")}
                 >
                     {enderecoConcluido ? (

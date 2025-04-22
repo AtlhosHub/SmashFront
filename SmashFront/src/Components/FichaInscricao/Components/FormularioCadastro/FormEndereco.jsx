@@ -6,15 +6,15 @@ import { ToastContainer } from "react-toastify";
 
 export const FormEndereco = ({
     userInfo,
+    maiorIdade,
+    cepValido,
     setUserInfo,
     setEnderecoConcluido,
     setTabAtiva,
-    setInfoConcluido,
-    maiorIdade,
+    setCepValido,
     handleConfirmar,
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
-    const [cepValido, setCepValido] = useState(false);
     const messagemErroCEP = useRef();
 
     useEffect(() => {
@@ -26,7 +26,6 @@ export const FormEndereco = ({
 
     const formatarCep = (valor) => {
         if (!valor) return;
-        console.log("bananae");
         const apenasNumeros = valor.replace(/\D/g, "").slice(0, 8);
 
         if (apenasNumeros.length <= 5) {
@@ -262,7 +261,6 @@ export const FormEndereco = ({
                         label="Voltar"
                         onClick={() => {
                             setTabAtiva("info");
-                            setInfoConcluido(false);
                         }}
                     />
                     <DefaultButton

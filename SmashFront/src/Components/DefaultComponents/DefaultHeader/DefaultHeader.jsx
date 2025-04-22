@@ -1,7 +1,8 @@
 import { Person } from "@mui/icons-material";
-import { AppBar, Avatar, Box, Button, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, Box, Toolbar, Typography } from "@mui/material";
+import { getUserInicial, getUserName } from "../../FichaInscricao/utils/getUserData";
 
-export const DefaultHeader = ({ pageTitle, userInfo }) => {
+export const DefaultHeader = ({ pageTitle }) => {
   return (
     <AppBar
       position="static"
@@ -39,7 +40,7 @@ export const DefaultHeader = ({ pageTitle, userInfo }) => {
             gap: "10px",
             marginBottom: "5px",
             fontFamily: "'Poppins', sans-serif",
-            }}>
+          }}>
             <span style={{ fontSize: "26px", lineHeight: 0 }}>
               |
             </span>
@@ -48,9 +49,11 @@ export const DefaultHeader = ({ pageTitle, userInfo }) => {
             </span>
           </Box>
         </Box>
-        <Box sx={{display: "flex", alignItems: "center", gap: "10px", fontFamily: "'Poppins', sans-serif", fontSize: "16px", color: "#F3F9F9"}}>
-              <span><span style={{fontWeight: 600}}>Bem-vindo(a)</span>, {userInfo?.name ?? "carregando..."}</span>
-              <Avatar sx={{backgroundColor: "white"}}>{userInfo?.charAt(0) ?? <Person sx={{color: "black", fontSize: "30px"}} />}</Avatar>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "'Poppins', sans-serif", fontSize: "16px", color: "#F3F9F9" }}>
+          <span><span style={{ fontWeight: 600 }}>Bem-vindo(a)</span>, {getUserName() || "carregando..."}</span>
+          <Avatar sx={{ backgroundColor: "white" }}>
+            {<span style={{color: "black"}}>{getUserInicial()}</span> || <Person sx={{ color: "black", fontSize: "30px" }} />}
+          </Avatar>
         </Box>
       </Toolbar>
     </AppBar>
