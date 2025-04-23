@@ -9,13 +9,19 @@ import { api } from "../../provider/apiProvider"
 import { FormResponsavel } from "./Components/FormularioCadastro/FormResponsavel";
 
 export const FichaInscricao = () => {
-    const [tabAtiva, setTabAtiva] = useState("resp");
+    //Variaveis de Controle Tela
+    const [tabAtiva, setTabAtiva] = useState("info");
     const [infoConcluido, setInfoConcluido] = useState(false);
     const [enderecoConcluido, setEnderecoConcluido] = useState(false);
+
+    // Variaveis de Controle Form
     const [maiorIdade, setMaiorIdade] = useState(true);
     const [cpfValidoAluno, setCpfValidoAluno] = useState(false);
     const [cpfValidoResp, setCpfValidoResp] = useState(false);
+    const [cepValido, setCepValido] = useState(false);
+    const [isDeficiente, setIsDeficiente] = useState(false)
 
+    // Dados dos Form
     const [userInfo, setUserInfo] = useState({
         nome: null,
         email: null,
@@ -110,6 +116,11 @@ export const FichaInscricao = () => {
                         email: null
                     }
                 ],
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                }
             })
             .then((response) => console.log(response.data))
             .catch((error) => console.error("Erro ao adicionar aluno:", error));
@@ -135,38 +146,39 @@ export const FichaInscricao = () => {
                     {tabAtiva === "info" &&
                         <FormInfo
                             userInfo={userInfo}
-                            setUserInfo={setUserInfo}
                             maiorIdade={maiorIdade}
+                            cpfValido={cpfValidoAluno}
+                            isDeficiente={isDeficiente}
                             setMaiorIdade={setMaiorIdade}
+                            setUserInfo={setUserInfo}
                             setTabAtiva={setTabAtiva}
                             setInfoConcluido={setInfoConcluido}
-                            infoConcluido={infoConcluido}
-                            cpfValido={cpfValidoAluno}
+                            setIsDeficiente={setIsDeficiente}
                             setCpfValido={setCpfValidoAluno}
                         />
                     }
                     {tabAtiva === "ende" &&
                         <FormEndereco
                             userInfo={userInfo}
+                            maiorIdade={maiorIdade}
+                            cepValido={cepValido}
                             setUserInfo={setUserInfo}
-                            setInfoConcluido={setInfoConcluido}
                             setEnderecoConcluido={setEnderecoConcluido}
                             setTabAtiva={setTabAtiva}
-                            maiorIdade={maiorIdade}
+                            setCepValido={setCepValido}
                             handleConfirmar={cadastrarAluno}
                         />
                     }
                     {tabAtiva === "resp" &&
                         <FormResponsavel
                             userInfo={userInfo}
-                            setUserInfo={setUserInfo}
-                            handleConfirmar={cadastrarAluno}
-                            setInfoConcluido={setInfoConcluido}
-                            setEnderecoConcluido={setEnderecoConcluido}
-                            setTabAtiva={setTabAtiva}
-                            maiorIdade={maiorIdade}
-                            setCpfValido={setCpfValidoResp}
                             cpfValido={cpfValidoResp}
+                            infoConcluido={infoConcluido}
+                            enderecoConcluido={enderecoConcluido}
+                            setTabAtiva={setTabAtiva}
+                            setUserInfo={setUserInfo}
+                            setCpfValido={setCpfValidoResp}
+                            handleConfirmar={cadastrarAluno}
                         />
                     }
                 </Box>

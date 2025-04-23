@@ -76,7 +76,12 @@ export const ListaAlunos = () => {
     }, [searchValue])
 
     const fetchAlunos = (objFilter) => {
-        api.post("/alunos/comprovantes", objFilter)
+        api.post("/alunos/comprovantes", objFilter, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+            })
             .then((res) => {
                 setRowData(res.data);
                 console.log("Dados recebidos:", res.data);

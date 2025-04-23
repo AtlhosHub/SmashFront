@@ -11,6 +11,8 @@ import logo from '../../assets/logoACDNB.png';
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DefaultLoginCard } from "../DefaultComponents/DefaultLoginCard/DefaultLoginCard";
+import { useNavigate } from "react-router-dom";
+import { api } from "../../provider/apiProvider"
 
 export const TelaLogin = () => {
     const [usuario, setUsuario] = useState('');
@@ -18,11 +20,42 @@ export const TelaLogin = () => {
 
     const [mostrarSenha, setMostrarSenha] = useState(false);
 
-    const handleLogin = () => {
+    const navigate = useNavigate();
+
+    const handleLogin = (e) => {
         // Aplica o fetch pra validar o login
-        console.log('Usuário:', usuario);
-        console.log('Senha:', senha);
+        e.preventDefault();
+
+        api.post('usuarios/login', {
+            email: usuario,
+            senha: senha
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.status === 200 && response.data?.token) {
+                    sessionStorage.setItem('authToken', response.data.token);
+                    sessionStorage.setItem('usuario', response.data.nome);
+             
+                    setTimeout(() => {
+                        navigate('/telaInicial');
+                    }, 1000);
+                } else {
+                    throw new Error('Ops! Ocorreu um erro interno.');
+                }
+            })
+            .catch(error => {
+                console.log(error.message);
+                setToast({
+                    mensagem: error.message || 'Ops! Ocorreu um erro interno.',
+                    tipo: 'erro'
+                });
+            });
     }
+
+
 
     return (
         <>
