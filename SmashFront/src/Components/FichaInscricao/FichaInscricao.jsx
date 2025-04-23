@@ -103,17 +103,17 @@ export const FichaInscricao = () => {
                     cidade: userInfo.endereco.cidade,
                     cep: userInfo.endereco.cep
                 },
-                responsavel: [
+                responsaveis: [
                     {
-                        nome: null,
-                        nomeSocial: null,
-                        CPF: null,
-                        RG: null,
-                        profissao: null,
-                        genero: null,
-                        telefone: null,
-                        celular: null,
-                        email: null
+                        nome: userInfo.responsavel[0].nome,
+                        nomeSocial: userInfo.responsavel[0].nomeSocial,
+                        cpf: userInfo.responsavel[0].cpf,
+                        rg: userInfo.responsavel[0].rg,
+                        profissao: userInfo.responsavel[0].profissao,
+                        genero: userInfo.responsavel[0].genero,
+                        telefone: userInfo.responsavel[0].telefone,
+                        celular: userInfo.responsavel[0].celular,
+                        email: userInfo.responsavel[0].email
                     }
                 ],
             }, {
