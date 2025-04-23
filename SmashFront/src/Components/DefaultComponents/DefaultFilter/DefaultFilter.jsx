@@ -121,7 +121,7 @@ export const DefaultFilter = ({
                                             slotProps={{ textField: { size: 'small', placeholder: 'DD/MM/AAAA' } }}
                                             renderInput={(startProps, endProps) => (
                                                 <Box sx={{ display: 'flex', gap: 2 }}>
-                                                    <TextField {...startProps} />
+                                                    <TextField {...startProps} sx={{border: "0px"}} />
                                                     <TextField {...endProps} />
                                                 </Box>
                                             )}

@@ -13,6 +13,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DefaultLoginCard } from "../DefaultComponents/DefaultLoginCard/DefaultLoginCard";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../provider/apiProvider"
+import { toasterMsg } from "../../utils/toasterService";
 
 export const TelaLogin = () => {
     const [usuario, setUsuario] = useState('');
@@ -38,7 +39,7 @@ export const TelaLogin = () => {
                 if (response.status === 200 && response.data?.token) {
                     sessionStorage.setItem('authToken', response.data.token);
                     sessionStorage.setItem('usuario', response.data.nome);
-             
+
                     setTimeout(() => {
                         navigate('/telaInicial');
                     }, 1000);
@@ -47,15 +48,9 @@ export const TelaLogin = () => {
                 }
             })
             .catch(error => {
-                console.log(error.message);
-                setToast({
-                    mensagem: error.message || 'Ops! Ocorreu um erro interno.',
-                    tipo: 'erro'
-                });
+                toasterMsg("error", 'Ops! Ocorreu um erro interno.');
             });
     }
-
-
 
     return (
         <>

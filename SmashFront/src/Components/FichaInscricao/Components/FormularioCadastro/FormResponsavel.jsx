@@ -50,6 +50,7 @@ export const FormResponsavel = ({
     useEffect(() => {
         const camposPreenchidos =
             userInfo.responsavel[0].nome
+            && userInfo.responsavel[0].email
             && cpfValido
             && userInfo.autorizado !== null;
 
@@ -59,7 +60,9 @@ export const FormResponsavel = ({
         const condicionalLiberacao = camposPreenchidos && emailValido;
 
         setBotaoLiberado(condicionalLiberacao);
-    }, [userInfo]);
+    }, [userInfo, cpfValido]);
+
+    useEffect(() => {console.log(userInfo)}, [userInfo])
 
     return (
         <FormControl
@@ -101,7 +104,7 @@ export const FormResponsavel = ({
                                     ...userInfo,
                                     responsavel: [
                                         {
-                                            ...userInfo.responsavel,
+                                            ...userInfo.responsavel[0],
                                             nome: e.target.value,
                                         },
                                     ],
@@ -126,7 +129,7 @@ export const FormResponsavel = ({
                                     ...userInfo,
                                     responsavel: [
                                         {
-                                            ...userInfo.responsavel,
+                                            ...userInfo.responsavel[0],
                                             rg: e.target.value,
                                         },
                                     ],
@@ -330,7 +333,7 @@ export const FormResponsavel = ({
                                     ...userInfo,
                                     responsavel: [
                                         {
-                                            ...[0],
+                                            ...userInfo.responsavel[0],
                                             celular: e.target.value,
                                         },
                                     ],

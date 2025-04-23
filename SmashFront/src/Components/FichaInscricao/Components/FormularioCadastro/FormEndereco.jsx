@@ -22,7 +22,7 @@ export const FormEndereco = ({
 
         setBotaoLiberado(camposPreenchidos);
         setEnderecoConcluido(camposPreenchidos);
-    }, [userInfo]);
+    }, [userInfo, cepValido]);
 
     const formatarCep = (valor) => {
         if (!valor) return;
@@ -38,7 +38,7 @@ export const FormEndereco = ({
     const handleCepChange = async (e) => {
         const valorFormatado = formatarCep(e.target.value);
 
-        const cepNumerico = valorFormatado.replace(/\D/g, "");
+        const cepNumerico = valorFormatado?.replace(/\D/g, "");
 
         setUserInfo((prev) => ({
             ...prev,

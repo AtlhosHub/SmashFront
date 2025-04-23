@@ -190,6 +190,7 @@ export const FormInfo = ({
                                             ? dayjs(userInfo.dataNascimento)
                                             : null
                                     }
+                                    format="DD/MM/YYYY"
                                     onChange={(newValue) => {
                                         isMaiorDeIdade(newValue);
                                         setUserInfo({ ...userInfo, dataNascimento: newValue });
@@ -394,7 +395,7 @@ export const FormInfo = ({
                             gap: "5px",
                         }}
                     >
-                        Status de Presença
+                        Status de Presença <span style={{ color: "red" }}>*</span>
                         <Tooltip
                             title={
                                 <Typography sx={{ fontSize: "14px" }}>
