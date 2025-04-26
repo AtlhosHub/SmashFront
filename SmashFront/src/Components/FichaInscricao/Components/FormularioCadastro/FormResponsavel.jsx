@@ -44,17 +44,17 @@ export const FormResponsavel = ({
             .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     };
 
-    const [cpfUser, setCpfUser] = useState(userInfo.responsavel[0].cpf && formatCPF(userInfo.responsavel[0].cpf));
+    const [cpfUser, setCpfUser] = useState(userInfo.responsaveis[0].cpf && formatCPF(userInfo.responsaveis[0].cpf));
 
     useEffect(() => {
         const camposPreenchidos =
-            userInfo.responsavel[0].nome
-            && userInfo.responsavel[0].email
+            userInfo.responsaveis[0].nome
+            && userInfo.responsaveis[0].email
             && cpfValido
             && userInfo.autorizado !== null;
 
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        const emailValido = regexEmail.test(userInfo.responsavel[0].email);
+        const emailValido = regexEmail.test(userInfo.responsaveis[0].email);
 
         const condicionalLiberacao = camposPreenchidos && emailValido;
 
@@ -102,15 +102,15 @@ export const FormResponsavel = ({
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             nome: e.target.value,
                                         },
                                     ],
                                 })
                             }
-                            value={userInfo.responsavel[0].nome}
+                            value={userInfo.responsaveis[0].nome}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -127,15 +127,15 @@ export const FormResponsavel = ({
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             rg: e.target.value,
                                         },
                                     ],
                                 })
                             }
-                            value={userInfo.responsavel[0].rg}
+                            value={userInfo.responsaveis[0].rg}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -157,9 +157,9 @@ export const FormResponsavel = ({
                                 setCpfUser(formatCPF(raw))
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             cpf: raw,
                                         },
                                     ],
@@ -203,15 +203,15 @@ export const FormResponsavel = ({
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             nomeSocial: e.target.value,
                                         },
                                     ],
                                 })
                             }
-                            value={userInfo.responsavel[0].nomeSocial}
+                            value={userInfo.responsaveis[0].nomeSocial}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -228,15 +228,15 @@ export const FormResponsavel = ({
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             profissao: e.target.value,
                                         },
                                     ],
                                 })
                             }
-                            value={userInfo.responsavel[0].profissao}
+                            value={userInfo.responsaveis[0].profissao}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -253,15 +253,15 @@ export const FormResponsavel = ({
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             genero: e.target.value,
                                         },
                                     ],
                                 })
                             }
-                            value={userInfo.responsavel[0].genero}
+                            value={userInfo.responsaveis[0].genero}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -280,15 +280,15 @@ export const FormResponsavel = ({
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             email: e.target.value,
                                         },
                                     ],
                                 })
                             }
-                            value={userInfo.responsavel[0].email}
+                            value={userInfo.responsaveis[0].email}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -305,16 +305,16 @@ export const FormResponsavel = ({
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             telefone: e.target.value,
                                         },
                                     ],
                                 })
                             }
                             placeholder="(00) 00000-0000"
-                            value={formatarTelefone(userInfo.responsavel[0].telefone)}
+                            value={formatarTelefone(userInfo.responsaveis[0].telefone)}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -331,15 +331,15 @@ export const FormResponsavel = ({
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
-                                    responsavel: [
+                                    responsaveis: [
                                         {
-                                            ...userInfo.responsavel[0],
+                                            ...userInfo.responsaveis[0],
                                             celular: e.target.value,
                                         },
                                     ],
                                 })
                             }
-                            value={formatarTelefone(userInfo.responsavel[0].celular)}
+                            value={formatarTelefone(userInfo.responsaveis[0].celular)}
                             placeholder="(00) 00000-0000"
                             variant="outlined"
                             size="small"

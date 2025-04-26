@@ -37,6 +37,7 @@ export const TelaLogin = () => {
         })
             .then(response => {
                 if (response.status === 200 && response.data?.token) {
+                    sessionStorage.setItem('idUsuario', response.data.id);
                     sessionStorage.setItem('authToken', response.data.token);
                     sessionStorage.setItem('usuario', response.data.nome);
 

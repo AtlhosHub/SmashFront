@@ -31,7 +31,7 @@ export const ListaAlunos = () => {
             description: "Nome do Aluno"
         },
         {
-            name: "dtEnvio",
+            name: "dataEnvio",
             description: "Data de Envio"
         }
     ]

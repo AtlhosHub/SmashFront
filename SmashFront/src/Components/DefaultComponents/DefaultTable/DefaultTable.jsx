@@ -32,7 +32,7 @@ export const DefaultTable = ({
                         >
                             {withStatus &&
                                 <TableCell sx={{ textAlign: "center" }}>
-                                    {row?.isAtivo === true ?
+                                    {row?.ativo === true ?
                                         <CircleIcon sx={{ color: "#286DA8" }} /> :
                                         <CircleIcon sx={{ color: "#989898" }} />
                                     }
