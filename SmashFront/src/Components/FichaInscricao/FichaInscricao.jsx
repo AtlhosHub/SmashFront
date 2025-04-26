@@ -52,7 +52,7 @@ export const FichaInscricao = () => {
             cidade: null,
             cep: null
         },
-        responsavel: [
+        responsaveis: [
             {
                 nome: null,
                 nomeSocial: null,
@@ -66,10 +66,12 @@ export const FichaInscricao = () => {
             }
         ],
         usuarioInclusao: {
-            id: null
+            id: sessionStorage.getItem("idUsuario"),
         }
     });
 
+
+    
     const rotas = [
         {
             route: "/alunos",
@@ -82,45 +84,13 @@ export const FichaInscricao = () => {
     ]
 
     const cadastrarAluno = () => {
-        api.post("/alunos", {
-                nome: userInfo.nome,
-                email: userInfo.email,
-                dataNascimento: userInfo.dataNascimento,
-                cpf: userInfo.cpf,
-                rg: userInfo.rg,
-                nomeSocial: userInfo.nomeSocial,
-                genero: userInfo.genero,
-                celular: userInfo.celular,
-                nacionalidade: userInfo.nacionalidade,
-                naturalidade: userInfo.naturalidade,
-                telefone: userInfo.telefone,
-                profissao: userInfo.profissao,
-                ativo: userInfo.ativo,
-                temAtestado: userInfo.temAtestado,
-                deficiencia: userInfo.deficiencia,
-                autorizado: userInfo.autorizado,
-                dataInclusao: userInfo.dataInclusao,
-                endereco: {
-                    logradouro: userInfo.endereco.logradouro,
-                    numLogradouro: userInfo.endereco.numLogradouro,
-                    bairro: userInfo.endereco.bairro,
-                    cidade: userInfo.endereco.cidade,
-                    cep: userInfo.endereco.cep
-                },
-                responsaveis: [
-                    {
-                        nome: userInfo.responsavel[0].nome,
-                        nomeSocial: userInfo.responsavel[0].nomeSocial,
-                        cpf: userInfo.responsavel[0].cpf,
-                        rg: userInfo.responsavel[0].rg,
-                        profissao: userInfo.responsavel[0].profissao,
-                        genero: userInfo.responsavel[0].genero,
-                        telefone: userInfo.responsavel[0].telefone,
-                        celular: userInfo.responsavel[0].celular,
-                        email: userInfo.responsavel[0].email
-                    }
-                ],
-            }, {
+        const dadosAluno = { ...userInfo };
+
+        if (maiorIdade) {
+            dadosAluno.responsaveis = [];
+        }
+
+        api.post("/alunos", dadosAluno, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
