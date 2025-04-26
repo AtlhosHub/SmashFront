@@ -70,8 +70,6 @@ export const FichaInscricao = () => {
         }
     });
 
-
-    
     const rotas = [
         {
             route: "/alunos",
@@ -91,11 +89,11 @@ export const FichaInscricao = () => {
         }
 
         api.post("/alunos", dadosAluno, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-                }
-            })
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
             .then((response) => console.log(response.data))
             .catch((error) => console.error("Erro ao adicionar aluno:", error));
     }

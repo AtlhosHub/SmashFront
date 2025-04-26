@@ -10,7 +10,7 @@ import {
     InputAdornment,
     TextField
 } from "@mui/material"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
     Add,
     Search
@@ -21,7 +21,9 @@ import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonth
 export const ListaAlunos = () => {
     const navigate = useNavigate();
 
-    const [searchValue, setSearchValue] = useState(null);
+    const timeoutRef = useRef(null);
+    const searchValueRef = useRef(null);
+    const [searchValue, setSearchValue] = useState("");
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [dateRange, setDateRange] = useState(getMonthRange());
@@ -48,7 +50,7 @@ export const ListaAlunos = () => {
 
     const handleApplyFilter = () => {
         const objFilter = {
-            nome: searchValue != "" ? searchValue : null,
+            nome: searchValueRef.current != "" ? searchValueRef.current : null,
             status: statusPagamento?.label,
             ativo: statusPresenca?.value,
             dataEnvioForm: dateRange?.[0].format("YYYY-MM-DD"),
@@ -68,13 +70,19 @@ export const ListaAlunos = () => {
         handleApplyFilter()
     }, [])
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        setSearchValue(value);
+        searchValueRef.current = value;
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        timeoutRef.current = setTimeout(() => {
             handleApplyFilter();
-        }, 1000); // 1 segundo de delay
-    
-        return () => clearTimeout(timer);
-    }, [searchValue])
+        }, 1000);
+    }
 
     const fetchAlunos = (objFilter) => {
         api.post("/alunos/comprovantes", objFilter, {
@@ -82,7 +90,7 @@ export const ListaAlunos = () => {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
             }
-            })
+        })
             .then((res) => {
                 setRowData(res.data);
                 console.log("Dados recebidos:", res.data);
@@ -102,7 +110,9 @@ export const ListaAlunos = () => {
                 <Box className="action-area">
                     <TextField
                         value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        onChange={(e) => {
+                            handleInputChange(e);
+                        }}
                         label="Nome do Aluno"
                         variant="outlined"
                         size="small"
