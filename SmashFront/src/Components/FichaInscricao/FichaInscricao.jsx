@@ -17,7 +17,7 @@ export const FichaInscricao = () => {
     const [infoConcluido, setInfoConcluido] = useState(false);
     const [enderecoConcluido, setEnderecoConcluido] = useState(false);
     const [respConcluido, setRespConcluido] = useState(false);
-    const [operacao, setOperacao] = useState(location.state?.operacao || "");
+    const [operacao, setOperacao] = useState(location.state?.operacao || "cadastrar");
 
     // Variaveis de Controle Form
     const [maiorIdade, setMaiorIdade] = useState(true);
@@ -117,6 +117,7 @@ export const FichaInscricao = () => {
                         maiorIdade={maiorIdade}
                         tabAtiva={tabAtiva}
                         setTabAtiva={setTabAtiva}
+                        operacao={operacao}
                     />
                     {tabAtiva === "info" &&
                         <FormInfo

@@ -31,9 +31,9 @@ export const DefaultFilter = ({
     const rect = anchorEl?.getBoundingClientRect();
 
     const statusPagArray = [
-        { label: "Enviado" },
-        { label: "Pendente" },
-        { label: "Atrasado" }
+        { label: "PAGO" },
+        { label: "PENDENTE" },
+        { label: "ATRASADO" }
     ];
     const statusPresencaArray = [
         { label: "Presente", value: true, },
