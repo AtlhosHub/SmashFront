@@ -7,12 +7,17 @@ import { FormInfo } from "./Components/FormularioCadastro/FormInfo";
 import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
 import { api } from "../../provider/apiProvider"
 import { FormResponsavel } from "./Components/FormularioCadastro/FormResponsavel";
+import { useLocation } from "react-router-dom";
 
 export const FichaInscricao = () => {
+    const location = useLocation();
+
     //Variaveis de Controle Tela
     const [tabAtiva, setTabAtiva] = useState("info");
     const [infoConcluido, setInfoConcluido] = useState(false);
     const [enderecoConcluido, setEnderecoConcluido] = useState(false);
+    const [respConcluido, setRespConcluido] = useState(false);
+    const [operacao, setOperacao] = useState(location.state?.operacao || "");
 
     // Variaveis de Controle Form
     const [maiorIdade, setMaiorIdade] = useState(true);
@@ -77,8 +82,7 @@ export const FichaInscricao = () => {
     ]
 
     const cadastrarAluno = () => {
-        api
-            .post("/alunos", {
+        api.post("/alunos", {
                 nome: userInfo.nome,
                 email: userInfo.email,
                 dataNascimento: userInfo.dataNascimento,
@@ -139,6 +143,7 @@ export const FichaInscricao = () => {
                     <MenuCadastro
                         infoConcluido={infoConcluido}
                         enderecoConcluido={enderecoConcluido}
+                        respConcluido={respConcluido}
                         maiorIdade={maiorIdade}
                         tabAtiva={tabAtiva}
                         setTabAtiva={setTabAtiva}
@@ -177,6 +182,7 @@ export const FichaInscricao = () => {
                             enderecoConcluido={enderecoConcluido}
                             setTabAtiva={setTabAtiva}
                             setUserInfo={setUserInfo}
+                            setRespConcluido={setRespConcluido}
                             setCpfValido={setCpfValidoResp}
                             handleConfirmar={cadastrarAluno}
                         />

@@ -5,7 +5,7 @@ import { Badge, Box } from '@mui/material';
 import './MenuCadastro.css';
 import { Check } from '@mui/icons-material';
 
-export const MenuCadastro = ({ infoConcluido, enderecoConcluido, tabAtiva, setTabAtiva, maiorIdade }) => {
+export const MenuCadastro = ({ infoConcluido, enderecoConcluido, respConcluido, tabAtiva, setTabAtiva, maiorIdade }) => {
     return (
         <Box sx={{ display: "flex", flexDirection: "row", pl: "30px" }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: "5px", pt: "35px" }}>
@@ -28,7 +28,7 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, tabAtiva, setTa
                     <span>Informações</span>
                 </Box>
                 <Box
-                    className={enderecoConcluido
+                    className={enderecoConcluido && infoConcluido
                         ? "menu-cadastro-item concluido"
                         : tabAtiva === "ende"
                             ? "menu-cadastro-item ativo"
@@ -37,7 +37,7 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, tabAtiva, setTa
                                 : "menu-cadastro-item desativado"}
                     onClick={() => infoConcluido && setTabAtiva("ende")}
                 >
-                    {enderecoConcluido ? (
+                    {enderecoConcluido && infoConcluido ? (
                         <Badge badgeContent={<Check />}>
                             <FmdGoodOutlinedIcon />
                         </Badge>
@@ -47,10 +47,24 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, tabAtiva, setTa
                     <span>Endereço</span>
                 </Box>
                 <Box
-                    className={maiorIdade ? "menu-cadastro-item desativado" : tabAtiva === "resp" ? "menu-cadastro-item ativo" : "menu-cadastro-item"}
-                    onClick={() => { if (!maiorIdade) setTabAtiva("resp") }}
+                    className={respConcluido && enderecoConcluido && infoConcluido
+                        ? "menu-cadastro-item concluido"
+                        : tabAtiva === "resp"
+                            ? "menu-cadastro-item ativo"
+                            : enderecoConcluido
+                                ? "menu-cadastro-item"
+                                : "menu-cadastro-item desativado"
+                    }
+                    sx={{ display: maiorIdade ? "none" : "flex" }}
+                    onClick={() => { infoConcluido && enderecoConcluido && setTabAtiva("resp") }}
                 >
-                    <FamilyRestroomIcon />
+                    {respConcluido && enderecoConcluido && infoConcluido ? (
+                        <Badge badgeContent={<Check />}>
+                            <FamilyRestroomIcon />
+                        </Badge>
+                    ) : (
+                        <FamilyRestroomIcon />
+                    )}
                     <span>Responsável</span>
                 </Box>
             </Box>
