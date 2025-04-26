@@ -137,7 +137,11 @@ export const ListaAlunos = () => {
                     <DefaultButton
                         variant="contained"
                         label="Novo Cadastro"
-                        onClick={() => navigate("/cadastrarAluno")}
+                        onClick={() => navigate("/cadastrarAluno", {
+                            state: {
+                                operacao: "cadastrar"
+                            }
+                        })}
                         endIcon={<Add />}
                     />
                 </Box>

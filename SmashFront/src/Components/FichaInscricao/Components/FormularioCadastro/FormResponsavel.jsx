@@ -17,10 +17,9 @@ import { formatarTelefone } from "../../utils/validacaoForm";
 export const FormResponsavel = ({
     userInfo,
     cpfValido,
-    infoConcluido,
-    enderecoConcluido,
     setUserInfo,
     setCpfValido,
+    setRespConcluido,
     setTabAtiva,
     handleConfirmar,
 }) => {
@@ -60,6 +59,7 @@ export const FormResponsavel = ({
         const condicionalLiberacao = camposPreenchidos && emailValido;
 
         setBotaoLiberado(condicionalLiberacao);
+        setRespConcluido(condicionalLiberacao);
     }, [userInfo, cpfValido]);
 
     useEffect(() => {console.log(userInfo)}, [userInfo])
