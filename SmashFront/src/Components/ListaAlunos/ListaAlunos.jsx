@@ -16,6 +16,7 @@ import {
     Search
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom";
+import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonthRange";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ export const ListaAlunos = () => {
     const [searchValue, setSearchValue] = useState(null);
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
-    const [dateRange, setDateRange] = useState([null, null]);
+    const [dateRange, setDateRange] = useState(getMonthRange());
 
     const headCells = [
         {
@@ -50,8 +51,8 @@ export const ListaAlunos = () => {
             nome: searchValue != "" ? searchValue : null,
             status: statusPagamento?.label,
             ativo: statusPresenca?.value,
-            dataEnvioForm: dateRange?.[0],
-            dataEnvioTo: dateRange?.[1]
+            dataEnvioForm: dateRange?.[0].format("YYYY-MM-DD"),
+            dataEnvioTo: dateRange?.[1].format("YYYY-MM-DD")
         }
 
         fetchAlunos(objFilter);
