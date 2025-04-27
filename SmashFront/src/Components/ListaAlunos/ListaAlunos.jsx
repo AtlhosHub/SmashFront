@@ -161,6 +161,7 @@ export const ListaAlunos = () => {
                         headCells={headCells}
                         rowData={rowData}
                         withStatus={true}
+                        withPagStatus={true}
                     />
                 </Box>
             </Box>

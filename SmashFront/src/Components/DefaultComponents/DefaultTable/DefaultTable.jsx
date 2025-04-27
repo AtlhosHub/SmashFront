@@ -5,7 +5,8 @@ import "./DefaultTable.css"
 export const DefaultTable = ({
     headCells,
     rowData,
-    withStatus = false
+    withStatus = false,
+    withPagStatus = false,
 }) => {
     return (
         <TableContainer sx={{ marginTop: "3rem", width: "100%" }}>
@@ -13,12 +14,12 @@ export const DefaultTable = ({
                 <TableHead sx={{ backgroundColor: "white" }}>
                     <TableRow className="header-table-row">
                         {withStatus &&
-                            <TableCell sx={{ textAlign: "center" }}>Status de Presença</TableCell>
+                            <TableCell sx={{ textAlign: "center", width: "10%" }}>Status</TableCell>
                         }
                         {headCells.map((cell, index) => (
                             <TableCell key={`header-cell-${index}`}>{cell.description}</TableCell>
                         ))}
-                        {withStatus &&
+                        {withPagStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
                         }
                     </TableRow>

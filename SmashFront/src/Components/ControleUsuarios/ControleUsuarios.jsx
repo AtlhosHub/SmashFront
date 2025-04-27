@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader"
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
 import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
@@ -8,7 +9,6 @@ import {
     InputAdornment,
     TextField
 } from "@mui/material"
-import { useEffect, useRef, useState } from "react"
 import {
     Add,
     Search
@@ -30,10 +30,6 @@ export const ControleUsuarios = () => {
         {
             name: "nome",
             description: "Nome do Aluno"
-        },
-        {
-            name: "dataEnvio",
-            description: "Data de Envio"
         }
     ]
 
