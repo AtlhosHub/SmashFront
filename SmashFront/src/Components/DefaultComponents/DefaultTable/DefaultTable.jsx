@@ -51,7 +51,7 @@ export const DefaultTable = ({
                                     {row[header.name]}
                                 </TableCell>
                             ))}
-                            {withStatus &&
+                            {withPagStatus &&
                                 <TableCell sx={{ textAlign: "center" }}>
                                     <Box
                                         className="status-comprovante"

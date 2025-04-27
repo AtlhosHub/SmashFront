@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader"
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
 import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
@@ -13,6 +13,7 @@ import {
     Add,
     Search
 } from "@mui/icons-material"
+import { api } from "../../provider/apiProvider"
 
 export const ControleUsuarios = () => {
 
@@ -29,9 +30,26 @@ export const ControleUsuarios = () => {
     const headCells = [
         {
             name: "nome",
-            description: "Nome do Aluno"
+            description: "Nome do Usuário Admnistrador"
         }
     ]
+
+    useEffect(() => {
+        listarUsuarios();
+    }, [])
+
+    const listarUsuarios = () => {
+        api.get("/usuarios", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then((response) => {
+                setRowData(response.data)
+            })
+            .catch((error) => console.error("Erro ao buscar dados:", error));
+    }
 
     return (
         <>
@@ -47,7 +65,7 @@ export const ControleUsuarios = () => {
                         onChange={(e) => {
                             handleInputChange(e);
                         }}
-                        label="Nome do Aluno"
+                        label="Nome do Usuário"
                         variant="outlined"
                         size="small"
                         sx={{
