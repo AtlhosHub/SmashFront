@@ -40,10 +40,12 @@ export const DefaultTable = ({
                             }
                             {headCells.map((header) => (
                                 <TableCell sx={{
-                                    ...(withStatus && header.name === "nomeAluno" && {'&:hover': {
-                                        cursor: "pointer",
-                                        textDecoration: "underline",
-                                    }})
+                                    ...(withStatus && header.name === "nomeAluno" && {
+                                        '&:hover': {
+                                            cursor: "pointer",
+                                            textDecoration: "underline",
+                                        }
+                                    })
                                 }}>
                                     {row[header.name]}
                                 </TableCell>
@@ -53,12 +55,12 @@ export const DefaultTable = ({
                                     <Box
                                         className="status-comprovante"
                                         sx={{
-                                            backgroundColor: row?.status === "Enviado" ?
-                                                "#2E7D32" :
-                                                row?.status === "Pendente" ?
-                                                    "#989898" :
-                                                    "#FF0000",
-                                            color: row?.status === "Pendente" ? "black" : "white",
+                                            backgroundColor: row?.status === "PAGO"
+                                                ? "#2E7D32"
+                                                : row?.status === "PENDENTE"
+                                                    ? "#989898"
+                                                    : "#FF0000",
+                                            color: row?.status === "PENDENTE" ? "black" : "white",
                                         }}>
                                         {row?.status}
                                     </Box>
