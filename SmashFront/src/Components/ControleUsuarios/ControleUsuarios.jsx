@@ -103,7 +103,6 @@ export const ControleUsuarios = () => {
                     <DefaultTable
                         headCells={headCells}
                         rowData={rowData}
-                        withStatus={true}
                     />
                 </Box>
             </Box>
