@@ -12,7 +12,7 @@ function App() {
         <Route path="/" element={<TelaLogin />} />
         <Route path="/telaInicial" element={<TelaInicial />} />
         <Route path="/alunos" element={<ListaAlunos />} />
-        <Route path="/cadastrarAluno" element={<FichaInscricao />} />
+        <Route path="/fichaInscricao" element={<FichaInscricao />} />
       </Routes>
     </>
   )

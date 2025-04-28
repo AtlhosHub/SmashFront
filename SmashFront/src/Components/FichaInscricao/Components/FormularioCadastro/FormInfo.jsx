@@ -21,13 +21,14 @@ export const FormInfo = ({
     userInfo,
     maiorIdade,
     cpfValido,
-    isDeficiente, 
+    isDeficiente,
     setMaiorIdade,
     setTabAtiva,
     setInfoConcluido,
     setIsDeficiente,
     setUserInfo,
-    setCpfValido
+    setCpfValido,
+    operacao
 }) => {
     const navigate = useNavigate();
 
@@ -119,10 +120,10 @@ export const FormInfo = ({
                 >
                     <Box>
                         <label>
-                            Nome do Aluno <span style={{ color: "red" }}>*</span>
+                            Nome do Aluno <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
                         </label>
                         <TextField
-                            required
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.nome}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, nome: e.target.value })
@@ -130,7 +131,12 @@ export const FormInfo = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -164,6 +170,7 @@ export const FormInfo = ({
                             </Tooltip>
                         </label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.nomeSocial}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, nomeSocial: e.target.value })
@@ -171,7 +178,12 @@ export const FormInfo = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -180,15 +192,15 @@ export const FormInfo = ({
                     <Box display={"flex"} gap={2}>
                         <Box sx={{ width: "100%" }}>
                             <label>
-                                Data de Nascimento <span style={{ color: "red" }}>*</span>
+                                Data de Nascimento <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
                             </label>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     size="small"
-                                    value={
-                                        userInfo.dataNascimento
-                                            ? dayjs(userInfo.dataNascimento)
-                                            : null
+                                    disabled={operacao === "visualizacao"}
+                                    value={userInfo.dataNascimento
+                                        ? dayjs(userInfo.dataNascimento)
+                                        : null
                                     }
                                     format="DD/MM/YYYY"
                                     onChange={(newValue) => {
@@ -199,8 +211,13 @@ export const FormInfo = ({
                                         textField: { size: "small", placeholder: "DD/MM/AAAA" },
                                     }}
                                     sx={{
+                                        "& .MuiInputBase-root": {
+                                            borderRadius: "8px"
+                                        },
+                                        '& .MuiInputBase-input.Mui-disabled': {
+                                            "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                        },
                                         width: "100%",
-                                        "& .MuiInputBase-root": { borderRadius: "8px" },
                                     }}
                                 />
                             </LocalizationProvider>
@@ -209,6 +226,7 @@ export const FormInfo = ({
                         <Box sx={{ width: "100%" }}>
                             <label>Gênero</label>
                             <TextField
+                                disabled={operacao === "visualizacao"}
                                 value={userInfo.genero}
                                 onChange={(e) =>
                                     setUserInfo({ ...userInfo, genero: e.target.value })
@@ -216,7 +234,12 @@ export const FormInfo = ({
                                 variant="outlined"
                                 size="small"
                                 sx={{
-                                    "& .MuiInputBase-root": { borderRadius: "8px" },
+                                    "& .MuiInputBase-root": {
+                                        borderRadius: "8px"
+                                    },
+                                    '& .MuiInputBase-input.Mui-disabled': {
+                                        "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    },
                                     width: "100%",
                                 }}
                             />
@@ -226,6 +249,7 @@ export const FormInfo = ({
                     <Box>
                         <label>Profissão</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.profissao}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, profissao: e.target.value })
@@ -233,7 +257,12 @@ export const FormInfo = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -252,6 +281,7 @@ export const FormInfo = ({
                     <Box>
                         <label>Nacionalidade</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.nacionalidade}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, nacionalidade: e.target.value })
@@ -259,7 +289,12 @@ export const FormInfo = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -267,16 +302,21 @@ export const FormInfo = ({
 
                     <Box>
                         <label>
-                            RG <span style={{ color: "red" }}>*</span>
+                            RG <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
                         </label>
                         <TextField
-                            required
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.rg}
                             onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value })}
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -285,6 +325,7 @@ export const FormInfo = ({
                     <Box>
                         <label>Telefone</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             value={formatarTelefone(userInfo.telefone)}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, telefone: e.target.value })
@@ -294,7 +335,12 @@ export const FormInfo = ({
                             type="tel"
                             placeholder="(00) 00000-0000"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -302,10 +348,10 @@ export const FormInfo = ({
 
                     <Box>
                         <label>
-                            Email {maiorIdade && <span style={{ color: "red" }}>*</span>}
+                            Email {maiorIdade && <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>}
                         </label>
                         <TextField
-                            required
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.email}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, email: e.target.value })
@@ -314,7 +360,12 @@ export const FormInfo = ({
                             size="small"
                             type="email"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -333,6 +384,7 @@ export const FormInfo = ({
                     <Box>
                         <label>Naturalidade</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.naturalidade}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, naturalidade: e.target.value })
@@ -340,7 +392,12 @@ export const FormInfo = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -348,10 +405,10 @@ export const FormInfo = ({
 
                     <Box>
                         <label>
-                            CPF <span style={{ color: "red" }}>*</span>
+                            CPF <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
                         </label>
                         <TextField
-                            required
+                            disabled={operacao === "visualizacao"}
                             value={cpfUser}
                             onChange={(e) => {
                                 const raw = e.target.value.replace(/\D/g, "");
@@ -361,7 +418,12 @@ export const FormInfo = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -370,6 +432,7 @@ export const FormInfo = ({
                     <Box>
                         <label>Celular</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             value={formatarTelefone(userInfo.celular)}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, celular: e.target.value })
@@ -379,7 +442,12 @@ export const FormInfo = ({
                             type="tel"
                             placeholder="(00) 00000-0000"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -395,7 +463,7 @@ export const FormInfo = ({
                             gap: "5px",
                         }}
                     >
-                        Status de Presença <span style={{ color: "red" }}>*</span>
+                        Status de Presença <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
                         <Tooltip
                             title={
                                 <Typography sx={{ fontSize: "14px" }}>
@@ -422,11 +490,33 @@ export const FormInfo = ({
                             setUserInfo({ ...userInfo, ativo: e.target.value })
                         }
                     >
-                        <FormControlLabel value={true} control={<Radio />} label="Ativo" />
+                        <FormControlLabel
+                            value={true}
+                            control={
+                                <Radio
+                                    disabled={operacao === "visualizacao"}
+                                    sx={{
+                                        "&.Mui-disabled.Mui-checked": {
+                                            color: "#00000080",
+                                        },
+                                    }}
+                                />
+                            }
+                            label={<span style={{ color: "rgba(0, 0, 0, 0.60)" }}>Ativo</span>}
+                        />
                         <FormControlLabel
                             value={false}
-                            control={<Radio />}
-                            label="Inativo"
+                            control={
+                                <Radio
+                                    disabled={operacao === "visualizacao"}
+                                    sx={{
+                                        "&.Mui-disabled.Mui-checked": {
+                                            color: "#00000080",
+                                        },
+                                    }}
+                                />
+                            }
+                            label={<span style={{ color: "rgba(0, 0, 0, 0.60)" }}>Inativo</span>}
                         />
                     </RadioGroup>
                 </Box>
@@ -465,8 +555,34 @@ export const FormInfo = ({
                             setUserInfo({ ...userInfo, temAtestado: e.target.value })
                         }
                     >
-                        <FormControlLabel value={true} control={<Radio />} label="Sim" />
-                        <FormControlLabel value={false} control={<Radio />} label="Não" />
+                        <FormControlLabel
+                            value={true}
+                            control={
+                                <Radio
+                                    disabled={operacao === "visualizacao"}
+                                    sx={{
+                                        "&.Mui-disabled.Mui-checked": {
+                                            color: "#00000080",
+                                        },
+                                    }}
+                                />
+                            }
+                            label="Sim"
+                        />
+                        <FormControlLabel
+                            value={false}
+                            control={
+                                <Radio
+                                    disabled={operacao === "visualizacao"}
+                                    sx={{
+                                        "&.Mui-disabled.Mui-checked": {
+                                            color: "#00000080",
+                                        },
+                                    }}
+                                />
+                            }
+                            label="Não"
+                        />
                     </RadioGroup>
                 </Box>
                 <Box sx={{ color: "black" }}>
@@ -479,7 +595,7 @@ export const FormInfo = ({
                     >
                         <span>
                             Possui Deficiência e/ou Neurodivergência{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
                         </span>
                         <Tooltip
                             title={
@@ -505,10 +621,37 @@ export const FormInfo = ({
                         value={isDeficiente}
                         onChange={(e) => setIsDeficiente(e.target.value === "true")}
                     >
-                        <FormControlLabel value={true} control={<Radio />} label="Sim" />
-                        <FormControlLabel value={false} control={<Radio />} label="Não" />
+                        <FormControlLabel
+                            value={true}
+                            control={
+                                <Radio
+                                    disabled={operacao === "visualizacao"}
+                                    sx={{
+                                        "&.Mui-disabled.Mui-checked": {
+                                            color: "#00000080",
+                                        },
+                                    }}
+                                />
+                            }
+                            label="Sim"
+                        />
+                        <FormControlLabel
+                            value={false}
+                            control={
+                                <Radio
+                                    disabled={operacao === "visualizacao"}
+                                    sx={{
+                                        "&.Mui-disabled.Mui-checked": {
+                                            color: "#00000080",
+                                        },
+                                    }}
+                                />
+                            }
+                            label="Não"
+                        />
                         {isDeficiente && (
                             <TextField
+                                disabled={operacao === "visualizacao"}
                                 size="small"
                                 placeholder="Especifique"
                                 value={userInfo.deficiencia}

@@ -4,21 +4,55 @@ import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import { Badge, Box } from '@mui/material';
 import './MenuCadastro.css';
 import { Check } from '@mui/icons-material';
+import HistoryIcon from '@mui/icons-material/History';
 
-export const MenuCadastro = ({ infoConcluido, enderecoConcluido, respConcluido, tabAtiva, setTabAtiva, maiorIdade }) => {
+export const MenuCadastro = ({
+    infoConcluido,
+    enderecoConcluido,
+    respConcluido,
+    tabAtiva,
+    setTabAtiva,
+    maiorIdade,
+    operacao
+}) => {
+
+    const getMenuItemClass = ({ operacao, tabAtiva, idTab, tabAnteriorConcluida, tabAtualConcluida }) => {
+        if (operacao === "cadastro") {
+            if (tabAtualConcluida && tabAnteriorConcluida) {
+                return "menu-cadastro-item concluido";
+            }
+            if (tabAtiva === idTab) {
+                return "menu-cadastro-item ativo-cadastro";
+            }
+            if (tabAnteriorConcluida) {
+                return "menu-cadastro-item";
+            }
+            return "menu-cadastro-item desativado";
+        }
+
+        if (operacao === "visualizacao") {
+            return tabAtiva === idTab
+                ? "menu-cadastro-item ativo-visu"
+                : "menu-cadastro-item ocioso";
+        }
+
+        return "menu-cadastro-item";
+    };
+
     return (
         <Box sx={{ display: "flex", flexDirection: "row", pl: "30px" }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: "5px", pt: "35px" }}>
                 <Box
-                    className={infoConcluido
-                        ? "menu-cadastro-item concluido"
-                        : tabAtiva === "info"
-                            ? "menu-cadastro-item ativo"
-                            : "menu-cadastro-item"
-                    }
+                    className={getMenuItemClass({
+                        operacao,
+                        tabAtiva,
+                        idTab: "info",
+                        tabAnteriorConcluida: infoConcluido,
+                        tabAtualConcluida: infoConcluido
+                    })}
                     onClick={() => setTabAtiva("info")}
                 >
-                    {infoConcluido ? (
+                    {operacao === "cadastro" && infoConcluido ? (
                         <Badge badgeContent={<Check />}>
                             <AccountCircleOutlinedIcon />
                         </Badge>
@@ -28,16 +62,20 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, respConcluido, 
                     <span>Informações</span>
                 </Box>
                 <Box
-                    className={enderecoConcluido && infoConcluido
-                        ? "menu-cadastro-item concluido"
-                        : tabAtiva === "ende"
-                            ? "menu-cadastro-item ativo"
-                            : infoConcluido
-                                ? "menu-cadastro-item"
-                                : "menu-cadastro-item desativado"}
-                    onClick={() => infoConcluido && setTabAtiva("ende")}
+                    className={getMenuItemClass({
+                        operacao,
+                        tabAtiva,
+                        idTab: "ende",
+                        tabAnteriorConcluida: infoConcluido,
+                        tabAtualConcluida: enderecoConcluido
+                    })}
+                    onClick={() => {
+                        operacao === "cadastro"
+                            ? infoConcluido && setTabAtiva("ende")
+                            : setTabAtiva("ende")
+                    }}
                 >
-                    {enderecoConcluido && infoConcluido ? (
+                    {operacao === "cadastro" && enderecoConcluido && infoConcluido ? (
                         <Badge badgeContent={<Check />}>
                             <FmdGoodOutlinedIcon />
                         </Badge>
@@ -47,18 +85,21 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, respConcluido, 
                     <span>Endereço</span>
                 </Box>
                 <Box
-                    className={respConcluido && enderecoConcluido && infoConcluido
-                        ? "menu-cadastro-item concluido"
-                        : tabAtiva === "resp"
-                            ? "menu-cadastro-item ativo"
-                            : enderecoConcluido
-                                ? "menu-cadastro-item"
-                                : "menu-cadastro-item desativado"
-                    }
+                    className={getMenuItemClass({
+                        operacao,
+                        tabAtiva,
+                        idTab: "resp",
+                        tabAnteriorConcluida: enderecoConcluido,
+                        tabAtualConcluida: respConcluido
+                    })}
                     sx={{ display: maiorIdade ? "none" : "flex" }}
-                    onClick={() => { infoConcluido && enderecoConcluido && setTabAtiva("resp") }}
+                    onClick={() => {
+                        operacao === "cadastro"
+                            ? infoConcluido && enderecoConcluido && setTabAtiva("resp")
+                            : setTabAtiva("resp")
+                    }}
                 >
-                    {respConcluido && enderecoConcluido && infoConcluido ? (
+                    {operacao === "cadastro" && respConcluido && enderecoConcluido && infoConcluido ? (
                         <Badge badgeContent={<Check />}>
                             <FamilyRestroomIcon />
                         </Badge>
@@ -67,6 +108,21 @@ export const MenuCadastro = ({ infoConcluido, enderecoConcluido, respConcluido, 
                     )}
                     <span>Responsável</span>
                 </Box>
+                {operacao !== "cadastro" && (
+                    <Box
+                        className={getMenuItemClass({
+                            operacao,
+                            tabAtiva,
+                            idTab: "paga",
+                            tabAnteriorConcluida: infoConcluido,
+                            tabAtualConcluida: true
+                        })}
+                        onClick={() => setTabAtiva("paga")}
+                    >
+                        <HistoryIcon />
+                        <span>Pagamento</span>
+                    </Box>
+                )}
             </Box>
             <Box sx={{ width: "1px", backgroundColor: "#00000070", marginInline: "30px" }} />
         </Box>
