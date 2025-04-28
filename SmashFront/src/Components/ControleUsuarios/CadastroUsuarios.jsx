@@ -3,6 +3,7 @@ import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/Defaul
 import { Box } from "@mui/material";
 import { MenuCadastro } from "../FichaInscricao/Components/MenuCadastro/MenuCadastro";
 import { FormInfoUsuario } from "./Components/FormularioCadastroUsuario/FormInfoUsuario";
+import { useState } from "react";
 
 export const CadastroUsuarios = () => {
     const rotas = [
@@ -15,6 +16,24 @@ export const CadastroUsuarios = () => {
             description: "Cadastrar Usuário",
         },
     ];
+
+    // Dados dos Form
+    const [userInfo, setUserInfo] = useState({
+        nome: null,
+        email: null,
+        dataNascimento: null,
+        nomeSocial: null,
+        genero: null,
+        celular: null,
+        telefone: null,
+        senha: null,
+        cargo: null,
+        deletado: false,
+        dataInclusao: null,
+        usuarioInclusao: {
+            id: sessionStorage.getItem("idUsuario"),
+        }
+    });
 
     return (
         <>
@@ -35,7 +54,10 @@ export const CadastroUsuarios = () => {
                     }}
                 >
                     <MenuCadastro />
-                    <FormInfoUsuario />
+                    <FormInfoUsuario
+                        userInfo={userInfo}
+                        setUserInfo={setUserInfo}
+                    />
                 </Box>
             </Box>
         </>

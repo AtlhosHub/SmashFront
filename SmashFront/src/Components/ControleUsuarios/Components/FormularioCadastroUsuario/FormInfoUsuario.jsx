@@ -12,8 +12,22 @@ import HelpIcon from "@mui/icons-material/Help";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
+import { formatarTelefone } from "../../../FichaInscricao/utils/validacaoForm";
+import { useEffect, useState } from "react";
 
-export const FormInfoUsuario = () => {
+export const FormInfoUsuario = ({
+    userInfo,
+    setUserInfo,
+}) => {
+    const nomeSocialText =
+        "Nome social é o nome em que a pessoa prefere ser chamada, diferente do seu nome legal.";
+
+    const [confirmarSenha, setConfirmarSenha] = useState("");
+
+    useEffect(() => {
+        const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        const emailValido = regexEmail.test(userInfo.email);
+    }, [userInfo])
 
     return (
         <>
@@ -42,12 +56,14 @@ export const FormInfoUsuario = () => {
                     >
                         <Box>
                             <label>
-                                Nome do Aluno <span style={{ color: "red" }}>*</span>
+                                Nome do Usuário <span style={{ color: "red" }}>*</span>
                             </label>
                             <TextField
                                 required
-                                value={""}
-
+                                value={userInfo.nome}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, nome: e.target.value })
+                                }
                                 variant="outlined"
                                 size="small"
                                 sx={{
@@ -60,8 +76,10 @@ export const FormInfoUsuario = () => {
                         <Box sx={{ width: "100%" }}>
                             <label>Gênero</label>
                             <TextField
-                                value={""}
-
+                                value={userInfo.genero}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, genero: e.target.value })
+                                }
                                 variant="outlined"
                                 size="small"
                                 sx={{
@@ -74,8 +92,10 @@ export const FormInfoUsuario = () => {
                         <Box sx={{ width: "100%" }}>
                             <label>Cargo</label>
                             <TextField
-                                value={""}
-
+                                value={userInfo.cargo}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, cargo: e.target.value })
+                                }
                                 variant="outlined"
                                 size="small"
                                 sx={{
@@ -97,7 +117,7 @@ export const FormInfoUsuario = () => {
                                 <Tooltip
                                     title={
                                         <Typography sx={{ fontSize: "14px" }}>
-
+                                            {nomeSocialText}
                                         </Typography>
                                     }
                                     placement="right"
@@ -113,8 +133,10 @@ export const FormInfoUsuario = () => {
                                 </Tooltip>
                             </label>
                             <TextField
-                                value={""}
-
+                                value={userInfo.nomeSocial}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, nomeSocial: e.target.value })
+                                }
                                 variant="outlined"
                                 size="small"
                                 sx={{
@@ -131,15 +153,14 @@ export const FormInfoUsuario = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     size="small"
-                                    // value={
-                                    //     userInfo.dataNascimento
-                                    //         ? dayjs(userInfo.dataNascimento)
-                                    //         : null
-                                    // }
+                                    value={
+                                        userInfo.dataNascimento
+                                            ? dayjs(userInfo.dataNascimento)
+                                            : null
+                                    }
                                     format="DD/MM/YYYY"
                                     onChange={(newValue) => {
-                                        isMaiorDeIdade(newValue);
-                                        // setUserInfo({ ...userInfo, dataNascimento: newValue });
+                                        setUserInfo({ ...userInfo, dataNascimento: newValue });
                                     }}
                                     slotProps={{
                                         textField: { size: "small", placeholder: "DD/MM/AAAA" },
@@ -154,10 +175,10 @@ export const FormInfoUsuario = () => {
                         <Box>
                             <label>Celular</label>
                             <TextField
-                                value={""}
-                                // onChange={(e) =>
-                                //     setUserInfo({ ...userInfo, celular: e.target.value })
-                                // }
+                                value={formatarTelefone(userInfo.celular)}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, celular: e.target.value })
+                                }
                                 variant="outlined"
                                 size="small"
                                 type="tel"
@@ -187,10 +208,10 @@ export const FormInfoUsuario = () => {
                             </label>
                             <TextField
                                 required
-                                // value={""}
-                                // onChange={(e) =>
-                                //     setUserInfo({ ...userInfo, email: e.target.value })
-                                // }
+                                value={userInfo.email}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, email: e.target.value })
+                                }
                                 variant="outlined"
                                 size="small"
                                 type="email"
@@ -207,10 +228,10 @@ export const FormInfoUsuario = () => {
                             </label>
                             <TextField
                                 required
-                                // value={""}
-                                // onChange={(e) =>
-                                //     setUserInfo({ ...userInfo, email: e.target.value })
-                                // }
+                                value={userInfo.senha}
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, senha: e.target.value })
+                                }
                                 variant="outlined"
                                 size="small"
                                 type="password"
@@ -227,10 +248,10 @@ export const FormInfoUsuario = () => {
                             </label>
                             <TextField
                                 required
-                                // value={""}
-                                // onChange={(e) =>
-                                //     setUserInfo({ ...userInfo, email: e.target.value })
-                                // }
+                                value={confirmarSenha}
+                                onChange={(e) =>
+                                    setConfirmarSenha(e.target.value)
+                                }
                                 variant="outlined"
                                 size="small"
                                 type="password"
@@ -256,7 +277,7 @@ export const FormInfoUsuario = () => {
                     <DefaultButton
                         // disabled={!botaoLiberado}
                         variant="contained"
-                        label="Prosseguir"
+                        label="Concluir"
                         onClick={() => {
                             setTabAtiva("ende");
                         }}
