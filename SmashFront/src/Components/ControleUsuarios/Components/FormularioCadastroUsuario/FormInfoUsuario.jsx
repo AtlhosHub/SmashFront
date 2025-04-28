@@ -1,9 +1,8 @@
 import {
     Box,
     FormControl,
-    FormControlLabel,
-    Radio,
-    RadioGroup,
+    IconButton,
+    InputAdornment,
     TextField,
     Tooltip,
     Typography,
@@ -14,29 +13,53 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { formatarTelefone } from "../../../FichaInscricao/utils/validacaoForm";
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export const FormInfoUsuario = ({
     userInfo,
     setUserInfo,
+    handleApplyClick
 }) => {
     const nomeSocialText =
         "Nome social é o nome em que a pessoa prefere ser chamada, diferente do seu nome legal.";
 
+    const [senha, setSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
+    const [botaoLiberado, setBotaoLiberado] = useState(false);
+
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
+    const [erroConfirmarSenha, setErroCofirmarSenha] = useState(false);
 
     useEffect(() => {
+        const camposPreenchidos = userInfo.nome && userInfo.dataNascimento && senha && confirmarSenha;
+
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         const emailValido = regexEmail.test(userInfo.email);
-    }, [userInfo])
+        let senhaIgual = false;
+
+        if (!!confirmarSenha === true) {
+            senhaIgual = senha === confirmarSenha;
+            setErroCofirmarSenha(senha === confirmarSenha ? false : true);
+        } else {
+            setErroCofirmarSenha(false)
+        }
+
+        const condicionalLiberacao = camposPreenchidos && emailValido && senhaIgual;
+        setUserInfo({ ...userInfo, senha: senha })
+        setBotaoLiberado(condicionalLiberacao);
+    }, [userInfo, senha, confirmarSenha]);
 
     return (
         <>
-            <FormControl sx={{
-                display: "flex",
-                flexDirection: "column",
-                flex: 1,
-                padding: "30px 20px 20px 0px",
-            }}
+            <FormControl
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    flex: 1,
+                    padding: "30px 20px 20px 0px",
+                }}
             >
 
                 <Box
@@ -207,7 +230,6 @@ export const FormInfoUsuario = ({
                                 Email  <span style={{ color: "red" }}>*</span>
                             </label>
                             <TextField
-                                required
                                 value={userInfo.email}
                                 onChange={(e) =>
                                     setUserInfo({ ...userInfo, email: e.target.value })
@@ -228,16 +250,34 @@ export const FormInfoUsuario = ({
                             </label>
                             <TextField
                                 required
-                                value={userInfo.senha}
+                                value={senha}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, senha: e.target.value })
+                                    setSenha(e.target.value)
                                 }
                                 variant="outlined"
                                 size="small"
-                                type="password"
+                                type={mostrarSenha ? "text" : "password"}
                                 sx={{
                                     "& .MuiInputBase-root": { borderRadius: "8px" },
                                     width: "100%",
+                                }}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={() => setMostrarSenha(!mostrarSenha)}
+                                                edge="end"
+                                                sx={{
+                                                    color: "#093962",
+                                                    '&:hover': {
+                                                        color: "#093962",
+                                                    },
+                                                }}
+                                            >
+                                                {mostrarSenha ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
                                 }}
                             />
                         </Box>
@@ -247,17 +287,35 @@ export const FormInfoUsuario = ({
                                 Confirmar senha  <span style={{ color: "red" }}>*</span>
                             </label>
                             <TextField
-                                required
+                                error={erroConfirmarSenha}
                                 value={confirmarSenha}
                                 onChange={(e) =>
                                     setConfirmarSenha(e.target.value)
                                 }
                                 variant="outlined"
                                 size="small"
-                                type="password"
+                                type={mostrarConfirmarSenha ? "text" : "password"}
                                 sx={{
                                     "& .MuiInputBase-root": { borderRadius: "8px" },
                                     width: "100%",
+                                }}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
+                                                edge="end"
+                                                sx={{
+                                                    color: "#093962",
+                                                    '&:hover': {
+                                                        color: "#093962",
+                                                    },
+                                                }}
+                                            >
+                                                {mostrarConfirmarSenha ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
                                 }}
                             />
                         </Box>
@@ -275,12 +333,10 @@ export const FormInfoUsuario = ({
                 >
                     <DefaultButton variant="outlined" label="Cancelar" onClick={() => navigate("/alunos")} />
                     <DefaultButton
-                        // disabled={!botaoLiberado}
+                        disabled={!botaoLiberado}
                         variant="contained"
                         label="Concluir"
-                        onClick={() => {
-                            setTabAtiva("ende");
-                        }}
+                        onClick={() => handleApplyClick()}
                     />
                 </Box>
             </FormControl>

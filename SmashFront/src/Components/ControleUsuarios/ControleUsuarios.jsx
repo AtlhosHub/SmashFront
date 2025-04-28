@@ -14,8 +14,10 @@ import {
     Search
 } from "@mui/icons-material"
 import { api } from "../../provider/apiProvider"
+import { useNavigate } from "react-router-dom";
 
 export const ControleUsuarios = () => {
+    const navigate = useNavigate();
 
     const [searchValue, setSearchValue] = useState("");
     const [rowData, setRowData] = useState([])
@@ -91,7 +93,7 @@ export const ControleUsuarios = () => {
                     <DefaultButton
                         variant="contained"
                         label="Novo Cadastro"
-                        onClick={() => navigate("/cadastrarAluno", {
+                        onClick={() => navigate("/cadastroUsuarios", {
                             state: {
                                 operacao: "cadastrar"
                             }
