@@ -13,6 +13,7 @@ export const FormEndereco = ({
     setTabAtiva,
     setCepValido,
     handleConfirmar,
+    operacao
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
     const messagemErroCEP = useRef();
@@ -117,6 +118,7 @@ export const FormEndereco = ({
                             CEP <span style={{ color: "red" }}>*</span>
                         </label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             required
                             value={formatarCep(userInfo.endereco.cep)}
                             onChange={(e) => {
@@ -129,6 +131,9 @@ export const FormEndereco = ({
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
                                 },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -140,6 +145,7 @@ export const FormEndereco = ({
                         </label>
                         <TextField
                             required
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.endereco.numLogradouro}
                             onChange={(e) =>
                                 setUserInfo({
@@ -155,6 +161,9 @@ export const FormEndereco = ({
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}

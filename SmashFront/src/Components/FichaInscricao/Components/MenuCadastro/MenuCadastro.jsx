@@ -120,7 +120,7 @@ export const MenuCadastro = ({
                         onClick={() => setTabAtiva("paga")}
                     >
                         <HistoryIcon />
-                        <span>Pagamento</span>
+                        <span>Histórico de Pagamento</span>
                     </Box>
                 )}
             </Box>
