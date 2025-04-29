@@ -17,6 +17,7 @@ import {
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom";
 import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonthRange";
+import { dateFormater } from "../../utils/dateFormaterService";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -92,8 +93,13 @@ export const ListaAlunos = () => {
             }
         })
             .then((res) => {
-                setRowData(res.data);
-                console.log("Dados recebidos:", res.data);
+                const formattedData = res.data.map((aluno) => ({
+                    ...aluno,
+                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null 
+                }));
+                
+                setRowData(formattedData);
+                console.log("Dados recebidos:", formattedData);
             })
             .catch((err) => {
                 console.error("Erro ao buscar alunos:", err);
