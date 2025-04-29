@@ -10,14 +10,18 @@ import { useState } from "react";
 import { DefaultLoginCard } from "../DefaultComponents/DefaultLoginCard/DefaultLoginCard";
 import { useNavigate } from "react-router-dom";
 
-export const TelaEsqueciSenha = () => {
-    const [email, setEmail] = useState('');
+export const TelaEsqueciSenha2 = () => {
+    const [novaSenha, setNovaSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
     const navigate = useNavigate();
 
-    const handleRecuperarSenha = () => {
-        console.log('E-mail para recuperação:', email);
-        alert('Se o e-mail estiver cadastrado, você receberá um link para recuperação de senha.');
-        navigate('/esqueciSenha2'); 
+    const handleAlterarSenha = () => {
+        if (novaSenha !== confirmarSenha) {
+            alert('As senhas não coincidem. Por favor, tente novamente.');
+            return;
+        }
+        console.log('Nova senha:', novaSenha);
+        alert('Senha alterada com sucesso!');
     };
 
     return (
@@ -64,25 +68,25 @@ export const TelaEsqueciSenha = () => {
                                     marginBottom: "0.1rem",
                                 }}
                             >
-                                ESQUECEU SUA SENHA?
+                                ALTERAR SENHA
                             </Typography>
                             <Typography
                                 sx={{
                                     fontFamily: "'Inter', sans-serif",
                                     fontWeight: "400",
                                     fontSize: "15px",
-                                    textAlign: "left", 
+                                    textAlign: "left",
                                     color: "#1E1919",
                                     marginTop: "0rem",
                                 }}
                             >
-                                Informe seu email e enviaremos um link para a recuperação da sua senha.
+                                Essa ação irá alterar a senha vinculada ao email informado.
                             </Typography>
                             <TextField
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                label="E-mail:"
-                                placeholder=""
+                                value={novaSenha}
+                                onChange={(e) => setNovaSenha(e.target.value)}
+                                label="Senha"
+                                type="password"
                                 variant="outlined"
                                 size="small"
                                 InputLabelProps={{
@@ -90,8 +94,25 @@ export const TelaEsqueciSenha = () => {
                                 }}
                                 sx={{
                                     width: "100%",
-                                    marginTop: "5rem",
-                                    marginBottom: "3rem",
+                                    marginTop: "1rem",
+                                    '& .MuiInputBase-root': {
+                                        borderRadius: '8px',
+                                    },
+                                }}
+                            />
+                            <TextField
+                                value={confirmarSenha}
+                                onChange={(e) => setConfirmarSenha(e.target.value)}
+                                label="Confirmar Senha"
+                                type="password"
+                                variant="outlined"
+                                size="small"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                sx={{
+                                    width: "100%",
+                                    marginBottom: "2rem",
                                     '& .MuiInputBase-root': {
                                         borderRadius: '8px',
                                     },
@@ -99,7 +120,7 @@ export const TelaEsqueciSenha = () => {
                             />
                             <Button
                                 variant="contained"
-                                onClick={handleRecuperarSenha}
+                                onClick={handleAlterarSenha}
                                 sx={{
                                     backgroundColor: "#0D3C53",
                                     color: "#FFFFFF",
@@ -113,7 +134,7 @@ export const TelaEsqueciSenha = () => {
                                     },
                                 }}
                             >
-                                Enviar Link
+                                Alterar
                             </Button>
                             <Link
                                 onClick={() => navigate('/telaInicial')}
@@ -142,9 +163,9 @@ export const TelaEsqueciSenha = () => {
                         flexDirection: "column",
                         color: "#0D3C53",
                         width: "100%",
-                        pr: "5rem", 
+                        pr: "5rem",
                         pb: "1rem",
-                        textAlign: "right", 
+                        textAlign: "right",
                     }}
                 >
                     <Typography
@@ -173,4 +194,4 @@ export const TelaEsqueciSenha = () => {
     );
 };
 
-export default TelaEsqueciSenha;    
+export default TelaEsqueciSenha2;
