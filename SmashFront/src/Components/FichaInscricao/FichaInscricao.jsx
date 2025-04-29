@@ -1,13 +1,18 @@
 import { Box } from "@mui/material";
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
 import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
-import { MenuCadastro } from "./Components/MenuCadastro/MenuCadastro";
+import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
 import { useEffect, useState } from "react";
 import { FormInfo } from "./Components/FormularioCadastro/FormInfo";
 import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
 import { api } from "../../provider/apiProvider"
 import { FormResponsavel } from "./Components/FormularioCadastro/FormResponsavel";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
+import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
+import HistoryIcon from '@mui/icons-material/History';
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -82,6 +87,33 @@ export const FichaInscricao = () => {
         }
     ]
 
+    const etapasMenu = [
+        {
+            id: "info",
+            nome: "Informações",
+            icone: AccountCircleOutlinedIcon,
+            concluido: infoConcluido,
+            ativoQuando: () => true,
+            visivel: () => true,
+        },
+        {
+            id: "ende",
+            nome: "Endereço",
+            icone: FmdGoodOutlinedIcon,
+            concluido: enderecoConcluido,
+            ativoQuando: () => infoConcluido,
+            visivel: () => true,
+        },
+        {
+            id: "resp",
+            nome: "Responsável",
+            icone: FamilyRestroomIcon,
+            concluido: respConcluido,
+            ativoQuando: () => infoConcluido && enderecoConcluido,
+            visivel: () => !maiorIdade,
+        },
+    ];
+
     const cadastrarAluno = () => {
         const dadosAluno = { ...userInfo };
 
@@ -131,13 +163,43 @@ export const FichaInscricao = () => {
                 <DefaultBreadcrumb rotas={rotas} />
                 <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
                     <MenuCadastro
-                        infoConcluido={infoConcluido}
-                        enderecoConcluido={enderecoConcluido}
-                        respConcluido={respConcluido}
-                        maiorIdade={maiorIdade}
+                        operacao="cadastro"
                         tabAtiva={tabAtiva}
                         setTabAtiva={setTabAtiva}
-                        operacao={operacao}
+                        etapas={[
+                            {
+                                id: "info",
+                                nome: "Informações",
+                                Icone: AccountCircleOutlinedIcon,
+                                visivel: true,
+                                concluido: infoConcluido,
+                                podeAtivar: () => true
+                            },
+                            {
+                                id: "ende",
+                                nome: "Endereço",
+                                Icone: FmdGoodOutlinedIcon,
+                                visivel: true,
+                                concluido: enderecoConcluido,
+                                podeAtivar: () => infoConcluido
+                            },
+                            {
+                                id: "resp",
+                                nome: "Responsável",
+                                Icone: FamilyRestroomIcon,
+                                visivel: !maiorIdade,
+                                concluido: respConcluido,
+                                podeAtivar: () => infoConcluido && enderecoConcluido
+                            },
+                            {
+                                id: "paga",
+                                nome: "Histórico de Pagamento",
+                                Icone: HistoryIcon,
+                                visivel: operacao !== "cadastro",
+                                concluido: true,
+                                podeAtivar: () => true
+                            }
+                        ]}
                     />
                     {tabAtiva === "info" &&
                         <FormInfo
