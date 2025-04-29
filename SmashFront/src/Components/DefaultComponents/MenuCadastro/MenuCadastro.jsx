@@ -22,6 +22,7 @@ export const MenuCadastro = ({ operacao, tabAtiva, setTabAtiva, etapas }) => {
         <Box sx={{ display: "flex", flexDirection: "row", pl: "30px" }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: "5px", pt: "35px" }}>
                 {etapas.map((etapa, index) => {
+                    console.log(etapa.Icone)
                     const {
                         id,
                         nome,

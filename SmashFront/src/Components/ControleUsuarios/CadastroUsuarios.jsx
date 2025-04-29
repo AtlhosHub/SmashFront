@@ -44,10 +44,10 @@ export const CadastroUsuarios = () => {
         {
             id: "info",
             nome: "Informações",
-            icone: AccountCircleOutlinedIcon,
+            Icone: AccountCircleOutlinedIcon,
+            visivel: true,
             concluido: infoConcluido,
-            ativoQuando: () => true,
-            visivel: () => true,
+            podeAtivar: () => true
         },
     ];
 

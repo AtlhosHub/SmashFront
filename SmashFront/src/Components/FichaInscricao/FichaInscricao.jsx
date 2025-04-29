@@ -91,26 +91,26 @@ export const FichaInscricao = () => {
         {
             id: "info",
             nome: "Informações",
-            icone: AccountCircleOutlinedIcon,
+            Icone: AccountCircleOutlinedIcon,
+            visivel: true,
             concluido: infoConcluido,
-            ativoQuando: () => true,
-            visivel: () => true,
+            podeAtivar: () => true
         },
         {
             id: "ende",
             nome: "Endereço",
-            icone: FmdGoodOutlinedIcon,
+            Icone: FmdGoodOutlinedIcon,
+            visivel: true,
             concluido: enderecoConcluido,
-            ativoQuando: () => infoConcluido,
-            visivel: () => true,
+            podeAtivar: () => infoConcluido
         },
         {
             id: "resp",
             nome: "Responsável",
-            icone: FamilyRestroomIcon,
+            Icone: FamilyRestroomIcon,
+            visivel: !maiorIdade,
             concluido: respConcluido,
-            ativoQuando: () => infoConcluido && enderecoConcluido,
-            visivel: () => !maiorIdade,
+            podeAtivar: () => infoConcluido && enderecoConcluido
         },
         {
             id: "paga",
@@ -119,7 +119,7 @@ export const FichaInscricao = () => {
             visivel: operacao !== "cadastro",
             concluido: true,
             podeAtivar: () => true
-          }
+        }
     ];
 
     const cadastrarAluno = () => {
