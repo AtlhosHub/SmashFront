@@ -5,6 +5,7 @@ import { TelaInicial } from './Components/TelaInicial/TelaInicial';
 import { TelaLogin } from './Components/TelaLogin/TelaLogin';
 import { FichaInscricao } from './Components/FichaInscricao/FichaInscricao';
 import { ControleUsuarios } from './Components/ControleUsuarios/ControleUsuarios';
+import { CadastroUsuarios } from './Components/ControleUsuarios/CadastroUsuarios';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/alunos" element={<ListaAlunos />} />
         <Route path="/cadastrarAluno" element={<FichaInscricao />} />
         <Route path="/controleUsuarios" element={<ControleUsuarios />} />
+        <Route path="/cadastroUsuarios" element={<CadastroUsuarios />} />
       </Routes>
     </>
   )
