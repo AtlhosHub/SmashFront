@@ -112,6 +112,14 @@ export const FichaInscricao = () => {
             ativoQuando: () => infoConcluido && enderecoConcluido,
             visivel: () => !maiorIdade,
         },
+        {
+            id: "paga",
+            nome: "Histórico de Pagamento",
+            Icone: HistoryIcon,
+            visivel: operacao !== "cadastro",
+            concluido: true,
+            podeAtivar: () => true
+          }
     ];
 
     const cadastrarAluno = () => {
@@ -163,43 +171,10 @@ export const FichaInscricao = () => {
                 <DefaultBreadcrumb rotas={rotas} />
                 <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
                     <MenuCadastro
-                        operacao="cadastro"
+                        operacao={operacao}
                         tabAtiva={tabAtiva}
                         setTabAtiva={setTabAtiva}
-                        etapas={[
-                            {
-                                id: "info",
-                                nome: "Informações",
-                                Icone: AccountCircleOutlinedIcon,
-                                visivel: true,
-                                concluido: infoConcluido,
-                                podeAtivar: () => true
-                            },
-                            {
-                                id: "ende",
-                                nome: "Endereço",
-                                Icone: FmdGoodOutlinedIcon,
-                                visivel: true,
-                                concluido: enderecoConcluido,
-                                podeAtivar: () => infoConcluido
-                            },
-                            {
-                                id: "resp",
-                                nome: "Responsável",
-                                Icone: FamilyRestroomIcon,
-                                visivel: !maiorIdade,
-                                concluido: respConcluido,
-                                podeAtivar: () => infoConcluido && enderecoConcluido
-                            },
-                            {
-                                id: "paga",
-                                nome: "Histórico de Pagamento",
-                                Icone: HistoryIcon,
-                                visivel: operacao !== "cadastro",
-                                concluido: true,
-                                podeAtivar: () => true
-                            }
-                        ]}
+                        etapas={etapasMenu}
                     />
                     {tabAtiva === "info" &&
                         <FormInfo

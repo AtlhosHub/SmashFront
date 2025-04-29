@@ -1,11 +1,16 @@
 import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
 import { Box } from "@mui/material";
-import { MenuCadastro } from "../FichaInscricao/Components/MenuCadastro/MenuCadastro";
+import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
 import { FormInfoUsuario } from "./Components/FormularioCadastroUsuario/FormInfoUsuario";
 import { useState } from "react";
 
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+
 export const CadastroUsuarios = () => {
+
+    const [infoConcluido, setInfoConcluido] = useState(false);
+
     const rotas = [
         {
             route: "/controleUsuarios",
@@ -35,6 +40,17 @@ export const CadastroUsuarios = () => {
         }
     });
 
+    const etapasMenu = [
+        {
+            id: "info",
+            nome: "Informações",
+            icone: AccountCircleOutlinedIcon,
+            concluido: infoConcluido,
+            ativoQuando: () => true,
+            visivel: () => true,
+        },
+    ];
+
     return (
         <>
             <Box
@@ -53,7 +69,12 @@ export const CadastroUsuarios = () => {
                         flexDirection: "row",
                     }}
                 >
-                    <MenuCadastro />
+                    <MenuCadastro
+                        operacao="cadastro"
+                        tabAtiva="info"
+                        // setTabAtiva={setTabAtiva}
+                        etapas={etapasMenu}
+                    />
                     <FormInfoUsuario
                         userInfo={userInfo}
                         setUserInfo={setUserInfo}

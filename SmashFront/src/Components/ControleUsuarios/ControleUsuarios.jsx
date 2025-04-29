@@ -48,7 +48,8 @@ export const ControleUsuarios = () => {
             }
         })
             .then((response) => {
-                setRowData(response.data)
+                console.log(response)
+                // setRowData(response.data)
             })
             .catch((error) => console.error("Erro ao buscar dados:", error));
     }
