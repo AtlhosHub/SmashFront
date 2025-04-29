@@ -25,20 +25,20 @@ export const TelaEsqueciSenha = () => {
                 sx={{
                     backgroundImage: `url(${bgImg2})`,
                     backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 10%', // Move a imagem mais para a direita
-                    backgroundSize: '800px', // largura x altura fixa
-                    height: '100vh', // Altura total da tela
-                    width: '100vw', // Largura total da tela
+                    backgroundPosition: 'right 10%',
+                    backgroundSize: '800px',
+                    height: '100vh',
+                    width: '100vw',
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    overflow: 'hidden', // Evita que o conteúdo ultrapasse os limites
+                    overflow: 'hidden',
                 }}
             >
                 <Box
                     sx={{
-                        width: "1400px", // Largura fixa
-                        height: "600px", // Altura fixa
+                        width: "1400px",
+                        height: "600px",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
@@ -48,19 +48,19 @@ export const TelaEsqueciSenha = () => {
                         typeButton="contained"
                         withButton={false}
                         sx={{
-                            width: "400px", // Largura fixa
-                            height: "500px", // Altura fixa
+                            width: "400px",
+                            height: "500px",
                         }}
                     >
-                        <Box sx={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                             <Typography
                                 sx={{
                                     fontFamily: "'Mohave', sans-serif",
                                     fontWeight: "600",
                                     fontSize: "35px",
-                                    textAlign: "center",
+                                    textAlign: "left",
                                     color: "#1E1919",
-                                    marginBottom: "0.2rem", // Reduz o espaçamento abaixo da frase
+                                    marginBottom: "0.1rem",
                                 }}
                             >
                                 ESQUECEU SUA SENHA?
@@ -70,9 +70,9 @@ export const TelaEsqueciSenha = () => {
                                     fontFamily: "'Inter', sans-serif",
                                     fontWeight: "400",
                                     fontSize: "15px",
-                                    textAlign: "center",
+                                    textAlign: "left", 
                                     color: "#1E1919",
-                                    marginTop: "0rem", // Remove o espaçamento acima da frase
+                                    marginTop: "0rem",
                                 }}
                             >
                                 Informe seu email e enviaremos um link para a recuperação da sua senha.
@@ -89,8 +89,8 @@ export const TelaEsqueciSenha = () => {
                                 }}
                                 sx={{
                                     width: "100%",
-                                    marginTop: "5rem", // Espaçamento acima do campo
-                                    marginBottom: "5rem", // Espaçamento abaixo do campo
+                                    marginTop: "5rem",
+                                    marginBottom: "3rem",
                                     '& .MuiInputBase-root': {
                                         borderRadius: '8px',
                                     },
@@ -141,8 +141,9 @@ export const TelaEsqueciSenha = () => {
                         flexDirection: "column",
                         color: "#0D3C53",
                         width: "100%",
-                        pr: "5rem",
+                        pr: "5rem", 
                         pb: "1rem",
+                        textAlign: "right", 
                     }}
                 >
                     <Typography
@@ -171,4 +172,4 @@ export const TelaEsqueciSenha = () => {
     );
 };
 
-export default TelaEsqueciSenha;
+export default TelaEsqueciSenha;    
