@@ -126,7 +126,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.nome}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, nome: e.target.value })
+                                setUserInfo({ ...userInfo, nome: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
@@ -173,7 +173,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.nomeSocial}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, nomeSocial: e.target.value })
+                                setUserInfo({ ...userInfo, nomeSocial: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
@@ -229,7 +229,7 @@ export const FormInfo = ({
                                 disabled={operacao === "visualizacao"}
                                 value={userInfo.genero}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, genero: e.target.value })
+                                    setUserInfo({ ...userInfo, genero: e.target.value.toUpperCase() })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -252,7 +252,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.profissao}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, profissao: e.target.value })
+                                setUserInfo({ ...userInfo, profissao: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
@@ -284,7 +284,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.nacionalidade}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, nacionalidade: e.target.value })
+                                setUserInfo({ ...userInfo, nacionalidade: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
@@ -307,7 +307,7 @@ export const FormInfo = ({
                         <TextField
                             disabled={operacao === "visualizacao"}
                             value={userInfo.rg}
-                            onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value })}
+                            onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value.toUpperCase() })}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -328,7 +328,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={formatarTelefone(userInfo.telefone)}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, telefone: e.target.value })
+                                setUserInfo({ ...userInfo, telefone: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
@@ -354,7 +354,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.email}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, email: e.target.value })
+                                setUserInfo({ ...userInfo, email: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
@@ -387,7 +387,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.naturalidade}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, naturalidade: e.target.value })
+                                setUserInfo({ ...userInfo, naturalidade: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
@@ -656,7 +656,7 @@ export const FormInfo = ({
                                 placeholder="Especifique"
                                 value={userInfo.deficiencia}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, deficiencia: e.target.value })
+                                    setUserInfo({ ...userInfo, deficiencia: e.target.value.toUpperCase() })
                                 }
                             />
                         )}

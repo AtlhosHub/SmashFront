@@ -62,8 +62,6 @@ export const FormResponsavel = ({
         setRespConcluido(condicionalLiberacao);
     }, [userInfo, cpfValido]);
 
-    useEffect(() => {console.log(userInfo)}, [userInfo])
-
     return (
         <FormControl
             sx={{
@@ -105,7 +103,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            nome: e.target.value,
+                                            nome: e.target.value.toUpperCase(),
                                         },
                                     ],
                                 })
@@ -130,7 +128,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            rg: e.target.value,
+                                            rg: e.target.value.toUpperCase(),
                                         },
                                     ],
                                 })
@@ -206,7 +204,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            nomeSocial: e.target.value,
+                                            nomeSocial: e.target.value.toUpperCase(),
                                         },
                                     ],
                                 })
@@ -231,7 +229,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            profissao: e.target.value,
+                                            profissao: e.target.value.toUpperCase(),
                                         },
                                     ],
                                 })
@@ -256,7 +254,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            genero: e.target.value,
+                                            genero: e.target.value.toUpperCase(),
                                         },
                                     ],
                                 })
@@ -283,7 +281,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            email: e.target.value,
+                                            email: e.target.value.toUpperCase(),
                                         },
                                     ],
                                 })
