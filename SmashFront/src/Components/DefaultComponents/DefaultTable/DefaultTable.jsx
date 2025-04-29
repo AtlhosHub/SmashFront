@@ -6,7 +6,8 @@ export const DefaultTable = ({
     headCells,
     rowData,
     withStatus = false,
-    onRowClick
+    withPagStatus = false,
+    onRowClick,
 }) => {
     return (
         <TableContainer sx={{ marginTop: "3rem", width: "100%" }}>
@@ -14,12 +15,12 @@ export const DefaultTable = ({
                 <TableHead sx={{ backgroundColor: "white" }}>
                     <TableRow className="header-table-row">
                         {withStatus &&
-                            <TableCell sx={{ textAlign: "center" }}>Status de Presença</TableCell>
+                            <TableCell sx={{ textAlign: "center", width: "10%" }}>Status</TableCell>
                         }
                         {headCells.map((cell, index) => (
                             <TableCell key={`header-cell-${index}`}>{cell.description}</TableCell>
                         ))}
-                        {withStatus &&
+                        {withPagStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
                         }
                     </TableRow>
@@ -71,8 +72,8 @@ export const DefaultTable = ({
                                     {row[header.name]}
                                 </TableCell>
                             ))}
-                            {withStatus &&
-                                <TableCell sx={{ textAlign: "center", textDecoration: "none !important" }}>
+                            {withPagStatus &&
+                                <TableCell sx={{ textAlign: "center" }}>
                                     <Box
                                         className="status-comprovante"
                                         sx={{

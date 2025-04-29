@@ -174,6 +174,7 @@ export const ListaAlunos = () => {
                         headCells={headCells}
                         rowData={rowData}
                         withStatus={true}
+                        withPagStatus={true}
                         onRowClick={(row) => navigate("/fichaInscricao", {
                             state: {
                                 idAluno: row.id,

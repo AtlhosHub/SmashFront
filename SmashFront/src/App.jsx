@@ -4,6 +4,8 @@ import { ListaAlunos } from './Components/ListaAlunos/ListaAlunos';
 import { TelaInicial } from './Components/TelaInicial/TelaInicial';
 import { TelaLogin } from './Components/TelaLogin/TelaLogin';
 import { FichaInscricao } from './Components/FichaInscricao/FichaInscricao';
+import { ControleUsuarios } from './Components/ControleUsuarios/ControleUsuarios';
+import { CadastroUsuarios } from './Components/ControleUsuarios/CadastroUsuarios';
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route path="/" element={<TelaLogin />} />
         <Route path="/telaInicial" element={<TelaInicial />} />
         <Route path="/alunos" element={<ListaAlunos />} />
+        <Route path="/controleUsuarios" element={<ControleUsuarios />} />
+        <Route path="/cadastroUsuarios" element={<CadastroUsuarios />} />
         <Route path="/fichaInscricao" element={<FichaInscricao />} />
       </Routes>
     </>
