@@ -19,7 +19,7 @@ export const TelaInicial = () => {
         {
             label: "FICHA DE INSCRIÇÃO",
             sidebarcolor: "#17778D",
-            rota: "/cadastrarAluno",
+            rota: "/fichaInscricao",
             icon: <img src={registrationIcon} width={70} height={68} alt="Ficha de Inscrição" />
         },
         {
@@ -37,7 +37,7 @@ export const TelaInicial = () => {
         {
             label: "CONTROLE DE USUÁRIOS",
             sidebarcolor: "#FFAE03",
-            rota: "/telaInicial",
+            rota: "/controleUsuarios",
             icon: <img src={team} width={70} height={70} alt="Controle de Usuários" />
         },
         {

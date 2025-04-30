@@ -7,6 +7,8 @@ import { FichaInscricao } from './Components/FichaInscricao/FichaInscricao';
 import { ListaEspera } from './Components/ListaEspera/ListaEspera';
 import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha/TelaEsqueciSenha';
 import {TelaEsqueciSenha2} from './Components/TelaEsqueciSenha/TelaEsqueciSenha2';
+import { ControleUsuarios } from './Components/ControleUsuarios/ControleUsuarios';
+import { CadastroUsuarios } from './Components/ControleUsuarios/CadastroUsuarios';
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
         <Route path="/cadastrarAluno" element={<FichaInscricao />} />
         <Route path="/listaEspera" element={<ListaEspera />} />
         <Route path="/esqueciSenha" element={<TelaEsqueciSenha />} />
+        <Route path="/controleUsuarios" element={<ControleUsuarios />} />
+        <Route path="/cadastroUsuarios" element={<CadastroUsuarios />} />
+        <Route path="/fichaInscricao" element={<FichaInscricao />} />
       </Routes>
     </>
   )
