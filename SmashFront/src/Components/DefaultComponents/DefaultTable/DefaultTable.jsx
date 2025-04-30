@@ -32,12 +32,13 @@ export const DefaultTable = ({
                             className="body-table-row"
                             sx={{
                                 backgroundColor: index % 2 !== 0
-                                    ? "#d5dae0"
+                                    ? "#ebeff5"
                                     : "white",
                                 '&:hover': {
-                                    textDecoration: "underline",
+                                    // textDecoration: "underline",
                                     textDecorationColor: "black",
                                     cursor: "pointer",
+                                    backgroundColor: "#d5dae0"
                                 }
                             }}
                             onClick={() => { onRowClick && onRowClick(row) }}

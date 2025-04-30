@@ -47,7 +47,6 @@ export const FormInfoUsuario = ({
         }
 
         const condicionalLiberacao = camposPreenchidos && emailValido && senhaIgual;
-        setUserInfo({ ...userInfo, senha: senha })
         setBotaoLiberado(condicionalLiberacao);
     }, [userInfo, senha, confirmarSenha]);
 
@@ -251,9 +250,10 @@ export const FormInfoUsuario = ({
                             <TextField
                                 required
                                 value={senha}
-                                onChange={(e) =>
-                                    setSenha(e.target.value)
-                                }
+                                onChange={(e) => {
+                                    setUserInfo({ ...userInfo, senha: senha });
+                                    setSenha(e.target.value);
+                                }}
                                 variant="outlined"
                                 size="small"
                                 type={mostrarSenha ? "text" : "password"}

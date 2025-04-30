@@ -66,7 +66,6 @@ export const ListaAlunos = () => {
     const handleClearFilter = () => {
         setStatusPagamento(null);
         setStatusPresenca(null);
-        setDateRange([null, null]);
     }
 
     const handleInputChange = (e) => {
@@ -122,7 +121,7 @@ export const ListaAlunos = () => {
             <Box className="main-content">
                 <Box className="action-area">
                     <TextField
-                        value={searchValue}
+                        value={searchValue.toUpperCase()}
                         onChange={(e) => {
                             handleInputChange(e);
                         }}

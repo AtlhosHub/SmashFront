@@ -130,7 +130,7 @@ export const FormInfo = ({
                         </label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.nome}
+                            value={userInfo.nome || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, nome: e.target.value.toUpperCase() })
                             }
@@ -177,7 +177,7 @@ export const FormInfo = ({
                         </label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.nomeSocial}
+                            value={userInfo.nomeSocial || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, nomeSocial: e.target.value.toUpperCase() })
                             }
@@ -339,7 +339,7 @@ export const FormInfo = ({
                             variant="outlined"
                             size="small"
                             type="tel"
-                            placeholder="(00) 00000-0000"
+                            placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px"
@@ -446,7 +446,7 @@ export const FormInfo = ({
                             variant="outlined"
                             size="small"
                             type="tel"
-                            placeholder="(00) 00000-0000"
+                            placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px"
@@ -682,7 +682,7 @@ export const FormInfo = ({
                     <DefaultButton
                         disabled={!botaoLiberado}
                         variant="contained"
-                        label="Prosseguir"
+                        label="Próximo"
                         onClick={() => {
                             setTabAtiva("ende");
                         }}

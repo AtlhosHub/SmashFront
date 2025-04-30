@@ -13,6 +13,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import HistoryIcon from '@mui/icons-material/History';
+import dayjs from "dayjs";
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -155,7 +156,11 @@ export const FichaInscricao = () => {
             }
         })
             .then((response) => {
+                const hoje = dayjs()
+                const nascimento = dayjs(response.data.dataNascimento)
+                
                 setUserInfo(response.data)
+                setMaiorIdade(hoje.diff(nascimento, 'year') >= 18);
             })
             .catch((error) => console.error("Erro ao buscar dados:", error));
     }

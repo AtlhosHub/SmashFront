@@ -22,6 +22,7 @@ export const FormResponsavel = ({
     setRespConcluido,
     setTabAtiva,
     handleConfirmar,
+    operacao,
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
 
@@ -43,6 +44,10 @@ export const FormResponsavel = ({
             .replace(/(\d{3})(\d)/, "$1.$2")
             .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     };
+
+    useEffect(() => {
+        console.log(operacao)
+    }, [])
 
     const [cpfUser, setCpfUser] = useState(userInfo.responsaveis[0].cpf && formatCPF(userInfo.responsaveis[0].cpf));
 
@@ -97,6 +102,7 @@ export const FormResponsavel = ({
                             Nome <span style={{ color: "red" }}>*</span>
                         </label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
@@ -113,7 +119,10 @@ export const FormResponsavel = ({
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -122,6 +131,7 @@ export const FormResponsavel = ({
                     <Box>
                         <label>RG</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
@@ -138,7 +148,10 @@ export const FormResponsavel = ({
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -149,6 +162,7 @@ export const FormResponsavel = ({
                             CPF <span style={{ color: "red" }}>*</span>
                         </label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             value={cpfUser}
                             onChange={(e) => {
                                 const raw = e.target.value.replace(/\D/g, "");
@@ -168,7 +182,10 @@ export const FormResponsavel = ({
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -198,6 +215,7 @@ export const FormResponsavel = ({
                             </Tooltip>
                         </label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
@@ -214,7 +232,10 @@ export const FormResponsavel = ({
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -223,6 +244,7 @@ export const FormResponsavel = ({
                     <Box>
                         <label>Profissão</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
@@ -239,7 +261,10 @@ export const FormResponsavel = ({
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -248,6 +273,7 @@ export const FormResponsavel = ({
                     <Box>
                         <label>Gênero</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
@@ -264,7 +290,10 @@ export const FormResponsavel = ({
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -275,6 +304,7 @@ export const FormResponsavel = ({
                             Email <span style={{ color: "red" }}>*</span>
                         </label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
@@ -291,7 +321,10 @@ export const FormResponsavel = ({
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -300,6 +333,7 @@ export const FormResponsavel = ({
                     <Box>
                         <label>Telefone</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
@@ -311,13 +345,16 @@ export const FormResponsavel = ({
                                     ],
                                 })
                             }
-                            placeholder="(00) 00000-0000"
+                            placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
                             value={formatarTelefone(userInfo.responsaveis[0].telefone)}
                             variant="outlined"
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -326,6 +363,7 @@ export const FormResponsavel = ({
                     <Box>
                         <label>Celular</label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             onChange={(e) =>
                                 setUserInfo({
                                     ...userInfo,
@@ -338,12 +376,15 @@ export const FormResponsavel = ({
                                 })
                             }
                             value={formatarTelefone(userInfo.responsaveis[0].celular)}
-                            placeholder="(00) 00000-0000"
+                            placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
                             variant="outlined"
                             size="small"
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -386,8 +427,30 @@ export const FormResponsavel = ({
                         setUserInfo({ ...userInfo, autorizado: e.target.value })
                     }
                 >
-                    <FormControlLabel value={true} control={<Radio />} label="Sim" />
-                    <FormControlLabel value={false} control={<Radio />} label="Não" />
+                    <FormControlLabel
+                        value={true}
+                        control={<Radio
+                            disabled={operacao === "visualizacao"}
+                            sx={{
+                                "&.Mui-disabled.Mui-checked": {
+                                    color: "#00000080",
+                                },
+                            }}
+                        />}
+                        label={<span style={{ color: "rgba(0, 0, 0, 0.60)" }}>Sim</span>}
+                    />
+                    <FormControlLabel
+                        value={false}
+                        control={<Radio
+                            disabled={operacao === "visualizacao"}
+                            sx={{
+                                "&.Mui-disabled.Mui-checked": {
+                                    color: "#00000080",
+                                },
+                            }}
+                        />}
+                        label={<span style={{ color: "rgba(0, 0, 0, 0.60)" }}>Não</span>}
+                    />
                 </RadioGroup>
             </Box>
             <Box

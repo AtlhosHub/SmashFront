@@ -274,7 +274,7 @@ export const FormEndereco = ({
                     />
                     <DefaultButton
                         variant="contained"
-                        label={maiorIdade ? "Concluir" : "Prosseguir"}
+                        label={maiorIdade ? "Concluir" : "Próximo"}
                         disabled={!botaoLiberado}
                         onClick={maiorIdade ? handleConfirmar : () => setTabAtiva("resp")}
                     />
