@@ -44,6 +44,8 @@ export const FormInfo = ({
         "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
 
     const formatCPF = (value) => {
+        if (!value) return;
+
         const digits = value.replace(/\D/g, "").slice(0, 11);
         if (digits.length === 11) {
             setCpfValido(true);
@@ -57,7 +59,11 @@ export const FormInfo = ({
             .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     };
 
-    const [cpfUser, setCpfUser] = useState(userInfo?.cpf && formatCPF(userInfo?.cpf));
+    useEffect(() => {
+        setCpfUser(formatCPF(userInfo?.cpf));
+    }, [userInfo?.cpf])
+
+    const [cpfUser, setCpfUser] = useState(formatCPF(userInfo?.cpf));
 
     useEffect(() => {
         const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && userInfo.dataNascimento;
