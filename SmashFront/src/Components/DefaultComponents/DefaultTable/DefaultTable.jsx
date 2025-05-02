@@ -10,7 +10,7 @@ export const DefaultTable = ({
     onRowClick,
 }) => {
     return (
-        <TableContainer sx={{ marginTop: "3rem", width: "100%" }}>
+        <TableContainer sx={{ width: "100%" }}>
             <Table>
                 <TableHead sx={{ backgroundColor: "white" }}>
                     <TableRow className="header-table-row">
@@ -18,7 +18,7 @@ export const DefaultTable = ({
                             <TableCell sx={{ textAlign: "center", width: "10%" }}>Status</TableCell>
                         }
                         {headCells.map((cell, index) => (
-                            <TableCell key={`header-cell-${index}`}>{cell.description}</TableCell>
+                            <TableCell key={`header-cell-${index}`} align={cell.align}>{cell.description}</TableCell>
                         ))}
                         {withPagStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
@@ -61,15 +61,17 @@ export const DefaultTable = ({
                             }
                             {headCells.map((header) => (
                                 <TableCell
-                                key={`row-cell-${header.name}-${index}`}
-                                sx={{
-                                    ...(withStatus && header.name === "nomeAluno" && {
-                                        '&:hover': {
-                                            cursor: "pointer",
-                                            textDecoration: "underline",
-                                        }
-                                    })
-                                }}>
+                                    key={`row-cell-${header.name}-${index}`}
+                                    sx={{
+                                        ...(withStatus && header.name === "nomeAluno" && {
+                                            '&:hover': {
+                                                cursor: "pointer",
+                                                textDecoration: "underline",
+                                            }
+                                        })
+                                    }}
+                                    align={header.align}
+                                >
                                     {row[header.name]}
                                 </TableCell>
                             ))}

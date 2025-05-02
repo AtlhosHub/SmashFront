@@ -19,7 +19,7 @@ export const FormEndereco = ({
     const messagemErroCEP = useRef();
 
     useEffect(() => {
-        const camposPreenchidos = cepValido && userInfo.endereco.numLogradouro;
+        const camposPreenchidos = (operacao === "cadastrar" ? cepValido : true) && userInfo.endereco.numLogradouro;
 
         setBotaoLiberado(camposPreenchidos);
         setEnderecoConcluido(camposPreenchidos);
@@ -250,7 +250,7 @@ export const FormEndereco = ({
             </Box>
             <Box
                 sx={{
-                    marginTop: "20px",
+                    marginTop: "auto",
                     display: "flex",
                     gap: "10px",
                 }}
@@ -274,13 +274,20 @@ export const FormEndereco = ({
                     />
                     <DefaultButton
                         variant="contained"
-                        label={maiorIdade ? "Concluir" : "Próximo"}
+                        label={operacao === "visualizacao" ? "Próximo" : maiorIdade ? "Concluir" : "Próximo"}
                         disabled={!botaoLiberado}
-                        onClick={maiorIdade ? handleConfirmar : () => setTabAtiva("resp")}
+                        onClick={operacao === "visualizacao"
+                            ? maiorIdade
+                                ? () => setTabAtiva("paga")
+                                : () => setTabAtiva("resp")
+                            : maiorIdade
+                                ? handleConfirmar
+                                : () => setTabAtiva("resp")
+                        }
                     />
                 </Box>
             </Box>
-            <ToastContainer></ToastContainer>
+            <ToastContainer />
         </FormControl>
     );
 };

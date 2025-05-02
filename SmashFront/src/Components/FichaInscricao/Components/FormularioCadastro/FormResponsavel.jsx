@@ -45,10 +45,6 @@ export const FormResponsavel = ({
             .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     };
 
-    useEffect(() => {
-        console.log(operacao)
-    }, [])
-
     const [cpfUser, setCpfUser] = useState(userInfo.responsaveis[0].cpf && formatCPF(userInfo.responsaveis[0].cpf));
 
     useEffect(() => {
@@ -437,7 +433,7 @@ export const FormResponsavel = ({
                                 },
                             }}
                         />}
-                        label={<span style={{ color: "rgba(0, 0, 0, 0.60)" }}>Sim</span>}
+                        label="Sim"
                     />
                     <FormControlLabel
                         value={false}
@@ -449,13 +445,13 @@ export const FormResponsavel = ({
                                 },
                             }}
                         />}
-                        label={<span style={{ color: "rgba(0, 0, 0, 0.60)" }}>Não</span>}
+                        label="Não"
                     />
                 </RadioGroup>
             </Box>
             <Box
                 sx={{
-                    marginTop: "20px",
+                    marginTop: "auto",
                     display: "flex",
                     gap: "10px",
                 }}
@@ -479,13 +475,16 @@ export const FormResponsavel = ({
                     />
                     <DefaultButton
                         variant="contained"
-                        label="Concluir"
+                        label={operacao === "visualizacao" ? "Próximo" : "Concluir"}
                         disabled={!botaoLiberado}
-                        onClick={handleConfirmar}
+                        onClick={operacao === "visualizacao"
+                            ? () => setTabAtiva("paga")
+                            : handleConfirmar
+                        }
                     />
                 </Box>
             </Box>
-            <ToastContainer></ToastContainer>
+            <ToastContainer />
         </FormControl>
     );
 };

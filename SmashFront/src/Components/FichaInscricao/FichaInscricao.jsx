@@ -14,6 +14,7 @@ import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import HistoryIcon from '@mui/icons-material/History';
 import dayjs from "dayjs";
+import { HistPagamento } from "./Components/HistPag/HistPagamento";
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -32,6 +33,12 @@ export const FichaInscricao = () => {
     const [cpfValidoResp, setCpfValidoResp] = useState(false);
     const [cepValido, setCepValido] = useState(false);
     const [isDeficiente, setIsDeficiente] = useState(false)
+
+    const definirNomePagina = () => {
+        if (operacao === "cadastro") return "Adicionar Ficha de Inscrição"
+        if (operacao === "visualizacao") return "Visualizar Ficha de Inscrição"
+        return "Editar Ficha de Inscrição"
+    }
 
     // Dados dos Form
     const [userInfo, setUserInfo] = useState({
@@ -84,7 +91,7 @@ export const FichaInscricao = () => {
         },
         {
             route: "/fichaInscricao",
-            description: "Ficha de Inscrição"
+            description: definirNomePagina()
         }
     ]
 
@@ -172,7 +179,7 @@ export const FichaInscricao = () => {
                 gridTemplateRows: "auto auto 1fr",
                 height: "100vh",
             }}>
-                <DefaultHeader pageTitle={"Ficha de Inscrição"} />
+                <DefaultHeader pageTitle={definirNomePagina()} />
                 <DefaultBreadcrumb rotas={rotas} />
                 <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
                     <MenuCadastro
@@ -221,6 +228,11 @@ export const FichaInscricao = () => {
                             setCpfValido={setCpfValidoResp}
                             handleConfirmar={cadastrarAluno}
                             operacao={operacao}
+                        />
+                    }
+                    {tabAtiva === "paga" &&
+                        <HistPagamento
+                            userInfo={userInfo}
                         />
                     }
                 </Box>

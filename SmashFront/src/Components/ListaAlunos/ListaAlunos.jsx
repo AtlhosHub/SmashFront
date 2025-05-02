@@ -129,6 +129,7 @@ export const ListaAlunos = () => {
                         variant="outlined"
                         size="small"
                         sx={{
+                            
                             '& .MuiInputBase-root': {
                                 borderRadius: '8px',
                             },
@@ -144,7 +145,13 @@ export const ListaAlunos = () => {
                                 <InputAdornment position="end">
                                     <Search sx={{ color: "black" }} />
                                 </InputAdornment>
-                            )
+                            ),
+                            sx: {
+                                height: 35,
+                                '& input': {
+                                    padding: '8px 14px',
+                                },
+                            },
                         }}
                     />
                     <DefaultFilter

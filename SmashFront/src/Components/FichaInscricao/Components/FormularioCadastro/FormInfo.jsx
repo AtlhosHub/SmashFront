@@ -251,17 +251,19 @@ export const FormInfo = ({
                             />
                         </Box>
                     </Box>
-
                     <Box>
-                        <label>Profissão</label>
+                        <label>
+                            Email {maiorIdade && <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>}
+                        </label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.profissao}
+                            value={userInfo.email}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, profissao: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, email: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
+                            type="email"
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px"
@@ -273,6 +275,7 @@ export const FormInfo = ({
                             }}
                         />
                     </Box>
+
                 </Box>
 
                 <Box
@@ -305,15 +308,14 @@ export const FormInfo = ({
                             }}
                         />
                     </Box>
-
                     <Box>
-                        <label>
-                            RG <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
-                        </label>
+                        <label>Naturalidade</label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.rg}
-                            onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value.toUpperCase() })}
+                            value={userInfo.naturalidade}
+                            onChange={(e) =>
+                                setUserInfo({ ...userInfo, naturalidade: e.target.value.toUpperCase() })
+                            }
                             variant="outlined"
                             size="small"
                             sx={{
@@ -327,7 +329,6 @@ export const FormInfo = ({
                             }}
                         />
                     </Box>
-
                     <Box>
                         <label>Telefone</label>
                         <TextField
@@ -351,20 +352,18 @@ export const FormInfo = ({
                             }}
                         />
                     </Box>
-
                     <Box>
-                        <label>
-                            Email {maiorIdade && <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>}
-                        </label>
+                        <label>Celular</label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.email}
+                            value={formatarTelefone(userInfo.celular)}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, email: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, celular: e.target.value })
                             }
                             variant="outlined"
                             size="small"
-                            type="email"
+                            type="tel"
+                            placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px"
@@ -387,28 +386,6 @@ export const FormInfo = ({
                         height: "fit-content",
                     }}
                 >
-                    <Box>
-                        <label>Naturalidade</label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={userInfo.naturalidade}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, naturalidade: e.target.value.toUpperCase() })
-                            }
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-
                     <Box>
                         <label>
                             CPF <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
@@ -434,19 +411,37 @@ export const FormInfo = ({
                             }}
                         />
                     </Box>
-
                     <Box>
-                        <label>Celular</label>
+                        <label>
+                            RG <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
+                        </label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={formatarTelefone(userInfo.celular)}
+                            value={userInfo.rg}
+                            onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value.toUpperCase() })}
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
+                                width: "100%",
+                            }}
+                        />
+                    </Box>
+                    <Box>
+                        <label>Profissão</label>
+                        <TextField
+                            disabled={operacao === "visualizacao"}
+                            value={userInfo.profissao}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, celular: e.target.value })
+                                setUserInfo({ ...userInfo, profissao: e.target.value.toUpperCase() })
                             }
                             variant="outlined"
                             size="small"
-                            type="tel"
-                            placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px"
@@ -460,7 +455,7 @@ export const FormInfo = ({
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <Box sx={{ marginTop: "auto", display: "flex", gap: "10px" }}>
                 <Box sx={{ color: "black" }}>
                     <label
                         style={{
@@ -508,7 +503,7 @@ export const FormInfo = ({
                                     }}
                                 />
                             }
-                            label={<span style={{ color: "rgba(0, 0, 0, 0.60)" }}>Ativo</span>}
+                            label="Ativo"
                         />
                         <FormControlLabel
                             value={false}
@@ -522,7 +517,7 @@ export const FormInfo = ({
                                     }}
                                 />
                             }
-                            label={<span style={{ color: "rgba(0, 0, 0, 0.60)" }}>Inativo</span>}
+                            label="Inativo"
                         />
                     </RadioGroup>
                 </Box>
