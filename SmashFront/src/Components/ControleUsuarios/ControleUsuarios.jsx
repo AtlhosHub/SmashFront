@@ -53,6 +53,12 @@ export const ControleUsuarios = () => {
             .catch((error) => console.error("Erro ao buscar dados:", error));
     }
 
+    useEffect(() => {
+        if (location.state?.userCreated) {
+            toasterMsg("success", "Usuário cadastrado com sucesso!")
+        }
+    }, [location])
+
     return (
         <>
             <Box>
@@ -65,7 +71,7 @@ export const ControleUsuarios = () => {
                     <TextField
                         value={searchValue}
                         onChange={(e) => {
-                            handleInputChange(e);
+                            setSearchValue(e.target.value.toUpperCase());
                         }}
                         label="Nome do Usuário"
                         variant="outlined"

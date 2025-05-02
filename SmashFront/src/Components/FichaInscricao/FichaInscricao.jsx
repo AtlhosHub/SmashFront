@@ -8,7 +8,6 @@ import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
 import { api } from "../../provider/apiProvider"
 import { FormResponsavel } from "./Components/FormularioCadastro/FormResponsavel";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
