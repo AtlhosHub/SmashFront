@@ -74,7 +74,7 @@ export const ListaEspera = () => {
         Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
       }
     })
-      .then(res => setRowData(res.data))
+      .then(res => setRowData(res.data || []))
       .catch(err => console.error("Erro ao buscar lista de espera:", err));
   }
 
