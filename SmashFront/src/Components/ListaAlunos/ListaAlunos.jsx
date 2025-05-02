@@ -15,11 +15,14 @@ import {
     Add,
     Search
 } from "@mui/icons-material"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonthRange";
+import { dateFormater } from "../../utils/dateFormaterService";
+import { toasterMsg } from "../../utils/toasterService";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const timeoutRef = useRef(null);
     const searchValueRef = useRef(null);
@@ -63,12 +66,7 @@ export const ListaAlunos = () => {
     const handleClearFilter = () => {
         setStatusPagamento(null);
         setStatusPresenca(null);
-        setDateRange([null, null]);
     }
-
-    useEffect(() => {
-        handleApplyFilter()
-    }, [])
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -92,13 +90,27 @@ export const ListaAlunos = () => {
             }
         })
             .then((res) => {
-                setRowData(res.data);
-                console.log("Dados recebidos:", res.data);
+                const formattedData = res.data.map((aluno) => ({
+                    ...aluno,
+                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null 
+                }));
+                
+                setRowData(formattedData);
             })
             .catch((err) => {
                 console.error("Erro ao buscar alunos:", err);
             });
     }
+
+    useEffect(() => {
+        if (location.state?.userCreated) {
+            toasterMsg("success", "Aluno cadastrado com sucesso!")
+        }
+    }, [location])
+
+    useEffect(() => {
+        handleApplyFilter()
+    }, [])
 
     return (
         <>
@@ -109,7 +121,7 @@ export const ListaAlunos = () => {
             <Box className="main-content">
                 <Box className="action-area">
                     <TextField
-                        value={searchValue}
+                        value={searchValue.toUpperCase()}
                         onChange={(e) => {
                             handleInputChange(e);
                         }}
@@ -117,6 +129,7 @@ export const ListaAlunos = () => {
                         variant="outlined"
                         size="small"
                         sx={{
+                            
                             '& .MuiInputBase-root': {
                                 borderRadius: '8px',
                             },
@@ -132,7 +145,13 @@ export const ListaAlunos = () => {
                                 <InputAdornment position="end">
                                     <Search sx={{ color: "black" }} />
                                 </InputAdornment>
-                            )
+                            ),
+                            sx: {
+                                height: 35,
+                                '& input': {
+                                    padding: '8px 14px',
+                                },
+                            },
                         }}
                     />
                     <DefaultFilter
@@ -148,9 +167,9 @@ export const ListaAlunos = () => {
                     <DefaultButton
                         variant="contained"
                         label="Novo Cadastro"
-                        onClick={() => navigate("/cadastrarAluno", {
+                        onClick={() => navigate("/fichaInscricao", {
                             state: {
-                                operacao: "cadastrar"
+                                operacao: "cadastro",
                             }
                         })}
                         endIcon={<Add />}
@@ -161,6 +180,13 @@ export const ListaAlunos = () => {
                         headCells={headCells}
                         rowData={rowData}
                         withStatus={true}
+                        withPagStatus={true}
+                        onRowClick={(row) => navigate("/fichaInscricao", {
+                            state: {
+                                idAluno: row.id,
+                                operacao: "visualizacao"
+                            }
+                        })}
                     />
                 </Box>
             </Box>

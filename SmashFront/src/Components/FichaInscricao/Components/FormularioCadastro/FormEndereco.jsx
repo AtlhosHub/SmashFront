@@ -13,12 +13,13 @@ export const FormEndereco = ({
     setTabAtiva,
     setCepValido,
     handleConfirmar,
+    operacao
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
     const messagemErroCEP = useRef();
 
     useEffect(() => {
-        const camposPreenchidos = cepValido && userInfo.endereco.numLogradouro;
+        const camposPreenchidos = (operacao === "cadastrar" ? cepValido : true) && userInfo.endereco.numLogradouro;
 
         setBotaoLiberado(camposPreenchidos);
         setEnderecoConcluido(camposPreenchidos);
@@ -117,6 +118,7 @@ export const FormEndereco = ({
                             CEP <span style={{ color: "red" }}>*</span>
                         </label>
                         <TextField
+                            disabled={operacao === "visualizacao"}
                             required
                             value={formatarCep(userInfo.endereco.cep)}
                             onChange={(e) => {
@@ -129,6 +131,9 @@ export const FormEndereco = ({
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
                                 },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                },
                                 width: "100%",
                             }}
                         />
@@ -140,6 +145,7 @@ export const FormEndereco = ({
                         </label>
                         <TextField
                             required
+                            disabled={operacao === "visualizacao"}
                             value={userInfo.endereco.numLogradouro}
                             onChange={(e) =>
                                 setUserInfo({
@@ -155,6 +161,9 @@ export const FormEndereco = ({
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -241,7 +250,7 @@ export const FormEndereco = ({
             </Box>
             <Box
                 sx={{
-                    marginTop: "20px",
+                    marginTop: "auto",
                     display: "flex",
                     gap: "10px",
                 }}
@@ -265,13 +274,20 @@ export const FormEndereco = ({
                     />
                     <DefaultButton
                         variant="contained"
-                        label={maiorIdade ? "Concluir" : "Prosseguir"}
+                        label={operacao === "visualizacao" ? "Próximo" : maiorIdade ? "Concluir" : "Próximo"}
                         disabled={!botaoLiberado}
-                        onClick={maiorIdade ? handleConfirmar : () => setTabAtiva("resp")}
+                        onClick={operacao === "visualizacao"
+                            ? maiorIdade
+                                ? () => setTabAtiva("paga")
+                                : () => setTabAtiva("resp")
+                            : maiorIdade
+                                ? handleConfirmar
+                                : () => setTabAtiva("resp")
+                        }
                     />
                 </Box>
             </Box>
-            <ToastContainer></ToastContainer>
+            <ToastContainer />
         </FormControl>
     );
 };

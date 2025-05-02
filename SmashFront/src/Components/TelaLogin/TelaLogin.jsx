@@ -96,7 +96,7 @@ export const TelaLogin = () => {
                             <TextField
                                 value={usuario}
                                 onChange={(e) => setUsuario(e.target.value)}
-                                label="Usuário"
+                                label="Email"
                                 variant="outlined"
                                 size="small"
                                 sx={{
@@ -150,7 +150,7 @@ export const TelaLogin = () => {
                                             textDecoration: 'underline',
                                         },
                                     }}
-                                    href="#"
+                                    onClick={() => navigate('/esqueciSenha')} 
                                 >
                                     Esqueci a senha
                                 </Link>
