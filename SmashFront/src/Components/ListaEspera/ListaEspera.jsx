@@ -21,6 +21,8 @@ import ActionMenu from "../iconButton/iconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { dateFormater } from "../../utils/dateFormaterService";
+
 
 export const ListaEspera = () => {
   const navigate = useNavigate();
@@ -60,11 +62,6 @@ export const ListaEspera = () => {
     fetchListaEspera(filtro);
   };
 
-  const handleClearFilter = () => {
-    setStatusFiltro(null);
-    setDateRange([null, null]);
-  };
-
   useEffect(() => {
     handleApplyFilter();
   }, []);
@@ -77,15 +74,23 @@ export const ListaEspera = () => {
     timeoutRef.current = setTimeout(handleApplyFilter, 800);
   };
 
-  const fetchListaEspera = filtro => {
+  const fetchListaEspera = (filtro) => {
     api.post("/lista-espera/filtro", filtro, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-      }
+        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      },
     })
-      .then(res => setRowData(res.data))
-      .catch(err => console.error("Erro ao buscar lista de espera:", err));
+      .then((res) => {
+        console.log("Resposta da API:", res.data);
+        const formattedData = res.data.map((item) => ({
+          ...item,
+          dataInteresse: item.dataInteresse ? dateFormater(item.dataInteresse) : null,
+        }));
+  
+        setRowData(formattedData);
+      })
+      .catch((err) => console.error("Erro ao buscar lista de espera:", err));
   };
 
   return (
