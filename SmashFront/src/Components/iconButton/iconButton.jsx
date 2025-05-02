@@ -35,7 +35,7 @@ export default function ActionMenu({ menuOptions }) {
         onClick={handleClick}
         size="small"
       >
-        <MoreVertIcon />
+        <MoreVertIcon sx={{color: "black"}}/>
       </IconButton>
 
       <Menu
@@ -45,6 +45,7 @@ export default function ActionMenu({ menuOptions }) {
         onClose={handleClose}
         PaperProps={{
           style: {
+            color: "black",
             maxHeight: ITEM_HEIGHT * 4.5,
             width: '180px',
             borderRadius: '10px',
@@ -56,7 +57,7 @@ export default function ActionMenu({ menuOptions }) {
         }}
       >
         {menuOptions.map((opt) => (
-          <MenuItem key={opt.label} onClick={() => handleSelect(opt.label)}>
+          <MenuItem key={opt.label} onClick={() => opt.onClickFunc()}>
             <ListItemIcon sx={{ color: '#2C2C2C' }}>
               {opt.icon}
             </ListItemIcon>
