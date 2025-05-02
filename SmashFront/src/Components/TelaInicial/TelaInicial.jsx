@@ -25,7 +25,7 @@ export const TelaInicial = () => {
         {
             label: "LISTA DE ESPERA",
             sidebarcolor: "#FFAE03",
-            rota: "/telaInicial",
+            rota: "/listaEspera",
             icon: <img src={waitingListIcon} width={70} height={70} alt="Lista de Espera" />
         },
         {
