@@ -150,7 +150,7 @@ export const TelaLogin = () => {
                                             textDecoration: 'underline',
                                         },
                                     }}
-                                    href="#"
+                                    onClick={() => navigate('/esqueciSenha')} 
                                 >
                                     Esqueci a senha
                                 </Link>
