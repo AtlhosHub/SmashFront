@@ -123,7 +123,7 @@ export const FichaInscricao = () => {
             id: "paga",
             nome: "Histórico de Pagamento",
             Icone: HistoryIcon,
-            visivel: operacao !== "cadastro",
+            visivel: operacao === "visualizacao",
             concluido: true,
             podeAtivar: () => true
         }
@@ -200,6 +200,7 @@ export const FichaInscricao = () => {
                             setIsDeficiente={setIsDeficiente}
                             setCpfValido={setCpfValidoAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
                         />
                     }
                     {tabAtiva === "ende" &&
@@ -213,6 +214,7 @@ export const FichaInscricao = () => {
                             setCepValido={setCepValido}
                             handleConfirmar={cadastrarAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
                         />
                     }
                     {tabAtiva === "resp" &&
@@ -227,6 +229,7 @@ export const FichaInscricao = () => {
                             setCpfValido={setCpfValidoResp}
                             handleConfirmar={cadastrarAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
                         />
                     }
                     {tabAtiva === "paga" &&

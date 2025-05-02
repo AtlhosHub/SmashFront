@@ -7,6 +7,7 @@ import { useState } from "react";
 import { api } from "../../provider/apiProvider"
 import { useLocation, useNavigate } from "react-router-dom";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { ToastContainer } from "react-toastify";
 
 export const CadastroUsuarios = () => {
     const navigate = useNavigate();
@@ -86,7 +87,6 @@ export const CadastroUsuarios = () => {
                     <MenuCadastro
                         operacao="cadastro"
                         tabAtiva="info"
-                        // setTabAtiva={setTabAtiva}
                         etapas={etapasMenu}
                     />
                     <FormInfoUsuario
@@ -96,6 +96,7 @@ export const CadastroUsuarios = () => {
                     />
                 </Box>
             </Box>
+            <ToastContainer />
         </>
     );
 };

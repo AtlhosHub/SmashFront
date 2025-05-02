@@ -14,10 +14,12 @@ import {
     Search
 } from "@mui/icons-material"
 import { api } from "../../provider/apiProvider"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toasterMsg } from "../../utils/toasterService";
 
 export const ControleUsuarios = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [searchValue, setSearchValue] = useState("");
     const [rowData, setRowData] = useState([])
