@@ -8,7 +8,7 @@
 <ToastContainer>
 
 function genericFunction = () => {
-	toasterMsg("sucess", "Usuário excluído com sucesso!");
+	toasterMsg("success", "Usuário excluído com sucesso!");
 	toasterMsg("eror", "Algum erro ocorreu na exclusão do usuário!");
 }
 ```

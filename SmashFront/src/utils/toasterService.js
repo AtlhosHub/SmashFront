@@ -9,7 +9,7 @@ export const toasterMsg = (msgType, msg) => {
             type: "error",
             theme: "light",
         })
-    } else if(msgType === "sucess") {
+    } else if(msgType === "success") {
         toast.success(msg, {
             position: "top-right",
             autoClose: 3000,

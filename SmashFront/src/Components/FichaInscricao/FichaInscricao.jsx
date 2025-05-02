@@ -1,23 +1,31 @@
 import { Box } from "@mui/material";
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
 import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
-import { MenuCadastro } from "./Components/MenuCadastro/MenuCadastro";
-import { useState } from "react";
+import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
+import { useEffect, useState } from "react";
 import { FormInfo } from "./Components/FormularioCadastro/FormInfo";
 import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
 import { api } from "../../provider/apiProvider"
 import { FormResponsavel } from "./Components/FormularioCadastro/FormResponsavel";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
+import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
+import HistoryIcon from '@mui/icons-material/History';
+import dayjs from "dayjs";
+import { HistPagamento } from "./Components/HistPag/HistPagamento";
 
 export const FichaInscricao = () => {
     const location = useLocation();
+    const navigate = useNavigate();
 
     //Variaveis de Controle Tela
     const [tabAtiva, setTabAtiva] = useState("info");
     const [infoConcluido, setInfoConcluido] = useState(false);
     const [enderecoConcluido, setEnderecoConcluido] = useState(false);
     const [respConcluido, setRespConcluido] = useState(false);
-    const [operacao, setOperacao] = useState(location.state?.operacao || "cadastrar");
+    const [operacao, setOperacao] = useState(location.state?.operacao || "cadastro");
 
     // Variaveis de Controle Form
     const [maiorIdade, setMaiorIdade] = useState(true);
@@ -25,6 +33,12 @@ export const FichaInscricao = () => {
     const [cpfValidoResp, setCpfValidoResp] = useState(false);
     const [cepValido, setCepValido] = useState(false);
     const [isDeficiente, setIsDeficiente] = useState(false)
+
+    const definirNomePagina = () => {
+        if (operacao === "cadastro") return "Adicionar Ficha de Inscrição"
+        if (operacao === "visualizacao") return "Visualizar Ficha de Inscrição"
+        return "Editar Ficha de Inscrição"
+    }
 
     // Dados dos Form
     const [userInfo, setUserInfo] = useState({
@@ -76,10 +90,45 @@ export const FichaInscricao = () => {
             description: "Lista de Alunos"
         },
         {
-            route: "/cadastrarAluno",
-            description: "Ficha de Inscrição"
+            route: "/fichaInscricao",
+            description: definirNomePagina()
         }
     ]
+
+    const etapasMenu = [
+        {
+            id: "info",
+            nome: "Informações",
+            Icone: AccountCircleOutlinedIcon,
+            visivel: true,
+            concluido: infoConcluido,
+            podeAtivar: () => true
+        },
+        {
+            id: "ende",
+            nome: "Endereço",
+            Icone: FmdGoodOutlinedIcon,
+            visivel: true,
+            concluido: enderecoConcluido,
+            podeAtivar: () => infoConcluido
+        },
+        {
+            id: "resp",
+            nome: "Responsável",
+            Icone: FamilyRestroomIcon,
+            visivel: !maiorIdade,
+            concluido: respConcluido,
+            podeAtivar: () => infoConcluido && enderecoConcluido
+        },
+        {
+            id: "paga",
+            nome: "Histórico de Pagamento",
+            Icone: HistoryIcon,
+            visivel: operacao !== "cadastro",
+            concluido: true,
+            podeAtivar: () => true
+        }
+    ];
 
     const cadastrarAluno = () => {
         const dadosAluno = { ...userInfo };
@@ -94,8 +143,33 @@ export const FichaInscricao = () => {
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
             }
         })
-            .then((response) => console.log(response.data))
+            .then(() => {
+                navigate("/alunos", { state: { userCreated: true } })
+            })
             .catch((error) => console.error("Erro ao adicionar aluno:", error));
+    }
+
+    useEffect(() => {
+        if (operacao === "visualizacao") {
+            listarDadosAluno(location.state?.idAluno);
+        }
+    }, []);
+
+    const listarDadosAluno = (id) => {
+        api.get(`/alunos/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then((response) => {
+                const hoje = dayjs()
+                const nascimento = dayjs(response.data.dataNascimento)
+                
+                setUserInfo(response.data)
+                setMaiorIdade(hoje.diff(nascimento, 'year') >= 18);
+            })
+            .catch((error) => console.error("Erro ao buscar dados:", error));
     }
 
     return (
@@ -105,17 +179,14 @@ export const FichaInscricao = () => {
                 gridTemplateRows: "auto auto 1fr",
                 height: "100vh",
             }}>
-                <DefaultHeader pageTitle={"Ficha de Inscrição"} />
+                <DefaultHeader pageTitle={definirNomePagina()} />
                 <DefaultBreadcrumb rotas={rotas} />
                 <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
                     <MenuCadastro
-                        infoConcluido={infoConcluido}
-                        enderecoConcluido={enderecoConcluido}
-                        respConcluido={respConcluido}
-                        maiorIdade={maiorIdade}
+                        operacao={operacao}
                         tabAtiva={tabAtiva}
                         setTabAtiva={setTabAtiva}
-                        operacao={operacao}
+                        etapas={etapasMenu}
                     />
                     {tabAtiva === "info" &&
                         <FormInfo
@@ -129,6 +200,7 @@ export const FichaInscricao = () => {
                             setInfoConcluido={setInfoConcluido}
                             setIsDeficiente={setIsDeficiente}
                             setCpfValido={setCpfValidoAluno}
+                            operacao={operacao}
                         />
                     }
                     {tabAtiva === "ende" &&
@@ -141,6 +213,7 @@ export const FichaInscricao = () => {
                             setTabAtiva={setTabAtiva}
                             setCepValido={setCepValido}
                             handleConfirmar={cadastrarAluno}
+                            operacao={operacao}
                         />
                     }
                     {tabAtiva === "resp" &&
@@ -154,6 +227,12 @@ export const FichaInscricao = () => {
                             setRespConcluido={setRespConcluido}
                             setCpfValido={setCpfValidoResp}
                             handleConfirmar={cadastrarAluno}
+                            operacao={operacao}
+                        />
+                    }
+                    {tabAtiva === "paga" &&
+                        <HistPagamento
+                            userInfo={userInfo}
                         />
                     }
                 </Box>

@@ -5,20 +5,22 @@ import "./DefaultTable.css"
 export const DefaultTable = ({
     headCells,
     rowData,
-    withStatus = false
+    withStatus = false,
+    withPagStatus = false,
+    onRowClick,
 }) => {
     return (
-        <TableContainer sx={{ marginTop: "3rem", width: "100%" }}>
+        <TableContainer sx={{ width: "100%" }}>
             <Table>
                 <TableHead sx={{ backgroundColor: "white" }}>
                     <TableRow className="header-table-row">
                         {withStatus &&
-                            <TableCell sx={{ textAlign: "center" }}>Status de Presença</TableCell>
+                            <TableCell sx={{ textAlign: "center", width: "10%" }}>Status</TableCell>
                         }
                         {headCells.map((cell, index) => (
-                            <TableCell key={`header-cell-${index}`}>{cell.description}</TableCell>
+                            <TableCell key={`header-cell-${index}`} align={cell.align}>{cell.description}</TableCell>
                         ))}
-                        {withStatus &&
+                        {withPagStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
                         }
                     </TableRow>
@@ -28,10 +30,29 @@ export const DefaultTable = ({
                         <TableRow
                             key={`row-index-${index}`}
                             className="body-table-row"
-                            sx={{ backgroundColor: index % 2 !== 0 ? "#d5dae0" : "white", }}
+                            sx={{
+                                backgroundColor: index % 2 !== 0
+                                    ? "#ebeff5"
+                                    : "white",
+                                '&:hover': {
+                                    // textDecoration: "underline",
+                                    textDecorationColor: "black",
+                                    cursor: "pointer",
+                                    backgroundColor: "#d5dae0"
+                                }
+                            }}
+                            onClick={() => { onRowClick && onRowClick(row) }}
                         >
                             {withStatus &&
-                                <TableCell sx={{ textAlign: "center" }}>
+                                <TableCell
+                                    sx={{
+                                        textAlign: "center",
+                                        '&:hover': {
+                                            textDecoration: "underline",
+                                            textDecorationColor: "black"
+                                        }
+                                    }}
+                                >
                                     {row?.ativo === true ?
                                         <CircleIcon sx={{ color: "#286DA8" }} /> :
                                         <CircleIcon sx={{ color: "#989898" }} />
@@ -39,18 +60,22 @@ export const DefaultTable = ({
                                 </TableCell>
                             }
                             {headCells.map((header) => (
-                                <TableCell sx={{
-                                    ...(withStatus && header.name === "nomeAluno" && {
-                                        '&:hover': {
-                                            cursor: "pointer",
-                                            textDecoration: "underline",
-                                        }
-                                    })
-                                }}>
+                                <TableCell
+                                    key={`row-cell-${header.name}-${index}`}
+                                    sx={{
+                                        ...(withStatus && header.name === "nomeAluno" && {
+                                            '&:hover': {
+                                                cursor: "pointer",
+                                                textDecoration: "underline",
+                                            }
+                                        })
+                                    }}
+                                    align={header.align}
+                                >
                                     {row[header.name]}
                                 </TableCell>
                             ))}
-                            {withStatus &&
+                            {withPagStatus &&
                                 <TableCell sx={{ textAlign: "center" }}>
                                     <Box
                                         className="status-comprovante"
