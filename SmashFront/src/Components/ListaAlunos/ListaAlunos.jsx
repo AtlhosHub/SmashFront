@@ -66,7 +66,6 @@ export const ListaAlunos = () => {
     const handleClearFilter = () => {
         setStatusPagamento(null);
         setStatusPresenca(null);
-        setDateRange([null, null]);
     }
 
     const handleInputChange = (e) => {
@@ -122,7 +121,7 @@ export const ListaAlunos = () => {
             <Box className="main-content">
                 <Box className="action-area">
                     <TextField
-                        value={searchValue}
+                        value={searchValue.toUpperCase()}
                         onChange={(e) => {
                             handleInputChange(e);
                         }}
@@ -130,6 +129,7 @@ export const ListaAlunos = () => {
                         variant="outlined"
                         size="small"
                         sx={{
+                            
                             '& .MuiInputBase-root': {
                                 borderRadius: '8px',
                             },
@@ -145,7 +145,13 @@ export const ListaAlunos = () => {
                                 <InputAdornment position="end">
                                     <Search sx={{ color: "black" }} />
                                 </InputAdornment>
-                            )
+                            ),
+                            sx: {
+                                height: 35,
+                                '& input': {
+                                    padding: '8px 14px',
+                                },
+                            },
                         }}
                     />
                     <DefaultFilter
