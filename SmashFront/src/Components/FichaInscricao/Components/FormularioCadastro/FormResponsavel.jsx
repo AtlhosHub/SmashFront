@@ -21,9 +21,11 @@ export const FormResponsavel = ({
     setCpfValido,
     setRespConcluido,
     setTabAtiva,
-    handleConfirmar,
+    setOperacao,
+    setIsModalDeleteOpen,
     operacao,
-    setOperacao
+    handleSalvar,
+    handleConfirmar,
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
 
@@ -495,7 +497,7 @@ export const FormResponsavel = ({
                         }
                         onClick={() => {
                             operacao === "visualizacao"
-                                ? handleDelete()
+                                ? setIsModalDeleteOpen(true)
                                 : setTabAtiva("ende");
                         }}
                     />

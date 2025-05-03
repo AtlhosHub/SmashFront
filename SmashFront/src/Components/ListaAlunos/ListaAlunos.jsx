@@ -35,10 +35,6 @@ export const ListaAlunos = () => {
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [dateRange, setDateRange] = useState(getMonthRange());
 
-    const menuOptions = [
-
-    ];
-
     const headCells = [
         {
             name: "nome",
@@ -105,9 +101,10 @@ export const ListaAlunos = () => {
 
                 setRowData(formattedData);
             })
-            .catch((err) => {
-                console.error("Erro ao buscar alunos:", err);
-            });
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao buscar os alunos:", error)
+            })
     }
 
     useEffect(() => {

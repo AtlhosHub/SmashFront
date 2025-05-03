@@ -27,6 +27,7 @@ export const FormInfo = ({
     setInfoConcluido,
     setIsDeficiente,
     setUserInfo,
+    setIsModalDeleteOpen,
     setCpfValido,
     operacao,
     setOperacao
@@ -700,7 +701,7 @@ export const FormInfo = ({
                         : "Cancelar"
                     }
                     onClick={operacao === "visualizacao"
-                        ? () => handleDelete()
+                        ? () => setIsModalDeleteOpen(true)
                         : () => navigate("/alunos")
                     }
                 />

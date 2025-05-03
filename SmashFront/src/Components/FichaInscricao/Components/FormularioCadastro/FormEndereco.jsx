@@ -15,7 +15,7 @@ export const FormEndereco = ({
     handleConfirmar,
     operacao,
     setOperacao,
-    handleDelete,
+    setIsModalDeleteOpen,
     handleSalvar
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
@@ -309,7 +309,7 @@ export const FormEndereco = ({
                         }
                         onClick={() => {
                             operacao === "visualizacao"
-                                ? handleDelete()
+                                ? setIsModalDeleteOpen(true)
                                 : setTabAtiva("info");
                         }}
                     />

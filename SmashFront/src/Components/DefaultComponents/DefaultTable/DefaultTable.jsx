@@ -23,7 +23,7 @@ export const DefaultTable = ({
                         {withPagStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
                         }
-                        <TableCell></TableCell>
+                        <TableCell sx={{ width: "10%", textAlign: "center", }}></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
