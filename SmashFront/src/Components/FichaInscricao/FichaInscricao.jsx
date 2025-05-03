@@ -8,7 +8,6 @@ import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
 import { api } from "../../provider/apiProvider"
 import { FormResponsavel } from "./Components/FormularioCadastro/FormResponsavel";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
@@ -124,7 +123,7 @@ export const FichaInscricao = () => {
             id: "paga",
             nome: "Histórico de Pagamento",
             Icone: HistoryIcon,
-            visivel: operacao !== "cadastro",
+            visivel: operacao === "visualizacao",
             concluido: true,
             podeAtivar: () => true
         }
@@ -155,6 +154,39 @@ export const FichaInscricao = () => {
         }
     }, []);
 
+    const editarAluno = () => {
+        const dadosAluno = { ...userInfo };
+
+        if (maiorIdade) {
+            dadosAluno.responsaveis = [];
+        }
+
+        api.put(`/alunos/${userInfo.id}`, dadosAluno, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+        .then(() => {
+            navigate("/alunos", { state: { userCreated: true } })
+        })
+        .catch((error) => console.error("Erro ao editar aluno:", error));
+    }
+
+    const deletarAluno = () => {
+        api.delete(`/alunos/${userInfo.id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+            .then(() => {
+                navigate("/alunos", { state: { userCreated: true } })
+            })
+            .catch((error) => console.error("Erro ao excluir aluno:", error))
+        })
+    }
+
+ 
     const listarDadosAluno = (id) => {
         api.get(`/alunos/${id}`, {
             headers: {
@@ -201,6 +233,7 @@ export const FichaInscricao = () => {
                             setIsDeficiente={setIsDeficiente}
                             setCpfValido={setCpfValidoAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
                         />
                     }
                     {tabAtiva === "ende" &&
@@ -214,6 +247,7 @@ export const FichaInscricao = () => {
                             setCepValido={setCepValido}
                             handleConfirmar={cadastrarAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
                         />
                     }
                     {tabAtiva === "resp" &&
@@ -228,6 +262,7 @@ export const FichaInscricao = () => {
                             setCpfValido={setCpfValidoResp}
                             handleConfirmar={cadastrarAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
                         />
                     }
                     {tabAtiva === "paga" &&

@@ -11,8 +11,10 @@ export const MenuCadastro = ({ operacao, tabAtiva, setTabAtiva, etapas }) => {
             return "menu-cadastro-item desativado";
         }
 
-        if (operacao === "visualizacao") {
-            return tabAtiva === idTab ? "menu-cadastro-item ativo-visu" : "menu-cadastro-item ocioso";
+        if (operacao === "visualizacao" || operacao === "edicao") {
+            return tabAtiva === idTab
+                ? "menu-cadastro-item ativo-visu"
+                : "menu-cadastro-item ocioso";
         }
 
         return "menu-cadastro-item";

@@ -23,6 +23,7 @@ export const FormResponsavel = ({
     setTabAtiva,
     handleConfirmar,
     operacao,
+    setOperacao
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
 
@@ -30,6 +31,26 @@ export const FormResponsavel = ({
         "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
     const autorizacaoText =
         "O responsável autoriza o filho menor a se inscrever e, ao fazer o seu registro na ACDNB da Vila Formosa, o mesmo poderá disputar as competições promovidas por esta associação.";
+
+    const isVisualizacao = operacao === "visualizacao";
+    const isCadastro = operacao === "cadastro";
+
+    const labelBotao = isVisualizacao
+        ? "Editar"
+        : isCadastro
+            ? "Concluir"
+            : "Salvar"
+        ;
+
+    const handleClick = () => {
+        if (isVisualizacao) {
+            setOperacao("edicao");
+        } else if (isCadastro) {
+            handleConfirmar();
+        } else {
+            handleSalvar();
+        }
+    };
 
     const formatCPF = (value) => {
         const digits = value.replace(/\D/g, "").slice(0, 11);
@@ -468,19 +489,21 @@ export const FormResponsavel = ({
                 >
                     <DefaultButton
                         variant="outlined"
-                        label="Voltar"
+                        label={operacao === "visualizacao"
+                            ? "Excluir"
+                            : "Voltar"
+                        }
                         onClick={() => {
-                            setTabAtiva("ende");
+                            operacao === "visualizacao"
+                                ? handleDelete()
+                                : setTabAtiva("ende");
                         }}
                     />
                     <DefaultButton
                         variant="contained"
-                        label={operacao === "visualizacao" ? "Próximo" : "Concluir"}
+                        label={labelBotao}
                         disabled={!botaoLiberado}
-                        onClick={operacao === "visualizacao"
-                            ? () => setTabAtiva("paga")
-                            : handleConfirmar
-                        }
+                        onClick={handleClick}
                     />
                 </Box>
             </Box>

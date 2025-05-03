@@ -28,7 +28,8 @@ export const FormInfo = ({
     setIsDeficiente,
     setUserInfo,
     setCpfValido,
-    operacao
+    operacao,
+    setOperacao
 }) => {
     const navigate = useNavigate();
 
@@ -42,6 +43,24 @@ export const FormInfo = ({
         "Use este campo para indicar se o aluno(a) entregou o atestado de capacitação para a prática de esportes.";
     const deficienciaText =
         "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
+
+    const isVisualizacao = operacao === "visualizacao";
+    const isCadastro = operacao === "cadastro";
+
+    const labelBotao = isVisualizacao
+        ? "Editar"
+        : isCadastro
+            ? "Próximo"
+            : "Próximo"
+        ;
+
+    const handleClick = () => {
+        if (isVisualizacao) {
+            setOperacao("edicao");
+        } else {
+            setTabAtiva("ende");
+        }
+    };
 
     const formatCPF = (value) => {
         if (!value) return;
@@ -455,7 +474,7 @@ export const FormInfo = ({
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ marginTop: "auto", display: "flex", gap: "10px" }}>
+            <Box sx={{ marginTop: "10px", display: "flex", gap: "10px" }}>
                 <Box sx={{ color: "black" }}>
                     <label
                         style={{
@@ -663,26 +682,34 @@ export const FormInfo = ({
                         )}
                     </RadioGroup>
                 </Box>
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "10px",
-                        justifyContent: "end",
-                        alignItems: "end",
-                        flex: 1,
-                    }}
-                >
-                    <DefaultButton variant="outlined" label="Cancelar" onClick={() => navigate("/alunos")} />
-                    <DefaultButton
-                        disabled={!botaoLiberado}
-                        variant="contained"
-                        label="Próximo"
-                        onClick={() => {
-                            setTabAtiva("ende");
-                        }}
-                    />
-                </Box>
+            </Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "10px",
+                    justifyContent: "end",
+                    alignItems: "end",
+                    flex: 1,
+                }}
+            >
+                <DefaultButton
+                    variant="outlined"
+                    label={operacao === "visualizacao"
+                        ? "Excluir"
+                        : "Cancelar"
+                    }
+                    onClick={operacao === "visualizacao"
+                        ? () => handleDelete()
+                        : () => navigate("/alunos")
+                    }
+                />
+                <DefaultButton
+                    variant="contained"
+                    label={labelBotao}
+                    disabled={!botaoLiberado}
+                    onClick={handleClick}
+                />
             </Box>
         </FormControl>
     );

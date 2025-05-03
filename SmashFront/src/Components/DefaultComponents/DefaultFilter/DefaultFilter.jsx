@@ -51,7 +51,7 @@ export const DefaultFilter = ({
     return (
         <>
             <DefaultButton
-                label="Filter"
+                label="Filtro"
                 endIcon={<FilterAltOutlinedIcon />}
                 onClick={handleOpenFilter}
             />
