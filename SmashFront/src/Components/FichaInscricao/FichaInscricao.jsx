@@ -154,6 +154,39 @@ export const FichaInscricao = () => {
         }
     }, []);
 
+    const editarAluno = () => {
+        const dadosAluno = { ...userInfo };
+
+        if (maiorIdade) {
+            dadosAluno.responsaveis = [];
+        }
+
+        api.put(`/alunos/${userInfo.id}`, dadosAluno, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+        .then(() => {
+            navigate("/alunos", { state: { userCreated: true } })
+        })
+        .catch((error) => console.error("Erro ao editar aluno:", error));
+    }
+
+    const deletarAluno = () => {
+        api.delete(`/alunos/${userInfo.id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+            .then(() => {
+                navigate("/alunos", { state: { userCreated: true } })
+            })
+            .catch((error) => console.error("Erro ao excluir aluno:", error))
+        })
+    }
+
+ 
     const listarDadosAluno = (id) => {
         api.get(`/alunos/${id}`, {
             headers: {
