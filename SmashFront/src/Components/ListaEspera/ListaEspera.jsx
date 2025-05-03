@@ -17,6 +17,12 @@ import {
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom";
 import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonthRange";
+import ActionMenu from "../iconButton/iconButton";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { dateFormater } from "../../utils/dateFormaterService";
+
 
 export const ListaEspera = () => {
   const navigate = useNavigate();
@@ -27,12 +33,18 @@ export const ListaEspera = () => {
   const [statusFiltro, setStatusFiltro] = useState(null);
   const [dateRange, setDateRange] = useState(getMonthRange());
 
+  const menuOptions = [
+    { label: 'Visualizar', icon: <VisibilityIcon fontSize="small" /> },
+    { label: 'Editar', icon: <EditIcon fontSize="small" /> },
+    { label: 'Excluir', icon: <DeleteIcon fontSize="small" /> },
+  ];
+
   const headCells = [
     { name: "nome", description: "Nome" },
     { name: "dataInteresse", description: "Data de Contato" },
     { name: "horarioPreferencia", description: "Horário de Preferência" },
-
-  ]
+    { name: "acoes", description: "Ações" },
+  ];
 
   const [rowData, setRowData] = useState([]);
 
@@ -45,15 +57,10 @@ export const ListaEspera = () => {
       nome: searchValueRef.current || null,
       status: statusFiltro?.label,
       dataFrom: dateRange[0]?.format("YYYY-MM-DD"),
-      dataTo:   dateRange[1]?.format("YYYY-MM-DD")
+      dataTo: dateRange[1]?.format("YYYY-MM-DD")
     };
     fetchListaEspera(filtro);
-  }
-
-  const handleClearFilter = () => {
-    setStatusFiltro(null);
-    setDateRange([null, null]);
-  }
+  };
 
   useEffect(() => {
     handleApplyFilter();
@@ -65,18 +72,26 @@ export const ListaEspera = () => {
     searchValueRef.current = v;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(handleApplyFilter, 800);
-  }
+  };
 
-  const fetchListaEspera = filtro => {
+  const fetchListaEspera = (filtro) => {
     api.post("/lista-espera/filtro", filtro, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-      }
+        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      },
     })
-      .then(res => setRowData(res.data || []))
-      .catch(err => console.error("Erro ao buscar lista de espera:", err));
-  }
+      .then((res) => {
+        console.log("Resposta da API:", res.data);
+        const formattedData = res.data.map((item) => ({
+          ...item,
+          dataInteresse: item.dataInteresse ? dateFormater(item.dataInteresse) : null,
+        }));
+  
+        setRowData(formattedData);
+      })
+      .catch((err) => console.error("Erro ao buscar lista de espera:", err));
+  };
 
   return (
     <>
@@ -100,30 +115,25 @@ export const ListaEspera = () => {
               )
             }}
           />
-          <DefaultFilter
-            statusPagamento={statusFiltro}
-            dateRange={dateRange}
-            setDateRange={setDateRange}
-            setStatusPagamento={setStatusFiltro}
-            handleApplyFilter={handleApplyFilter}
-            handleClearFilter={handleClearFilter}
-          />
           <DefaultButton
             variant="contained"
             label="Novo Cadastro"
             endIcon={<Add />}
-            onClick={() => navigate("/cadastrarListaEspera", { state:{ operacao:"cadastrar" } })}
+            onClick={() => navigate("/cadastrarListaEspera", { state: { operacao: "cadastrar" } })}
           />
         </Box>
         <Box>
           <DefaultTable
             headCells={headCells}
-            rowData={rowData}
-            withActions={true}
+            rowData={rowData.map(row => ({
+              ...row,
+              acoes: <ActionMenu menuOptions={menuOptions} />
+            }))}
+            withActions={false}
           />
         </Box>
       </Box>
       <ToastContainer />
     </>
-  )
-}
+  );
+};

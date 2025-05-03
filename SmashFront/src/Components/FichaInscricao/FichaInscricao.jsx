@@ -149,7 +149,7 @@ export const FichaInscricao = () => {
     }
 
     useEffect(() => {
-        if (operacao === "visualizacao") {
+        if (operacao !== "cadastro") {
             listarDadosAluno(location.state?.idAluno);
         }
     }, []);
