@@ -259,7 +259,7 @@ export const ListaAlunos = () => {
             <ModalDelete
                 isModalOpen={isModalDeleteOpen}
                 setIsModalOpen={setIsModalDeleteOpen}
-                handleDelete={() => handleDeletarAluno(idToDelete)}
+                handleDelete={() => handleDeletarAluno(idToDelete.current)}
             />
             <ToastContainer />
         </>
