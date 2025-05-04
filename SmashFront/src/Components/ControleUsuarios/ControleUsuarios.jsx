@@ -52,7 +52,13 @@ export const ControleUsuarios = () => {
             .then((response) => {
                 setRowData(response.data || [])
             })
-            .catch((error) => console.error("Erro ao buscar dados:", error));
+            .catch((error) => {
+                if(error.response.status === 401 || error.response.data.message  === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                    sessionStorage.clear();
+                    navigate("/", { state: { tokenLogout: true } });
+                }
+                console.error("Erro ao buscar dados:", error)
+            });
     }
 
     useEffect(() => {
@@ -73,7 +79,7 @@ export const ControleUsuarios = () => {
                     <TextField
                         value={searchValue}
                         onChange={(e) => {
-                            setSearchValue(e.target.value.toUpperCase());
+                            setSearchValue(e.target.value);
                         }}
                         label="Nome do Usuário"
                         variant="outlined"

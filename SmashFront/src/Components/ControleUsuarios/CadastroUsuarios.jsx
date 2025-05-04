@@ -8,6 +8,9 @@ import { api } from "../../provider/apiProvider"
 import { useLocation, useNavigate } from "react-router-dom";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { ToastContainer } from "react-toastify";
+import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
+import { useEffect } from "react";
+
 
 export const CadastroUsuarios = () => {
     const navigate = useNavigate();
@@ -56,7 +59,7 @@ export const CadastroUsuarios = () => {
     const cadastrarUsuario = () => {
         api.post("/usuarios", userInfo, {
             headers: {
-                "Content-Type": "application/json", 
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
             }
         })
@@ -65,6 +68,18 @@ export const CadastroUsuarios = () => {
             })
             .catch((error) => console.error("Erro ao adicionar usuário: ", error));
     }
+
+       useEffect(() => {
+           const validateToken = async () => {
+               const isValid = await tokenValidationFunction();
+               if (!isValid) {
+                   navigate("/", { state: { tokenLogout: true } });
+               }
+           };
+       
+           validateToken();
+       }, []);
+
 
     return (
         <>

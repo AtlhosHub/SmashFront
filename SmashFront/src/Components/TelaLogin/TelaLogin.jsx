@@ -11,17 +11,26 @@ import logo from '../../assets/logoACDNB.png';
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DefaultLoginCard } from "../DefaultComponents/DefaultLoginCard/DefaultLoginCard";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { api } from "../../provider/apiProvider"
 import { toasterMsg } from "../../utils/toasterService";
+import { ToastContainer } from "react-toastify";
+import { useEffect } from "react";
 
 export const TelaLogin = () => {
+    const locate = useLocation();
     const [usuario, setUsuario] = useState('');
     const [senha, setSenha] = useState('');
 
     const [mostrarSenha, setMostrarSenha] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (locate.state?.tokenLogout) {
+            toasterMsg("error", "Sessão expirada, por favor faça o login novamente.")
+        }
+    }, [locate])
 
     const handleLogin = (e) => {
         // Aplica o fetch pra validar o login
@@ -150,7 +159,7 @@ export const TelaLogin = () => {
                                             textDecoration: 'underline',
                                         },
                                     }}
-                                    onClick={() => navigate('/esqueciSenha')} 
+                                    onClick={() => navigate('/esqueciSenha')}
                                 >
                                     Esqueci a senha
                                 </Link>
@@ -159,6 +168,7 @@ export const TelaLogin = () => {
                     </DefaultLoginCard>
                 </Box>
             </Box>
+            <ToastContainer />
         </>
     )
 }

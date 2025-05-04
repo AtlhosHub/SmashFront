@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { formatarTelefone } from "../../utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
+import { tokenValidationFunction } from "../../../../utils/tokenValidationFunction";
 
 export const FormInfo = ({
     userInfo,
@@ -116,6 +117,18 @@ export const FormInfo = ({
         setMaiorIdade(idade >= 18);
     };
 
+
+    useEffect(() => {
+        const validateToken = async () => {
+            const isValid = await tokenValidationFunction();
+            if (!isValid) {
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        };
+
+        validateToken();
+    }, []);
+
     return (
         <FormControl
             sx={{
@@ -152,7 +165,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.nome || undefined}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, nome: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, nome: e.target.value })
                             }
                             variant="outlined"
                             size="small"
@@ -199,7 +212,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.nomeSocial || undefined}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, nomeSocial: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, nomeSocial: e.target.value })
                             }
                             variant="outlined"
                             size="small"
@@ -255,7 +268,7 @@ export const FormInfo = ({
                                 disabled={operacao === "visualizacao"}
                                 value={userInfo.genero}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, genero: e.target.value.toUpperCase() })
+                                    setUserInfo({ ...userInfo, genero: e.target.value })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -279,7 +292,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.email}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, email: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, email: e.target.value })
                             }
                             variant="outlined"
                             size="small"
@@ -313,7 +326,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.nacionalidade}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, nacionalidade: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, nacionalidade: e.target.value })
                             }
                             variant="outlined"
                             size="small"
@@ -334,7 +347,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.naturalidade}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, naturalidade: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, naturalidade: e.target.value })
                             }
                             variant="outlined"
                             size="small"
@@ -355,7 +368,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={formatarTelefone(userInfo.telefone)}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, telefone: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, telefone: e.target.value })
                             }
                             variant="outlined"
                             size="small"
@@ -438,7 +451,7 @@ export const FormInfo = ({
                         <TextField
                             disabled={operacao === "visualizacao"}
                             value={userInfo.rg}
-                            onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value.toUpperCase() })}
+                            onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value })}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -458,7 +471,7 @@ export const FormInfo = ({
                             disabled={operacao === "visualizacao"}
                             value={userInfo.profissao}
                             onChange={(e) =>
-                                setUserInfo({ ...userInfo, profissao: e.target.value.toUpperCase() })
+                                setUserInfo({ ...userInfo, profissao: e.target.value })
                             }
                             variant="outlined"
                             size="small"
@@ -677,7 +690,7 @@ export const FormInfo = ({
                                 placeholder="Especifique"
                                 value={userInfo.deficiencia}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, deficiencia: e.target.value.toUpperCase() })
+                                    setUserInfo({ ...userInfo, deficiencia: e.target.value })
                                 }
                             />
                         )}

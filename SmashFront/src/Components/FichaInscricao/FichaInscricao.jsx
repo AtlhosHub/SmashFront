@@ -17,6 +17,7 @@ import { HistPagamento } from "./Components/HistPag/HistPagamento";
 import { toasterMsg } from "../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
 import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -215,6 +216,18 @@ export const FichaInscricao = () => {
                 console.error("Erro ao excluir aluno:", error)
             })
     }
+
+      useEffect(() => {
+          const validateToken = async () => {
+              const isValid = await tokenValidationFunction();
+              if (!isValid) {
+                  navigate("/", { state: { tokenLogout: true } });
+              }
+          };
+      
+          validateToken();
+      }, []);
+
 
     return (
         <>

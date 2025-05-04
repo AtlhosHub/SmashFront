@@ -102,6 +102,10 @@ export const ListaAlunos = () => {
                 setRowData(formattedData);
             })
             .catch((error) => {
+                if(error.response.status === 401 || error.response.data.message  === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                    sessionStorage.clear();
+                    navigate("/", { state: { tokenLogout: true } });
+                }
                 toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
                 console.error("Erro ao buscar os alunos:", error)
             })
@@ -213,7 +217,7 @@ export const ListaAlunos = () => {
                                 {
                                     label: 'Excluir',
                                     icon: <DeleteIcon fontSize="small" />,
-                                    onClickFunc: () => {}
+                                    onClickFunc: () => { }
                                 }
                             ]}
                             />

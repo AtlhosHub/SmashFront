@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import HelpIcon from "@mui/icons-material/Help";
 import { formatarTelefone } from "../../utils/validacaoForm";
+import { useNavigate } from "react-router-dom";
+import { tokenValidationFunction } from "../../../../utils/tokenValidationFunction";
 
 export const FormResponsavel = ({
     userInfo,
@@ -86,6 +88,19 @@ export const FormResponsavel = ({
         setRespConcluido(condicionalLiberacao);
     }, [userInfo, cpfValido]);
 
+    const navigate = useNavigate();
+    useEffect(() => {
+        const validateToken = async () => {
+            const isValid = await tokenValidationFunction();
+            if (!isValid) {
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        };
+
+        validateToken();
+    }, []);
+
+
     return (
         <FormControl
             sx={{
@@ -128,7 +143,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            nome: e.target.value.toUpperCase(),
+                                            nome: e.target.value,
                                         },
                                     ],
                                 })
@@ -157,7 +172,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            rg: e.target.value.toUpperCase(),
+                                            rg: e.target.value,
                                         },
                                     ],
                                 })
@@ -241,7 +256,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            nomeSocial: e.target.value.toUpperCase(),
+                                            nomeSocial: e.target.value,
                                         },
                                     ],
                                 })
@@ -270,7 +285,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            profissao: e.target.value.toUpperCase(),
+                                            profissao: e.target.value,
                                         },
                                     ],
                                 })
@@ -299,7 +314,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            genero: e.target.value.toUpperCase(),
+                                            genero: e.target.value,
                                         },
                                     ],
                                 })
@@ -330,7 +345,7 @@ export const FormResponsavel = ({
                                     responsaveis: [
                                         {
                                             ...userInfo.responsaveis[0],
-                                            email: e.target.value.toUpperCase(),
+                                            email: e.target.value,
                                         },
                                     ],
                                 })

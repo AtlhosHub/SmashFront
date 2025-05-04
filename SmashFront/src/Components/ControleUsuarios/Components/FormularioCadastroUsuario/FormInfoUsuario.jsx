@@ -85,7 +85,7 @@ export const FormInfoUsuario = ({
                                 required
                                 value={userInfo.nome}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, nome: e.target.value.toUpperCase() })
+                                    setUserInfo({ ...userInfo, nome: e.target.value })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -101,7 +101,7 @@ export const FormInfoUsuario = ({
                             <TextField
                                 value={userInfo.genero}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, genero: e.target.value.toUpperCase() })
+                                    setUserInfo({ ...userInfo, genero: e.target.value })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -117,7 +117,7 @@ export const FormInfoUsuario = ({
                             <TextField
                                 value={userInfo.cargo}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, cargo: e.target.value.toUpperCase() })
+                                    setUserInfo({ ...userInfo, cargo: e.target.value })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -158,7 +158,7 @@ export const FormInfoUsuario = ({
                             <TextField
                                 value={userInfo.nomeSocial}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, nomeSocial: e.target.value.toUpperCase() })
+                                    setUserInfo({ ...userInfo, nomeSocial: e.target.value })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -232,7 +232,7 @@ export const FormInfoUsuario = ({
                             <TextField
                                 value={userInfo.email}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, email: e.target.value.toUpperCase() })
+                                    setUserInfo({ ...userInfo, email: e.target.value })
                                 }
                                 variant="outlined"
                                 size="small"
