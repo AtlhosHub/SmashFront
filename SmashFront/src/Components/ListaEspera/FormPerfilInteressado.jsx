@@ -1,178 +1,338 @@
-import React from "react";
 import {
-  Box,
-  FormControl,
-  TextField,
-  Tooltip,
-  Typography,
-  useTheme,
-} from "@mui/material";
+    Box,
+    FormControl,
+    TextField,
+    MenuItem,
+    Tooltip,
+    Typography,
+  } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HelpIcon from "@mui/icons-material/Help";
-import { DefaultButton } from "../../../src/Components/DefaultComponents/DefaultButton/DefaultButton";
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { DefaultButton } from "../../../src/Components/DefaultComponents/DefaultButton/DefaultButton";
+import { formatarTelefone } from "../../Components/FichaInscricao/utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import { api } from "../../provider/apiProvider";
 
-export const FormPerfilInteressado = ({
-  perfil,
-  setPerfil,
+
+export const FormInfo = ({
+  userInfo,
+  setUserInfo,
   operacao,
-  botaoLiberado,
-  setConcluido,
-  setBotaoLiberado,
+  setInfoConcluido,
+  onSalvar, 
+  onCancelar,
 }) => {
   const navigate = useNavigate();
-  const theme = useTheme();
+  const [botaoLiberado, setBotaoLiberado] = useState(false);
 
-  const handleChange = (field) => (e) => setPerfil({ ...perfil, [field]: e.target.value });
-  const handleDateChange = (field) => (newValue) => setPerfil({ ...perfil, [field]: newValue });
-  const nomeSocialTooltip = "Nome social é o nome pelo qual o interessado prefere ser chamado, diferente do nome legal.";
+  const [horarios, setHorarios] = useState([]);
+  const [loadingHorarios, setLoadingHorarios] = useState(true);
+
+  const nomeSocialText = "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
+
+  useEffect(() => {
+    api
+      .get("/horario-pref", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+        }
+      })
+      .then(({ data }) => setHorarios(data))
+      .catch(console.error)
+      .finally(() => setLoadingHorarios(false));
+  }, []);
+  
+
+  useEffect(() => {
+    const camposObrigatorios =
+      userInfo.nome?.trim() &&
+      userInfo.dataContato &&
+      userInfo.email?.trim() &&
+      userInfo.horarioPreferenciaId;  
+      userInfo.celular?.trim();
+
+
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailValido = regexEmail.test(userInfo.email);
+    
+
+    setBotaoLiberado(camposObrigatorios && emailValido);
+    setInfoConcluido(camposObrigatorios && emailValido);
+
+  }, [userInfo]);
+
+  const handleDataContato     = (v) => setUserInfo({ ...userInfo, dataContato: v });
+
+  const handleDataNascimento  = (v) => setUserInfo({ ...userInfo, dataNascimento: v });
 
   return (
-    <Box sx={{ display: 'flex', flex: 1, backgroundColor: theme.palette.background.default }}>
-      {/* Navegação lateral */}
-      <Box sx={{ width: 200, backgroundColor: theme.palette.grey[100], p: 2, borderRight: `1px solid ${theme.palette.divider}` }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: theme.palette.text.primary }}>
-          <PersonOutlineIcon sx={{ mr: 1 }} />
-          <Typography variant="subtitle1">Informações</Typography>
+    <FormControl
+      sx={{
+        paddingBlock: "30px",
+        pr: "30px",
+        display: "flex",
+        flex: 1,
+        flexDirection: "column",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
+          width: "100%",
+          color: "black",
+        }}
+      >
+        {/* Coluna 1 */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+          <Box>
+            <label>
+              Nome do Aluno <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
+            </label>
+            <TextField
+              disabled={operacao === "visualizacao"}
+              value={userInfo.nome || ""}
+              onChange={(e) => setUserInfo({ ...userInfo, nome: e.target.value.toUpperCase() })}
+              variant="outlined"
+              size="small"
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                },
+              }}
+            />
+          </Box>
+
+          <Box>
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              Nome Social
+              <Tooltip
+                title={<Typography sx={{ fontSize: "14px" }}>{nomeSocialText}</Typography>}
+                placement="right"
+                arrow
+              >
+                <HelpIcon sx={{ marginTop: "1px", color: "#286DA8", fontSize: "18px" }} />
+              </Tooltip>
+            </label>
+            <TextField
+              disabled={operacao === "visualizacao"}
+              value={userInfo.nomeSocial || ""}
+              onChange={(e) => setUserInfo({ ...userInfo, nomeSocial: e.target.value.toUpperCase() })}
+              variant="outlined"
+              size="small"
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px", 
+                },
+              }}
+            />
+          </Box>
+
+          <Box>
+            <label>Telefone</label>
+            <TextField
+              disabled={operacao === "visualizacao"}
+              value={formatarTelefone(userInfo.telefone)}
+              onChange={(e) => setUserInfo({ ...userInfo, telefone: e.target.value })}
+              variant="outlined"
+              size="small"
+              type="tel"
+              placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                },
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* Coluna 2 */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+          <Box>
+            <label>Data de Nascimento</label>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                disabled={operacao === "visualizacao"}
+                value={userInfo.dataNascimento ? dayjs(userInfo.dataNascimento) : null}
+                onChange={handleDataNascimento}
+                format="DD/MM/YYYY"
+                slotProps={{
+                  textField: {
+                    size: "small",
+                    fullWidth: true,
+                    placeholder: "DD/MM/AAAA"
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "8px",
+                  },
+                }}
+              />
+            </LocalizationProvider>
+          </Box>
+
+          <Box>
+            <label>
+              Gênero
+            </label>
+            <TextField
+              disabled={operacao === "visualizacao"}
+              value={userInfo.genero || ""}
+              onChange={(e) => setUserInfo({ ...userInfo, genero: e.target.value.toUpperCase() })}
+              variant="outlined"
+              size="small"
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px", 
+                },
+              }}
+            />
+          </Box>
+
+          <Box>
+            <label>
+              Email <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
+            </label>
+            <TextField
+              disabled={operacao === "visualizacao"}
+              value={userInfo.email || ""}
+              onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value.toUpperCase() })}
+              variant="outlined"
+              size="small"
+              type="email"
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px", 
+                },
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* Coluna 3 */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+          <Box>
+            <label>
+              Data de Contato <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
+            </label>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                disabled={operacao === "visualizacao"}
+                value={userInfo.dataContato ? dayjs(userInfo.dataContato) : null}
+                onChange={handleDataContato}
+                format="DD/MM/YYYY"
+                slotProps={{
+                  textField: {
+                    size: "small",
+                    fullWidth: true,
+                    placeholder: "DD/MM/AAAA"
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "8px", 
+                  },
+                }}
+              />
+            </LocalizationProvider>
+          </Box>
+
+          <Box>
+            <label>
+              Celular <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
+            </label>
+            <TextField
+              disabled={operacao === "visualizacao"}
+              value={formatarTelefone(userInfo.celular)}
+              onChange={(e) => setUserInfo({ ...userInfo, celular: e.target.value })}
+              variant="outlined"
+              size="small"
+              type="tel"
+              placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px", 
+                },
+              }}
+            />
+          </Box>
+
+          <Box>
+  <label>
+    Horário de Preferência{" "}
+    <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>
+      *
+    </span>
+  </label>
+  <TextField
+    select
+    disabled={operacao === "visualizacao"}
+    value={userInfo.horarioPreferenciaId || ""}
+    onChange={e =>
+      setUserInfo({
+        ...userInfo,
+        horarioPreferenciaId: Number(e.target.value)
+      })
+    }
+    variant="outlined"
+    size="small"
+    fullWidth
+    sx={{
+      "& .MuiOutlinedInput-root": {
+        borderRadius: "8px"
+      }
+    }}
+  >
+    <MenuItem value="">
+      <em>— selecione —</em>
+    </MenuItem>
+    {horarios.map(h => (
+      <MenuItem key={h.id} value={h.id}>
+        {dayjs(h.horarioAula, "HH:mm:ss").format("HH:mm")}
+      </MenuItem>
+    ))}
+  </TextField>
+</Box>
         </Box>
       </Box>
 
-      {/* Formulário */}
-      <FormControl
-        sx={{
-          flex: 1,
-          p: 4,
-          display: "flex",
-          flexDirection: "column",
-          pl: 6 // aumenta espaçamento interno à esquerda para equalizar distâncias
-        }}
-      >
-        <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-          {/* Coluna 1 */}
-          <Box sx={{ flex: 1.3, display: "flex", flexDirection: "column", gap: 1 }}>
-            {/* aumento de gap entre label e campo */}
-            <Typography variant="body2" component="label" color="text.primary" sx={{ mb: 1 }}>
-              Nome<span style={{ color: theme.palette.error.main, marginLeft: 4, visibility: operacao === 'visualizacao' ? 'hidden' : 'visible' }}>*</span>
-            </Typography>
-            <TextField
-              size="small"
-              disabled={operacao === "visualizacao"}
-              value={perfil.nome || ""}
-              onChange={handleChange("nome")}
-            />
-
-            <Typography variant="body2" component="label" color="text.primary" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              Nome Social
-              <Tooltip title={<Typography sx={{ fontSize: 14 }}>{nomeSocialTooltip}</Typography>} arrow>
-                <HelpIcon fontSize="small" color="primary" sx={{ ml: 0.5 }} />
-              </Tooltip>
-            </Typography>
-            <TextField
-              size="small"
-              disabled={operacao === "visualizacao"}
-              value={perfil.nomeSocial || ""}
-              onChange={handleChange("nomeSocial")}
-            />
-
-            <Typography variant="body2" component="label" color="text.primary" sx={{ mb: 1 }}>
-              Telefone
-            </Typography>
-            <TextField
-              size="small"
-              disabled={operacao === "visualizacao"}
-              value={perfil.telefone || ""}
-              onChange={handleChange("telefone")}
-            />
-          </Box>
-
-          {/* Coluna 2 */}
-          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1 }}>
-            <Typography variant="body2" component="label" color="text.primary" sx={{ mb: 1 }}>
-              Gênero
-            </Typography>
-            <TextField
-              size="small"
-              disabled={operacao === "visualizacao"}
-              value={perfil.genero || ""}
-              onChange={handleChange("genero")}
-            />
-
-            <Typography variant="body2" component="label" color="text.primary" sx={{ mb: 1 }}>
-              Data de Nascimento
-            </Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                slotProps={{ textField: { size: "small", placeholder: "DD/MM/AAAA" } }}
-                disabled={operacao === "visualizacao"}
-                value={perfil.dataNascimento ? dayjs(perfil.dataNascimento) : null}
-                onChange={handleDateChange("dataNascimento")}
-                format="DD/MM/YYYY"
-              />
-            </LocalizationProvider>
-
-            <Typography variant="body2" component="label" color="text.primary" sx={{ mb: 1 }}>
-              Email
-            </Typography>
-            <TextField
-              size="small"
-              type="email"
-              disabled={operacao === "visualizacao"}
-              value={perfil.email || ""}
-              onChange={handleChange("email")}
-            />
-          </Box>
-
-          {/* Coluna 3 */}
-          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1 }}>
-            <Typography variant="body2" component="label" color="text.primary" sx={{ mb: 1 }}>
-              Data de Contato<span style={{ color: theme.palette.error.main, marginLeft: 4, visibility: operacao === 'visualizacao' ? 'hidden' : 'visible' }}>*</span>
-            </Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                slotProps={{ textField: { size: "small", placeholder: "DD/MM/AAAA" } }}
-                disabled={operacao === "visualizacao"}
-                value={perfil.dataContato ? dayjs(perfil.dataContato) : null}
-                onChange={handleDateChange("dataContato")}
-                format="DD/MM/YYYY"
-              />
-            </LocalizationProvider>
-
-            <Typography variant="body2" component="label" color="text.primary" sx={{ mb: 1 }}>
-              Celular
-            </Typography>
-            <TextField
-              size="small"
-              disabled={operacao === "visualizacao"}
-              value={perfil.celular || ""}
-              onChange={handleChange("celular")}
-            />
-
-            <Typography variant="body2" component="label" color="text.primary" sx={{ mb: 1 }}>
-              Horário de Preferência<span style={{ color: theme.palette.error.main, marginLeft: 4, visibility: operacao === 'visualizacao' ? 'hidden' : 'visible' }}>*</span>
-            </Typography>
-            <TextField
-              size="small"
-              disabled={operacao === "visualizacao"}
-              value={perfil.horarioPreferencia || ""}
-              onChange={handleChange("horarioPreferencia")}
-            />
-          </Box>
-        </Box>
-
-        {/* Botões */}
-        <Box sx={{ mt: 4, display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <DefaultButton variant="outlined" label="Cancelar" onClick={() => navigate(-1)} />
+      <Box sx={{ marginTop: "auto", display: "flex", gap: "10px" }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: "10px", width: "100%" }}>
           <DefaultButton
-            variant="contained"
-            label="Concluir"
-            disabled={!botaoLiberado}
-            onClick={() => setConcluido(true)}
+            variant="outlined"
+            label="Cancelar"
+            onClick={() => navigate("/listaEspera")}
           />
+            <DefaultButton
+              variant="contained"
+              label="Concluir"
+              disabled={!botaoLiberado}
+              onClick={() => {
+                setInfoConcluido(true);
+                onSalvar();
+              }}
+            />
         </Box>
-      </FormControl>
-    </Box>
+      </Box>
+    </FormControl>
   );
 };
