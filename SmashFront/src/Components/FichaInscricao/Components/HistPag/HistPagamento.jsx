@@ -3,12 +3,12 @@ import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultB
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DefaultTable } from "../../../DefaultComponents/DefaultTable/DefaultTable";
 import { dateFormater } from "../../../../utils/dateFormaterService";
 
 export const HistPagamento = ({ userInfo }) => {
-    const [filtroData, setFiltroData] = useState(dayjs());
+    const [filtroData, setFiltroData] = useState();
 
     const headCells = [
         {
@@ -70,6 +70,11 @@ export const HistPagamento = ({ userInfo }) => {
                 <DefaultButton
                     label="Buscar"
                     variant="contained"
+                />
+                <DefaultButton
+                    label="Limpar"
+                    variant="outlined"
+                    onClick={() => setFiltroData(undefined)}
                 />
             </Box>
             <DefaultTable

@@ -8,13 +8,15 @@ import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
 import { api } from "../../provider/apiProvider"
 import { FormResponsavel } from "./Components/FormularioCadastro/FormResponsavel";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import HistoryIcon from '@mui/icons-material/History';
 import dayjs from "dayjs";
 import { HistPagamento } from "./Components/HistPag/HistPagamento";
+import { toasterMsg } from "../../utils/toasterService";
+import { ToastContainer } from "react-toastify";
+import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -26,6 +28,7 @@ export const FichaInscricao = () => {
     const [enderecoConcluido, setEnderecoConcluido] = useState(false);
     const [respConcluido, setRespConcluido] = useState(false);
     const [operacao, setOperacao] = useState(location.state?.operacao || "cadastro");
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
     // Variaveis de Controle Form
     const [maiorIdade, setMaiorIdade] = useState(true);
@@ -40,7 +43,6 @@ export const FichaInscricao = () => {
         return "Editar Ficha de Inscrição"
     }
 
-    // Dados dos Form
     const [userInfo, setUserInfo] = useState({
         nome: null,
         email: null,
@@ -124,7 +126,7 @@ export const FichaInscricao = () => {
             id: "paga",
             nome: "Histórico de Pagamento",
             Icone: HistoryIcon,
-            visivel: operacao !== "cadastro",
+            visivel: operacao === "visualizacao",
             concluido: true,
             podeAtivar: () => true
         }
@@ -150,10 +152,49 @@ export const FichaInscricao = () => {
     }
 
     useEffect(() => {
-        if (operacao === "visualizacao") {
+        if (operacao !== "cadastro") {
             listarDadosAluno(location.state?.idAluno);
         }
     }, []);
+
+    const editarAluno = () => {
+        const dadosAluno = { ...userInfo };
+
+        if (maiorIdade) {
+            dadosAluno.responsaveis = [];
+        }
+
+        api.put(`/alunos/${userInfo.id}`, dadosAluno, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then(() => {
+                toasterMsg("success", "Usuário editado com sucesso!");
+                setOperacao("visualizacao")
+            })
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao excluir aluno:", error)
+            })
+    }
+
+    const deletarAluno = () => {
+        api.delete(`/alunos/${userInfo.id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then(() => {
+                navigate("/alunos", { state: { userCreated: true } })
+            })
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao excluir aluno:", error)
+            })
+    }
 
     const listarDadosAluno = (id) => {
         api.get(`/alunos/${id}`, {
@@ -165,11 +206,14 @@ export const FichaInscricao = () => {
             .then((response) => {
                 const hoje = dayjs()
                 const nascimento = dayjs(response.data.dataNascimento)
-                
+
                 setUserInfo(response.data)
                 setMaiorIdade(hoje.diff(nascimento, 'year') >= 18);
             })
-            .catch((error) => console.error("Erro ao buscar dados:", error));
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao excluir aluno:", error)
+            })
     }
 
     return (
@@ -201,6 +245,8 @@ export const FichaInscricao = () => {
                             setIsDeficiente={setIsDeficiente}
                             setCpfValido={setCpfValidoAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
+                            setIsModalDeleteOpen={setIsModalDeleteOpen}
                         />
                     }
                     {tabAtiva === "ende" &&
@@ -214,6 +260,9 @@ export const FichaInscricao = () => {
                             setCepValido={setCepValido}
                             handleConfirmar={cadastrarAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
+                            handleSalvar={editarAluno}
+                            setIsModalDeleteOpen={setIsModalDeleteOpen}
                         />
                     }
                     {tabAtiva === "resp" &&
@@ -228,6 +277,9 @@ export const FichaInscricao = () => {
                             setCpfValido={setCpfValidoResp}
                             handleConfirmar={cadastrarAluno}
                             operacao={operacao}
+                            setOperacao={setOperacao}
+                            handleSalvar={editarAluno}
+                            setIsModalDeleteOpen={setIsModalDeleteOpen}
                         />
                     }
                     {tabAtiva === "paga" &&
@@ -237,6 +289,12 @@ export const FichaInscricao = () => {
                     }
                 </Box>
             </Box >
+            <ToastContainer />
+            <ModalDelete
+                isModalOpen={isModalDeleteOpen}
+                setIsModalOpen={setIsModalDeleteOpen}
+                handleDelete={deletarAluno}
+            />
         </>
     );
 }

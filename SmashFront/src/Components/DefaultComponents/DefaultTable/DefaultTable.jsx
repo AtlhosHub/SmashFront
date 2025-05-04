@@ -23,6 +23,7 @@ export const DefaultTable = ({
                         {withPagStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
                         }
+                        <TableCell sx={{ width: "10%", textAlign: "center", }}></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -35,7 +36,6 @@ export const DefaultTable = ({
                                     ? "#ebeff5"
                                     : "white",
                                 '&:hover': {
-                                    // textDecoration: "underline",
                                     textDecorationColor: "black",
                                     cursor: "pointer",
                                     backgroundColor: "#d5dae0"
@@ -91,6 +91,9 @@ export const DefaultTable = ({
                                     </Box>
                                 </TableCell>
                             }
+                            <TableCell>
+                                {row.acoes}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

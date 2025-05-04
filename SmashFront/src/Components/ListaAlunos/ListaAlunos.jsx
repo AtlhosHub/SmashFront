@@ -19,6 +19,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonthRange";
 import { dateFormater } from "../../utils/dateFormaterService";
 import { toasterMsg } from "../../utils/toasterService";
+import ActionMenu from "../iconButton/iconButton";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -92,14 +96,15 @@ export const ListaAlunos = () => {
             .then((res) => {
                 const formattedData = res.data.map((aluno) => ({
                     ...aluno,
-                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null 
+                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null
                 }));
-                
+
                 setRowData(formattedData);
             })
-            .catch((err) => {
-                console.error("Erro ao buscar alunos:", err);
-            });
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao buscar os alunos:", error)
+            })
     }
 
     useEffect(() => {
@@ -129,7 +134,7 @@ export const ListaAlunos = () => {
                         variant="outlined"
                         size="small"
                         sx={{
-                            
+
                             '& .MuiInputBase-root': {
                                 borderRadius: '8px',
                             },
@@ -178,15 +183,43 @@ export const ListaAlunos = () => {
                 <Box>
                     <DefaultTable
                         headCells={headCells}
-                        rowData={rowData}
+                        rowData={rowData.map(row => ({
+                            ...row,
+                            acoes: <ActionMenu menuOptions={[
+                                {
+                                    label: 'Visualizar',
+                                    icon: <VisibilityIcon fontSize="small" />,
+                                    onClickFunc: () => {
+                                        navigate("/fichaInscricao", {
+                                            state: {
+                                                idAluno: row.id,
+                                                operacao: "visualizacao"
+                                            }
+                                        })
+                                    }
+                                },
+                                {
+                                    label: 'Editar',
+                                    icon: <EditIcon fontSize="small" />,
+                                    onClickFunc: () => {
+                                        navigate("/fichaInscricao", {
+                                            state: {
+                                                idAluno: row.id,
+                                                operacao: "edicao"
+                                            }
+                                        })
+                                    }
+                                },
+                                {
+                                    label: 'Excluir',
+                                    icon: <DeleteIcon fontSize="small" />,
+                                    onClickFunc: () => {}
+                                }
+                            ]}
+                            />
+                        }))}
                         withStatus={true}
                         withPagStatus={true}
-                        onRowClick={(row) => navigate("/fichaInscricao", {
-                            state: {
-                                idAluno: row.id,
-                                operacao: "visualizacao"
-                            }
-                        })}
                     />
                 </Box>
             </Box>

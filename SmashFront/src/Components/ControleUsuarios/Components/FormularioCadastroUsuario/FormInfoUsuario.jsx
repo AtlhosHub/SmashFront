@@ -14,6 +14,7 @@ import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultB
 import { formatarTelefone } from "../../../FichaInscricao/utils/validacaoForm";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { ToastContainer } from "react-toastify";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export const FormInfoUsuario = ({
@@ -84,7 +85,7 @@ export const FormInfoUsuario = ({
                                 required
                                 value={userInfo.nome}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, nome: e.target.value })
+                                    setUserInfo({ ...userInfo, nome: e.target.value.toUpperCase() })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -100,7 +101,7 @@ export const FormInfoUsuario = ({
                             <TextField
                                 value={userInfo.genero}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, genero: e.target.value })
+                                    setUserInfo({ ...userInfo, genero: e.target.value.toUpperCase() })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -116,7 +117,7 @@ export const FormInfoUsuario = ({
                             <TextField
                                 value={userInfo.cargo}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, cargo: e.target.value })
+                                    setUserInfo({ ...userInfo, cargo: e.target.value.toUpperCase() })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -157,7 +158,7 @@ export const FormInfoUsuario = ({
                             <TextField
                                 value={userInfo.nomeSocial}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, nomeSocial: e.target.value })
+                                    setUserInfo({ ...userInfo, nomeSocial: e.target.value.toUpperCase() })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -231,7 +232,7 @@ export const FormInfoUsuario = ({
                             <TextField
                                 value={userInfo.email}
                                 onChange={(e) =>
-                                    setUserInfo({ ...userInfo, email: e.target.value })
+                                    setUserInfo({ ...userInfo, email: e.target.value.toUpperCase() })
                                 }
                                 variant="outlined"
                                 size="small"
@@ -251,7 +252,7 @@ export const FormInfoUsuario = ({
                                 required
                                 value={senha}
                                 onChange={(e) => {
-                                    setUserInfo({ ...userInfo, senha: senha });
+                                    setUserInfo({ ...userInfo, senha: e.target.value });
                                     setSenha(e.target.value);
                                 }}
                                 variant="outlined"
@@ -339,6 +340,7 @@ export const FormInfoUsuario = ({
                         onClick={() => handleApplyClick()}
                     />
                 </Box>
+                <ToastContainer />
             </FormControl>
         </>
     )

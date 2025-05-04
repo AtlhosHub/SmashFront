@@ -4,11 +4,13 @@ import { Box } from "@mui/material";
 import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
 import { FormInfoUsuario } from "./Components/FormularioCadastroUsuario/FormInfoUsuario";
 import { useState } from "react";
-
+import { api } from "../../provider/apiProvider"
+import { useLocation, useNavigate } from "react-router-dom";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { ToastContainer } from "react-toastify";
 
 export const CadastroUsuarios = () => {
-
+    const navigate = useNavigate();
     const [infoConcluido, setInfoConcluido] = useState(false);
 
     const rotas = [
@@ -51,6 +53,19 @@ export const CadastroUsuarios = () => {
         },
     ];
 
+    const cadastrarUsuario = () => {
+        api.post("/usuarios", userInfo, {
+            headers: {
+                "Content-Type": "application/json", 
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then(() => {
+                navigate("/controleUsuarios", { state: { userCreated: true } })
+            })
+            .catch((error) => console.error("Erro ao adicionar usuário: ", error));
+    }
+
     return (
         <>
             <Box
@@ -72,15 +87,16 @@ export const CadastroUsuarios = () => {
                     <MenuCadastro
                         operacao="cadastro"
                         tabAtiva="info"
-                        // setTabAtiva={setTabAtiva}
                         etapas={etapasMenu}
                     />
                     <FormInfoUsuario
                         userInfo={userInfo}
                         setUserInfo={setUserInfo}
+                        handleApplyClick={cadastrarUsuario}
                     />
                 </Box>
             </Box>
+            <ToastContainer />
         </>
     );
 };

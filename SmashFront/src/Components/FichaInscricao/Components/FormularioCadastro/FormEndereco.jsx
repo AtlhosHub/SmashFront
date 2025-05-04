@@ -13,10 +13,46 @@ export const FormEndereco = ({
     setTabAtiva,
     setCepValido,
     handleConfirmar,
-    operacao
+    operacao,
+    setOperacao,
+    setIsModalDeleteOpen,
+    handleSalvar
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
     const messagemErroCEP = useRef();
+
+    const isVisualizacao = operacao === "visualizacao";
+    const isCadastro = operacao === "cadastro";
+    const isMaiorIdade = maiorIdade;
+
+    const labelBotao = isVisualizacao
+        ? "Editar"
+        : isCadastro
+            ? isMaiorIdade
+                ? "Concluir"
+                : "Próximo"
+            : isMaiorIdade
+                ? "Salvar"
+                : "Próximo"
+        ;
+
+    const handleClick = () => {
+        if (isVisualizacao) {
+            setOperacao("edicao");
+        } else if (isCadastro) {
+            if (isMaiorIdade) {
+                handleConfirmar();
+            } else {
+                setTabAtiva("resp");
+            }
+        } else {
+            if (isMaiorIdade) {
+                handleSalvar();
+            } else {
+                setTabAtiva("resp");
+            }
+        }
+    };
 
     useEffect(() => {
         const camposPreenchidos = (operacao === "cadastrar" ? cepValido : true) && userInfo.endereco.numLogradouro;
@@ -267,23 +303,21 @@ export const FormEndereco = ({
                 >
                     <DefaultButton
                         variant="outlined"
-                        label="Voltar"
+                        label={operacao === "visualizacao"
+                            ? "Excluir"
+                            : "Voltar"
+                        }
                         onClick={() => {
-                            setTabAtiva("info");
+                            operacao === "visualizacao"
+                                ? setIsModalDeleteOpen(true)
+                                : setTabAtiva("info");
                         }}
                     />
                     <DefaultButton
                         variant="contained"
-                        label={operacao === "visualizacao" ? "Próximo" : maiorIdade ? "Concluir" : "Próximo"}
+                        label={labelBotao}
                         disabled={!botaoLiberado}
-                        onClick={operacao === "visualizacao"
-                            ? maiorIdade
-                                ? () => setTabAtiva("paga")
-                                : () => setTabAtiva("resp")
-                            : maiorIdade
-                                ? handleConfirmar
-                                : () => setTabAtiva("resp")
-                        }
+                        onClick={handleClick}
                     />
                 </Box>
             </Box>
