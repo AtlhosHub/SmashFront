@@ -217,16 +217,16 @@ export const FichaInscricao = () => {
             })
     }
 
-      useEffect(() => {
-          const validateToken = async () => {
-              const isValid = await tokenValidationFunction();
-              if (!isValid) {
-                  navigate("/", { state: { tokenLogout: true } });
-              }
-          };
-      
-          validateToken();
-      }, []);
+    useEffect(() => {
+        const validateToken = async () => {
+            const isValid = await tokenValidationFunction();
+            if (!isValid) {
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        };
+
+        validateToken();
+    }, []);
 
 
     return (

@@ -19,11 +19,6 @@ export default function ActionMenu({ menuOptions }) {
     setAnchorEl(null);
   };
 
-  const handleSelect = (action) => {
-    console.log(`Selecionou: ${action}`);
-    handleClose();
-  };
-
   return (
     <div>
       <IconButton

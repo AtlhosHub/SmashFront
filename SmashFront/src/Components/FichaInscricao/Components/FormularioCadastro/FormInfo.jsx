@@ -56,52 +56,29 @@ export const FormInfo = ({
             : "Próximo"
         ;
 
-    const handleClick = () => {
-        if (isVisualizacao) {
-            setOperacao("edicao");
-        } else {
-            setTabAtiva("ende");
-        }
-    };
-
     const formatCPF = (value) => {
-        if (!value) return;
-
+        if (!value) return "";
         const digits = value.replace(/\D/g, "").slice(0, 11);
-        if (digits.length === 11) {
-            setCpfValido(true);
-        } else {
-            setCpfValido(false);
-        }
-
         return digits
             .replace(/(\d{3})(\d)/, "$1.$2")
             .replace(/(\d{3})(\d)/, "$1.$2")
             .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     };
 
-    useEffect(() => {
-        setCpfUser(formatCPF(userInfo?.cpf));
-    }, [userInfo?.cpf])
+    const validarCpf = (value) => {
+        const digits = value.replace(/\D/g, "");
+        return digits.length === 11;
+    };
 
     const [cpfUser, setCpfUser] = useState(formatCPF(userInfo?.cpf));
 
     useEffect(() => {
-        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && userInfo.dataNascimento;
 
-        const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        const emailValido = regexEmail.test(userInfo.email);
-
-        const emailNecessario = maiorIdade ? emailValido : true;
-        const condicionalLiberacao = camposPreenchidos && emailNecessario && (!isDeficiente ? true : !!userInfo.deficiencia === true);
-
-        setBotaoLiberado(condicionalLiberacao);
-        setInfoConcluido(condicionalLiberacao);
-    }, [userInfo, maiorIdade, isDeficiente]);
-
-    useEffect(() => {
-        if (!isDeficiente) setUserInfo({ ...userInfo, deficiencia: null })
-    }, [isDeficiente])
+        const cpf = userInfo?.cpf || "";
+        console.log(validarCpf(cpf))
+        setCpfUser(formatCPF(cpf));
+        setCpfValido(validarCpf(cpf));
+    }, [userInfo?.cpf]);
 
     const isMaiorDeIdade = (dataNascimento) => {
         const hoje = new Date();
@@ -117,6 +94,30 @@ export const FormInfo = ({
         setMaiorIdade(idade >= 18);
     };
 
+    const handleClick = () => {
+        if (isVisualizacao) {
+            setOperacao("edicao");
+        } else {
+            setTabAtiva("ende");
+        }
+    };
+
+    useEffect(() => {
+        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && userInfo.dataNascimento;
+
+        const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        const emailValido = regexEmail.test(userInfo.email);
+
+        const emailNecessario = maiorIdade ? emailValido : true;
+        const condicionalLiberacao = camposPreenchidos && emailNecessario && (!isDeficiente ? true : !!userInfo.deficiencia === true);
+
+        setBotaoLiberado(condicionalLiberacao);
+        setInfoConcluido(condicionalLiberacao);
+    }, [userInfo, maiorIdade, isDeficiente, cpfValido]);
+
+    useEffect(() => {
+        if (!isDeficiente) setUserInfo({ ...userInfo, deficiencia: null })
+    }, [isDeficiente])
 
     useEffect(() => {
         const validateToken = async () => {
@@ -174,7 +175,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -221,7 +222,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -254,7 +255,7 @@ export const FormInfo = ({
                                             borderRadius: "8px"
                                         },
                                         '& .MuiInputBase-input.Mui-disabled': {
-                                            "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                            WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                         },
                                         width: "100%",
                                     }}
@@ -266,7 +267,7 @@ export const FormInfo = ({
                             <label>Gênero</label>
                             <TextField
                                 disabled={operacao === "visualizacao"}
-                                value={userInfo.genero}
+                                value={userInfo.genero || undefined}
                                 onChange={(e) =>
                                     setUserInfo({ ...userInfo, genero: e.target.value })
                                 }
@@ -277,7 +278,7 @@ export const FormInfo = ({
                                         borderRadius: "8px"
                                     },
                                     '& .MuiInputBase-input.Mui-disabled': {
-                                        "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                        WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                     },
                                     width: "100%",
                                 }}
@@ -290,7 +291,7 @@ export const FormInfo = ({
                         </label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.email}
+                            value={userInfo.email || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, email: e.target.value })
                             }
@@ -302,7 +303,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -324,7 +325,7 @@ export const FormInfo = ({
                         <label>Nacionalidade</label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.nacionalidade}
+                            value={userInfo.nacionalidade || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, nacionalidade: e.target.value })
                             }
@@ -335,7 +336,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -345,7 +346,7 @@ export const FormInfo = ({
                         <label>Naturalidade</label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.naturalidade}
+                            value={userInfo.naturalidade || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, naturalidade: e.target.value })
                             }
@@ -356,7 +357,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -379,7 +380,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -402,7 +403,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -426,10 +427,23 @@ export const FormInfo = ({
                         <TextField
                             disabled={operacao === "visualizacao"}
                             value={cpfUser}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ["Backspace", "ArrowLeft", "ArrowRight", "Tab", "Delete"];
+                                const isNumber = /^[0-9]$/.test(e.key);
+
+                                if (!isNumber && !allowedKeys.includes(e.key)) {
+                                    e.preventDefault();
+                                }
+                            }}
                             onChange={(e) => {
                                 const raw = e.target.value.replace(/\D/g, "");
                                 setCpfUser(formatCPF(raw));
                                 setUserInfo({ ...userInfo, cpf: raw });
+                            }}
+                            inputProps={{
+                                inputMode: "numeric",
+                                pattern: "[0-9]*",
+                                maxLength: 14,
                             }}
                             variant="outlined"
                             size="small"
@@ -438,7 +452,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -450,7 +464,7 @@ export const FormInfo = ({
                         </label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.rg}
+                            value={userInfo.rg || undefined}
                             onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value })}
                             variant="outlined"
                             size="small"
@@ -459,7 +473,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -469,7 +483,7 @@ export const FormInfo = ({
                         <label>Profissão</label>
                         <TextField
                             disabled={operacao === "visualizacao"}
-                            value={userInfo.profissao}
+                            value={userInfo.profissao || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, profissao: e.target.value })
                             }
@@ -480,7 +494,7 @@ export const FormInfo = ({
                                     borderRadius: "8px"
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
                                 },
                                 width: "100%",
                             }}
@@ -519,7 +533,7 @@ export const FormInfo = ({
                     <RadioGroup
                         row
                         defaultValue={true}
-                        value={userInfo.ativo}
+                        value={userInfo.ativo || undefined}
                         onChange={(e) =>
                             setUserInfo({ ...userInfo, ativo: e.target.value })
                         }
@@ -584,7 +598,7 @@ export const FormInfo = ({
                     <RadioGroup
                         row
                         defaultValue="true"
-                        value={userInfo.temAtestado}
+                        value={userInfo.temAtestado || undefined}
                         onChange={(e) =>
                             setUserInfo({ ...userInfo, temAtestado: e.target.value })
                         }
@@ -688,7 +702,7 @@ export const FormInfo = ({
                                 disabled={operacao === "visualizacao"}
                                 size="small"
                                 placeholder="Especifique"
-                                value={userInfo.deficiencia}
+                                value={userInfo.deficiencia || undefined}
                                 onChange={(e) =>
                                     setUserInfo({ ...userInfo, deficiencia: e.target.value })
                                 }
