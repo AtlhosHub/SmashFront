@@ -172,12 +172,12 @@ export const FichaInscricao = () => {
             }
         })
             .then(() => {
-                toasterMsg("success", "Usuário editado com sucesso!");
+                toasterMsg("success", "Aluno editado com sucesso!");
                 setOperacao("visualizacao")
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir aluno:", error)
+                toasterMsg("error", "Algum erro aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao editar aluno:", error)
             })
     }
 
@@ -213,7 +213,7 @@ export const FichaInscricao = () => {
             })
             .catch((error) => {
                 toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir aluno:", error)
+                console.error("Erro ao exibir aluno:", error)
             })
     }
 

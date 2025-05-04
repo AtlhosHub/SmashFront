@@ -72,8 +72,9 @@ export const FormInfoUsuario = ({
             setOperacao("edicao");
         } else if (operacao === "cadastro") {
             handleCadastrar()
+        } else{
+            handleSalvar();
         }
-        handleSalvar();
     }
 
     const labelBotao =

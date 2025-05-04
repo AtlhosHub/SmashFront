@@ -66,9 +66,22 @@ export const ControleUsuarios = () => {
 
     const handleDelete = (id) => {
         // Deletar usuário
-        setIsModalDeleteOpen(false);
-        setRowToDelete(undefined);
-        toasterMsg("success", "Se pá que deletou viu")
+        api.delete(`usuarios/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then(() => {
+                toasterMsg("success", "Usuário deletado com sucesso!");
+                setIsModalDeleteOpen(false);
+                setRowToDelete(undefined);
+                listarUsuarios();
+            })
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao excluir Usuário:", error)
+            })
     }
 
     useEffect(() => {
@@ -144,7 +157,7 @@ export const ControleUsuarios = () => {
                                     onClickFunc: () => {
                                         navigate("/cadastroUsuarios", {
                                             state: {
-                                                idAluno: row.id,
+                                                idUsuario: row.id,
                                                 operacao: "visualizacao"
                                             }
                                         })
@@ -156,7 +169,7 @@ export const ControleUsuarios = () => {
                                     onClickFunc: () => {
                                         navigate("/cadastroUsuarios", {
                                             state: {
-                                                idAluno: row.id,
+                                                idUsuario: row.id,
                                                 operacao: "edicao"
                                             }
                                         })

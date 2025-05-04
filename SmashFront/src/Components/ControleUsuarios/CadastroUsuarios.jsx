@@ -75,12 +75,37 @@ export const CadastroUsuarios = () => {
 
     const deletarUsuario = () => {
         // Deletar Usuário
-        navigate("/controleUsuarios", { state: { userDeleted: true } })
+        api.delete(`usuarios/${location.state?.idUsuario}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then(() => {
+                toasterMsg("success", "Usuário deletado com sucesso!");
+                navigate("/controleUsuarios", { state: { userDeleted: true } })
+            })
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao excluir Usuário:", error)
+            })
     }
 
     const editarUsuario = () => {
-        // Editar usuário
-        // setOperacao("visualizacao")
+        api.put(`usuarios/${location.state?.idUsuario}`, userInfo, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then(() => {
+                toasterMsg("success", "Usuário editado com sucesso!");
+                setOperacao("visualizacao")
+            })
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao editar Usuário:", error)
+            })
     }
 
     const listarDadosUsuario = (id) => {
@@ -110,7 +135,7 @@ export const CadastroUsuarios = () => {
         validateToken();
 
         if (operacao !== "cadastro") {
-            listarDadosUsuario(location.state?.idAluno)
+            listarDadosUsuario(location.state?.idUsuario)
         }
     }, []);
 
