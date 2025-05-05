@@ -67,7 +67,9 @@ export const ListaAlunos = () => {
             }
         })
             .then(() => {
-                navigate("/alunos", { state: { userCreated: true } })
+                toasterMsg("success", "Aluno excluído com sucesso!")
+                setIsModalDeleteOpen(false);
+                handleApplyFilter();
             })
             .catch((error) => {
                 toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
