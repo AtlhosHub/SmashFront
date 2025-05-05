@@ -87,10 +87,16 @@ export const ListaEspera = () => {
           ...item,
           dataInteresse: item.dataInteresse ? dateFormater(item.dataInteresse) : null,
         }));
-  
+
         setRowData(formattedData);
       })
-      .catch((err) => console.error("Erro ao buscar lista de espera:", err));
+      .catch((error) => {
+        if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+          sessionStorage.clear();
+          navigate("/", { state: { tokenLogout: true } });
+        }
+        console.error("Erro ao buscar lista de espera:", err)
+      });
   };
 
   return (

@@ -17,6 +17,7 @@ import { HistPagamento } from "./Components/HistPag/HistPagamento";
 import { toasterMsg } from "../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
 import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -171,12 +172,12 @@ export const FichaInscricao = () => {
             }
         })
             .then(() => {
-                toasterMsg("success", "Usuário editado com sucesso!");
+                toasterMsg("success", "Aluno editado com sucesso!");
                 setOperacao("visualizacao")
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir aluno:", error)
+                toasterMsg("error", "Algum erro aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao editar aluno:", error)
             })
     }
 
@@ -212,9 +213,21 @@ export const FichaInscricao = () => {
             })
             .catch((error) => {
                 toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir aluno:", error)
+                console.error("Erro ao exibir aluno:", error)
             })
     }
+
+    useEffect(() => {
+        const validateToken = async () => {
+            const isValid = await tokenValidationFunction();
+            if (!isValid) {
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        };
+
+        validateToken();
+    }, []);
+
 
     return (
         <>

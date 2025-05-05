@@ -23,6 +23,7 @@ import ActionMenu from "../iconButton/iconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -30,10 +31,15 @@ export const ListaAlunos = () => {
 
     const timeoutRef = useRef(null);
     const searchValueRef = useRef(null);
+    const idToDelete = useRef(undefined);
+
+    const [rowData, setRowData] = useState([])
     const [searchValue, setSearchValue] = useState("");
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [dateRange, setDateRange] = useState(getMonthRange());
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    
 
     const headCells = [
         {
@@ -46,14 +52,28 @@ export const ListaAlunos = () => {
         }
     ]
 
-    const [rowData, setRowData] = useState([])
-
     const rotas = [
         {
             route: "/listaAlunos",
             description: "Lista de Alunos"
         }
     ]
+
+    const handleDeletarAluno = (idAluno) => {
+        api.delete(`/alunos/${idAluno}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then(() => {
+                navigate("/alunos", { state: { userCreated: true } })
+            })
+            .catch((error) => {
+                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+                console.error("Erro ao excluir aluno:", error)
+            })
+    }
 
     const handleApplyFilter = () => {
         const objFilter = {
@@ -102,6 +122,10 @@ export const ListaAlunos = () => {
                 setRowData(formattedData);
             })
             .catch((error) => {
+                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                    sessionStorage.clear();
+                    navigate("/", { state: { tokenLogout: true } });
+                }
                 toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
                 console.error("Erro ao buscar os alunos:", error)
             })
@@ -126,7 +150,7 @@ export const ListaAlunos = () => {
             <Box className="main-content">
                 <Box className="action-area">
                     <TextField
-                        value={searchValue.toUpperCase()}
+                        value={searchValue}
                         onChange={(e) => {
                             handleInputChange(e);
                         }}
@@ -152,9 +176,15 @@ export const ListaAlunos = () => {
                                 </InputAdornment>
                             ),
                             sx: {
-                                height: 35,
+                                height: "35px",
                                 '& input': {
                                     padding: '8px 14px',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    lineHeight: '35px',
+                                },
+                                '& .MuiInputLabel-shrink': {
+                                    lineHeight: '1.2',
                                 },
                             },
                         }}
@@ -213,7 +243,10 @@ export const ListaAlunos = () => {
                                 {
                                     label: 'Excluir',
                                     icon: <DeleteIcon fontSize="small" />,
-                                    onClickFunc: () => {}
+                                    onClickFunc: () => {
+                                        idToDelete.current = row.id;
+                                        setIsModalDeleteOpen(true);
+                                    }
                                 }
                             ]}
                             />
@@ -223,6 +256,11 @@ export const ListaAlunos = () => {
                     />
                 </Box>
             </Box>
+            <ModalDelete
+                isModalOpen={isModalDeleteOpen}
+                setIsModalOpen={setIsModalDeleteOpen}
+                handleDelete={() => handleDeletarAluno(idToDelete.current)}
+            />
             <ToastContainer />
         </>
     )

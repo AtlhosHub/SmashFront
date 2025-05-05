@@ -7,6 +7,10 @@ import waitingListIcon from '../../assets/waitinglist.svg';
 import settingsIcon from '../../assets/settings.svg';
 import dashIcon from '../../assets/chart.svg';
 import team from '../../assets/Team Management.svg';
+import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 export const TelaInicial = () => {
     const cards = [
@@ -47,6 +51,18 @@ export const TelaInicial = () => {
             icon: <img src={settingsIcon} width={70} height={70} alt="Config" />
         },
     ];
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        const validateToken = async () => {
+            const isValid = await tokenValidationFunction();
+            if (!isValid) {
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        };
+    
+        validateToken();
+    }, []);
 
     return (
         <>
