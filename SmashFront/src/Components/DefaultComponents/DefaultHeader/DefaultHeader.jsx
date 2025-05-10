@@ -2,9 +2,10 @@ import { Logout, Person } from "@mui/icons-material";
 import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import { getUserInicial, getUserName } from "../../FichaInscricao/utils/getUserData";
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-export const DefaultHeader = ({ pageTitle }) => {
+export const DefaultHeader = () => {
+  const { pathname } = useLocation();
   const navigation = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -15,13 +16,35 @@ export const DefaultHeader = ({ pageTitle }) => {
     navigation("/");
   }
 
+  const definirTitulo = () => {
+    switch (pathname) {
+      case "/telaInicial":
+        return "Tela Inicial"
+      case "/dashboard":
+        return "Dashboard"
+      case "/alunos":
+        return "Mensalidade"
+      case "/listaEspera":
+        return "Lista de Espera"
+      case "/controleUsuarios":
+        return "Controle de Usuários"
+      case "/cadastroUsuarios":
+        return "Cadastro de Usuários"
+      case "/fichaInscricao":
+        return "Ficha de Inscrição"
+      default:
+        return "Sistema"
+    }
+  };
+
   return (
-    <>
+    <Box sx={{flex: 1}}>
       <Box>
         <AppBar
           position="static"
           sx={{
             backgroundColor: "#286DA8 !important",
+            zIndex: 10
           }}
         >
           <Toolbar>
@@ -59,7 +82,7 @@ export const DefaultHeader = ({ pageTitle }) => {
                   |
                 </span>
                 <span style={{ lineHeight: "10px" }}>
-                  {pageTitle}
+                  {definirTitulo()}
                 </span>
               </Box>
             </Box>
@@ -125,6 +148,6 @@ export const DefaultHeader = ({ pageTitle }) => {
         </Menu>
       </Box>
       <Outlet />
-    </>
+    </Box>
   );
 };
