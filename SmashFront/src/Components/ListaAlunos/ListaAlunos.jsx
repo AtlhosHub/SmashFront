@@ -146,7 +146,6 @@ export const ListaAlunos = () => {
     return (
         <>
             <Box>
-                <DefaultHeader pageTitle="Lista de Alunos" />
                 <DefaultBreadcrumb rotas={rotas} />
             </Box>
             <Box className="main-content">

@@ -9,22 +9,25 @@ import { ControleUsuarios } from './Components/ControleUsuarios/ControleUsuarios
 import { CadastroUsuarios } from './Components/ControleUsuarios/CadastroUsuarios';
 import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha/TelaEsqueciSenha';
 import { TelaEsqueciSenha2 } from './Components/TelaEsqueciSenha/TelaEsqueciSenha2';
+import { Dashboard } from './pages/Dashboard/Dashboard';
+import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
 
 function App() {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<TelaLogin />} />
-        <Route path="/esqueciSenha2" element={<TelaEsqueciSenha2/>} />
+    <Routes>
+      <Route path="/" element={<TelaLogin />} />
+      <Route path="/esqueciSenha" element={<TelaEsqueciSenha />} />
+      <Route path="/esqueciSenha2" element={<TelaEsqueciSenha2 />} />
+      <Route element={<DefaultHeader />}>
         <Route path="/telaInicial" element={<TelaInicial />} />
         <Route path="/alunos" element={<ListaAlunos />} />
         <Route path="/listaEspera" element={<ListaEspera />} />
         <Route path="/controleUsuarios" element={<ControleUsuarios />} />
         <Route path="/cadastroUsuarios" element={<CadastroUsuarios />} />
         <Route path="/fichaInscricao" element={<FichaInscricao />} />
-        <Route path="/esqueciSenha" element={<TelaEsqueciSenha />} />
-      </Routes>
-    </>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+    </Routes>
   )
 }
 

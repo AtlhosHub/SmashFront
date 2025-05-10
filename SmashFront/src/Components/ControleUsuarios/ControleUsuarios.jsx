@@ -100,7 +100,6 @@ export const ControleUsuarios = () => {
     return (
         <>
             <Box>
-                <DefaultHeader pageTitle="Controle de Usuários" />
                 <DefaultBreadcrumb rotas={rotas} />
             </Box>
 

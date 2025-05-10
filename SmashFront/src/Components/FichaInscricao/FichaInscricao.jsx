@@ -236,7 +236,6 @@ export const FichaInscricao = () => {
                 gridTemplateRows: "auto auto 1fr",
                 height: "100vh",
             }}>
-                <DefaultHeader pageTitle={definirNomePagina()} />
                 <DefaultBreadcrumb rotas={rotas} />
                 <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
                     <MenuCadastro
