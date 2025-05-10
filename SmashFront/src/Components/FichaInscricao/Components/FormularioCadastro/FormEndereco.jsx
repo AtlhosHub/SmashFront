@@ -3,6 +3,8 @@ import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultB
 import { useEffect, useRef, useState } from "react";
 import { toasterMsg } from "../../../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { tokenValidationFunction } from "../../../../utils/tokenValidationFunction";
 
 export const FormEndereco = ({
     userInfo,
@@ -118,6 +120,19 @@ export const FormEndereco = ({
             }
         }
     };
+
+    const navigate = useNavigate();
+      useEffect(() => {
+          const validateToken = async () => {
+              const isValid = await tokenValidationFunction();
+              if (!isValid) {
+                  navigate("/", { state: { tokenLogout: true } });
+              }
+          };
+      
+          validateToken();
+      }, []);
+
 
     return (
         <FormControl
