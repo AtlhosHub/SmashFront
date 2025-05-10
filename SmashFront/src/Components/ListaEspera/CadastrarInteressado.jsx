@@ -69,8 +69,8 @@ export const CadastrarInteressado = () => {
         ? dayjs(userInfo.dataNascimento).format("YYYY-MM-DD")
         : null,
       telefone: userInfo.telefone,
-      horarioPref: { id: userInfo.horarioPreferenciaId },  
-    };
+      horarioPref: userInfo.horarioPreferenciaId ? { id: userInfo.horarioPreferenciaId } : null,
+      };
   
     api.post("/lista-espera", payload, {
       headers: {

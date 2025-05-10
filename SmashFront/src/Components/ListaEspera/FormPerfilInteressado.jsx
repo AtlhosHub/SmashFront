@@ -41,8 +41,8 @@ export const FormInfo = ({
           Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
         }
       })
-      .then(({ data }) => setHorarios(data))
-      .catch(console.error)
+      .then(({ data }) => setHorarios(data || [])) 
+      .catch(() => setHorarios([])) 
       .finally(() => setLoadingHorarios(false));
   }, []);
   
@@ -285,12 +285,12 @@ export const FormInfo = ({
   </label>
   <TextField
     select
-    disabled={operacao === "visualizacao"}
+    disabled={operacao === "visualizacao" || loadingHorarios}
     value={userInfo.horarioPreferenciaId || ""}
     onChange={e =>
       setUserInfo({
         ...userInfo,
-        horarioPreferenciaId: Number(e.target.value)
+        horarioPreferenciaId: e.target.value === "" ? null : Number(e.target.value)
       })
     }
     variant="outlined"
@@ -305,11 +305,18 @@ export const FormInfo = ({
     <MenuItem value="">
       <em>— selecione —</em>
     </MenuItem>
-    {horarios.map(h => (
-      <MenuItem key={h.id} value={h.id}>
-        {dayjs(h.horarioAula, "HH:mm:ss").format("HH:mm")}
-      </MenuItem>
-    ))}
+    
+    {loadingHorarios ? (
+      <MenuItem disabled>Carregando horários...</MenuItem>
+    ) : horarios.length === 0 ? (
+      <MenuItem disabled>Nenhum horário disponível</MenuItem>
+    ) : (
+      horarios.map(h => (
+        <MenuItem key={h.id} value={h.id}>
+          {dayjs(h.horarioAula, "HH:mm:ss").format("HH:mm")}
+        </MenuItem>
+      ))
+    )}
   </TextField>
 </Box>
         </Box>
