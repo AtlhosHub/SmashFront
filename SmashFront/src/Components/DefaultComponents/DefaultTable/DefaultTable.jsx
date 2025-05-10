@@ -23,7 +23,14 @@ export const DefaultTable = ({
                         {withPagStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
                         }
-                        <TableCell sx={{ width: "10%", textAlign: "center", }}></TableCell>
+                        <TableCell
+                            sx={{
+                                display: !!rowData[0]?.acoes ? "flex" : "none",
+                                width: "10%"
+                            }}
+                        >
+                            &nbsp;
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -85,7 +92,13 @@ export const DefaultTable = ({
                                     </Box>
                                 </TableCell>
                             }
-                            <TableCell>
+                            <TableCell
+                                sx={{
+                                    display: !!row.acoes ? "flex" : "none",
+                                    width: "10%",
+                                    justifyContent: "center"
+                                }}
+                            >
                                 {row.acoes}
                             </TableCell>
                         </TableRow>

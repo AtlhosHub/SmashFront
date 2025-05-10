@@ -39,9 +39,9 @@ export const ListaEspera = () => {
   ];
 
   const headCells = [
-    { name: "nome", description: "Nome", cellWidth: "" },
-    { name: "dataInteresse", description: "Data de Contato", cellWidth: "" },
-    { name: "horarioPreferencia", description: "Horário de Preferência", cellWidth: "" },
+    { name: "nome", description: "Nome", cellWidth: "40%" },
+    { name: "dataInteresse", description: "Data de Contato", cellWidth: "33%" },
+    { name: "horarioPreferencia", description: "Horário de Preferência", cellWidth: "33%" },
   ];
 
   const [rowData, setRowData] = useState([]);
