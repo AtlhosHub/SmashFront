@@ -21,7 +21,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { dateFormater } from "../../utils/dateFormaterService";
-
+import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
 
 export const ListaEspera = () => {
   const navigate = useNavigate();
@@ -29,14 +29,8 @@ export const ListaEspera = () => {
   const timeoutRef = useRef(null);
   const searchValueRef = useRef("");
   const [searchValue, setSearchValue] = useState("");
-  const [statusFiltro, setStatusFiltro] = useState(null);
-  const [dateRange, setDateRange] = useState(getMonthRange());
-
-  const menuOptions = [
-    { label: 'Visualizar', icon: <VisibilityIcon fontSize="small" /> },
-    { label: 'Editar', icon: <EditIcon fontSize="small" /> },
-    { label: 'Excluir', icon: <DeleteIcon fontSize="small" /> },
-  ];
+  const [rowToDelete, setRowToDelete] = useState(undefined);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
   const headCells = [
     { name: "nome", description: "Nome", cellWidth: "40%" },
@@ -53,9 +47,6 @@ export const ListaEspera = () => {
   const handleApplyFilter = () => {
     const filtro = {
       nome: searchValueRef.current || null,
-      status: statusFiltro?.label,
-      dataFrom: dateRange[0]?.format("YYYY-MM-DD"),
-      dataTo: dateRange[1]?.format("YYYY-MM-DD")
     };
     fetchListaEspera(filtro);
   };
@@ -93,9 +84,28 @@ export const ListaEspera = () => {
           sessionStorage.clear();
           navigate("/", { state: { tokenLogout: true } });
         }
-        console.error("Erro ao buscar lista de espera:", err)
+        console.error("Erro ao buscar lista de espera:", error)
       });
   };
+
+  const handleDelete = (id) => {
+    api.delete(`lista-espera/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+      }
+    })
+      .then(() => {
+        toasterMsg("success", "Perfil de Pessoa Interessada deletado com sucesso!");
+        setIsModalDeleteOpen(false);
+        fetchListaEspera({});
+        setRowToDelete(undefined);
+      })
+      .catch((error) => {
+        toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+        console.error("Erro ao excluir Pessoa Interessada:", error)
+      })
+  }
 
   return (
     <>
@@ -114,15 +124,15 @@ export const ListaEspera = () => {
             sx={{
 
               '& .MuiInputBase-root': {
-                  borderRadius: '8px',
+                borderRadius: '8px',
               },
               '& .MuiInputBase-input': {
-                  fontFamily: 'Poppins, sans-serif',
-                  fontWeight: 400,
-                  fontSize: '14px',
-                  color: 'black',
+                fontFamily: 'Poppins, sans-serif',
+                fontWeight: 400,
+                fontSize: '14px',
+                color: 'black',
               },
-          }}
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -135,7 +145,7 @@ export const ListaEspera = () => {
             variant="contained"
             label="Novo Cadastro"
             endIcon={<Add />}
-            onClick={() => navigate("/cadastrarListaEspera", { state: { operacao: "cadastrar" } })}
+            onClick={() => navigate("/cadastrarListaEspera", { state: { operacao: "cadastro" } })}
           />
         </Box>
         <Box>
@@ -143,13 +153,51 @@ export const ListaEspera = () => {
             headCells={headCells}
             rowData={rowData.map(row => ({
               ...row,
-              acoes: <ActionMenu menuOptions={menuOptions} />
+              acoes: <ActionMenu menuOptions={[
+                {
+                  label: 'Visualizar',
+                  icon: <VisibilityIcon fontSize="small" />,
+                  onClickFunc: () => {
+                    navigate("/cadastrarListaEspera", {
+                      state: {
+                        idPessoa: row.id,
+                        operacao: "visualizacao"
+                      }
+                    })
+                  }
+                },
+                {
+                  label: 'Editar',
+                  icon: <EditIcon fontSize="small" />,
+                  onClickFunc: () => {
+                    navigate("/cadastrarListaEspera", {
+                      state: {
+                        idPessoa: row.id,
+                        operacao: "edicao"
+                      }
+                    })
+                  }
+                },
+                {
+                  label: 'Excluir',
+                  icon: <DeleteIcon fontSize="small" />,
+                  onClickFunc: () => {
+                    setRowToDelete(row.id);
+                    setIsModalDeleteOpen(true);
+                  }
+                },
+              ]} />
             }))}
             withActions={false}
           />
         </Box>
       </Box>
       <ToastContainer />
+      <ModalDelete
+        isModalOpen={isModalDeleteOpen}
+        setIsModalOpen={setIsModalDeleteOpen}
+        handleDelete={() => handleDelete(rowToDelete)}
+      />
     </>
   );
 };

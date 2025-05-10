@@ -1,11 +1,11 @@
 import {
-    Box,
-    FormControl,
-    TextField,
-    MenuItem,
-    Tooltip,
-    Typography,
-  } from "@mui/material";
+  Box,
+  FormControl,
+  TextField,
+  MenuItem,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HelpIcon from "@mui/icons-material/Help";
@@ -21,13 +21,14 @@ export const FormInfo = ({
   userInfo,
   setUserInfo,
   operacao,
+  setOperacao,
   setInfoConcluido,
-  onSalvar, 
-  onCancelar,
+  handleCadastrar,
+  handleSalvar,
+  handleDeletar
 }) => {
   const navigate = useNavigate();
   const [botaoLiberado, setBotaoLiberado] = useState(false);
-
   const [horarios, setHorarios] = useState([]);
   const [loadingHorarios, setLoadingHorarios] = useState(true);
 
@@ -41,33 +42,47 @@ export const FormInfo = ({
           Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
         }
       })
-      .then(({ data }) => setHorarios(data || [])) 
-      .catch(() => setHorarios([])) 
+      .then(({ data }) => setHorarios(data || []))
+      .catch(() => setHorarios([]))
       .finally(() => setLoadingHorarios(false));
   }, []);
-  
+
 
   useEffect(() => {
     const camposObrigatorios =
-      userInfo.nome?.trim() &&
-      userInfo.dataContato &&
-      userInfo.email?.trim() &&
-      userInfo.horarioPreferenciaId;  
-      userInfo.celular?.trim();
-
+      userInfo.nome &&
+      userInfo.dataInteresse &&
+      userInfo.email &&
+      userInfo.horarioPref?.horarioAula &&
+    userInfo.celular;
 
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const emailValido = regexEmail.test(userInfo.email);
-    
 
     setBotaoLiberado(camposObrigatorios && emailValido);
     setInfoConcluido(camposObrigatorios && emailValido);
-
   }, [userInfo]);
 
-  const handleDataContato     = (v) => setUserInfo({ ...userInfo, dataContato: v });
+  const handleDataContato = (v) => setUserInfo({ ...userInfo, dataInteresse: v });
 
-  const handleDataNascimento  = (v) => setUserInfo({ ...userInfo, dataNascimento: v });
+  const handleDataNascimento = (v) => setUserInfo({ ...userInfo, dataNascimento: v });
+
+  const handleClick = () => {
+    if (operacao === "visualizacao") {
+      setOperacao("edicao");
+    } else if (operacao === "cadastro") {
+      handleCadastrar()
+    } else {
+      handleSalvar();
+    }
+  }
+
+  const labelBotao =
+    operacao === "visualizacao"
+      ? "Editar"
+      : operacao === "edicao"
+        ? "Salvar"
+        : "Concluir";
 
   return (
     <FormControl
@@ -135,7 +150,7 @@ export const FormInfo = ({
               fullWidth
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "8px", 
+                  borderRadius: "8px",
                 },
               }}
             />
@@ -200,7 +215,7 @@ export const FormInfo = ({
               fullWidth
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "8px", 
+                  borderRadius: "8px",
                 },
               }}
             />
@@ -220,7 +235,7 @@ export const FormInfo = ({
               fullWidth
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "8px", 
+                  borderRadius: "8px",
                 },
               }}
             />
@@ -236,7 +251,7 @@ export const FormInfo = ({
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 disabled={operacao === "visualizacao"}
-                value={userInfo.dataContato ? dayjs(userInfo.dataContato) : null}
+                value={userInfo.dataInteresse ? dayjs(userInfo.dataInteresse) : null}
                 onChange={handleDataContato}
                 format="DD/MM/YYYY"
                 slotProps={{
@@ -248,7 +263,7 @@ export const FormInfo = ({
                 }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px", 
+                    borderRadius: "8px",
                   },
                 }}
               />
@@ -270,55 +285,58 @@ export const FormInfo = ({
               fullWidth
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "8px", 
+                  borderRadius: "8px",
                 },
               }}
             />
           </Box>
 
           <Box>
-  <label>
-    Horário de Preferência{" "}
-    <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>
-      *
-    </span>
-  </label>
-  <TextField
-    select
-    disabled={operacao === "visualizacao" || loadingHorarios}
-    value={userInfo.horarioPreferenciaId || ""}
-    onChange={e =>
-      setUserInfo({
-        ...userInfo,
-        horarioPreferenciaId: e.target.value === "" ? null : Number(e.target.value)
-      })
-    }
-    variant="outlined"
-    size="small"
-    fullWidth
-    sx={{
-      "& .MuiOutlinedInput-root": {
-        borderRadius: "8px"
-      }
-    }}
-  >
-    <MenuItem value="">
-      <em>—— Selecione ——</em>
-    </MenuItem>
-    
-    {loadingHorarios ? (
-      <MenuItem disabled>Carregando horários...</MenuItem>
-    ) : horarios.length === 0 ? (
-      <MenuItem disabled>Nenhum horário disponível</MenuItem>
-    ) : (
-      horarios.map(h => (
-        <MenuItem key={h.id} value={h.id}>
-          {dayjs(h.horarioAula, "HH:mm:ss").format("HH:mm")}
-        </MenuItem>
-      ))
-    )}
-  </TextField>
-</Box>
+            <label>
+              Horário de Preferência{" "}
+              <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>
+                *
+              </span>
+            </label>
+            <TextField
+              select
+              disabled={operacao === "visualizacao" || loadingHorarios}
+              value={userInfo.horarioPref?.horarioAula || ""}
+              onChange={e =>
+                setUserInfo({
+                  ...userInfo,
+                  horarioPref:{
+                      ...userInfo.horarioPref,
+                      horarioAula: e.target.value === "" ? null : Number(e.target.value)
+                  }  
+                })
+              }
+              variant="outlined"
+              size="small"
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px"
+                }
+              }}
+            >
+              <MenuItem value="">
+                <em>—— Selecione ——</em>
+              </MenuItem>
+
+              {loadingHorarios ? (
+                <MenuItem disabled>Carregando horários...</MenuItem>
+              ) : horarios.length === 0 ? (
+                <MenuItem disabled>Nenhum horário disponível</MenuItem>
+              ) : (
+                horarios.map(h => (
+                  <MenuItem key={h.id} value={h.id}>
+                    {dayjs(h.horarioAula, "HH:mm:ss").format("HH:mm")}
+                  </MenuItem>
+                ))
+              )}
+            </TextField>
+          </Box>
         </Box>
       </Box>
 
@@ -326,18 +344,22 @@ export const FormInfo = ({
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: "10px", width: "100%" }}>
           <DefaultButton
             variant="outlined"
-            label="Cancelar"
-            onClick={() => navigate("/listaEspera")}
+            label={operacao === "visualizacao"
+              ? "Excluir"
+              : "Cancelar"
+            }
+            onClick={() =>
+              operacao === "visualizacao"
+                ? handleDeletar()
+                : navigate("/listaEspera")
+            }
           />
-            <DefaultButton
-              variant="contained"
-              label="Concluir"
-              disabled={!botaoLiberado}
-              onClick={() => {
-                setInfoConcluido(true);
-                onSalvar();
-              }}
-            />
+          <DefaultButton
+            variant="contained"
+            label={labelBotao}
+            disabled={!botaoLiberado}
+            onClick={handleClick}
+          />
         </Box>
       </Box>
     </FormControl>
