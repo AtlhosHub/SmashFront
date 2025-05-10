@@ -31,7 +31,7 @@ export const FormInfo = ({
   const [horarios, setHorarios] = useState([]);
   const [loadingHorarios, setLoadingHorarios] = useState(true);
 
-  const nomeSocialText = "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
+  const nomeSocialText = "Nome social é o nome em que a pessoa prefere ser chamada, diferente do seu nome legal.";
 
   useEffect(() => {
     api
@@ -92,12 +92,12 @@ export const FormInfo = ({
         <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
           <Box>
             <label>
-              Nome do Aluno <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
+              Nome do Interessado <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
             </label>
             <TextField
               disabled={operacao === "visualizacao"}
               value={userInfo.nome || ""}
-              onChange={(e) => setUserInfo({ ...userInfo, nome: e.target.value.toUpperCase() })}
+              onChange={(e) => setUserInfo({ ...userInfo, nome: e.target.value })}
               variant="outlined"
               size="small"
               fullWidth
@@ -129,7 +129,7 @@ export const FormInfo = ({
             <TextField
               disabled={operacao === "visualizacao"}
               value={userInfo.nomeSocial || ""}
-              onChange={(e) => setUserInfo({ ...userInfo, nomeSocial: e.target.value.toUpperCase() })}
+              onChange={(e) => setUserInfo({ ...userInfo, nomeSocial: e.target.value })}
               variant="outlined"
               size="small"
               fullWidth
@@ -194,7 +194,7 @@ export const FormInfo = ({
             <TextField
               disabled={operacao === "visualizacao"}
               value={userInfo.genero || ""}
-              onChange={(e) => setUserInfo({ ...userInfo, genero: e.target.value.toUpperCase() })}
+              onChange={(e) => setUserInfo({ ...userInfo, genero: e.target.value })}
               variant="outlined"
               size="small"
               fullWidth
@@ -213,7 +213,7 @@ export const FormInfo = ({
             <TextField
               disabled={operacao === "visualizacao"}
               value={userInfo.email || ""}
-              onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value.toUpperCase() })}
+              onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
               variant="outlined"
               size="small"
               type="email"
@@ -303,7 +303,7 @@ export const FormInfo = ({
     }}
   >
     <MenuItem value="">
-      <em>— selecione —</em>
+      <em>—— Selecione ——</em>
     </MenuItem>
     
     {loadingHorarios ? (

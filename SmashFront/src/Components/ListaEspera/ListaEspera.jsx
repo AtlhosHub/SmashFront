@@ -43,7 +43,6 @@ export const ListaEspera = () => {
     { name: "nome", description: "Nome" },
     { name: "dataInteresse", description: "Data de Contato" },
     { name: "horarioPreferencia", description: "Horário de Preferência" },
-    { name: "acoes", description: "Ações" },
   ];
 
   const [rowData, setRowData] = useState([]);
@@ -113,6 +112,18 @@ export const ListaEspera = () => {
             label="Nome"
             variant="outlined"
             size="small"
+            sx={{
+
+              '& .MuiInputBase-root': {
+                  borderRadius: '8px',
+              },
+              '& .MuiInputBase-input': {
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  color: 'black',
+              },
+          }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
