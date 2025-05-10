@@ -2,7 +2,6 @@ import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader"
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
 import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
-import DefaultFilter from "../DefaultComponents/DefaultFilter/DefaultFilter"
 import { ToastContainer } from "react-toastify"
 import { api } from "../../provider/apiProvider"
 import {
@@ -40,9 +39,9 @@ export const ListaEspera = () => {
   ];
 
   const headCells = [
-    { name: "nome", description: "Nome" },
-    { name: "dataInteresse", description: "Data de Contato" },
-    { name: "horarioPreferencia", description: "Horário de Preferência" },
+    { name: "nome", description: "Nome", cellWidth: "" },
+    { name: "dataInteresse", description: "Data de Contato", cellWidth: "" },
+    { name: "horarioPreferencia", description: "Horário de Preferência", cellWidth: "" },
   ];
 
   const [rowData, setRowData] = useState([]);

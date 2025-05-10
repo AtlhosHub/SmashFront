@@ -34,12 +34,7 @@ export const DefaultTable = ({
                             sx={{
                                 backgroundColor: index % 2 !== 0
                                     ? "#ebeff5"
-                                    : "white",
-                                '&:hover': {
-                                    textDecorationColor: "black",
-                                    cursor: "pointer",
-                                    backgroundColor: "#d5dae0"
-                                }
+                                    : "white"
                             }}
                             onClick={() => { onRowClick && onRowClick(row) }}
                         >
@@ -48,7 +43,6 @@ export const DefaultTable = ({
                                     sx={{
                                         textAlign: "center",
                                         '&:hover': {
-                                            textDecoration: "underline",
                                             textDecorationColor: "black"
                                         }
                                     }}
@@ -66,9 +60,9 @@ export const DefaultTable = ({
                                         ...(withStatus && header.name === "nomeAluno" && {
                                             '&:hover': {
                                                 cursor: "pointer",
-                                                textDecoration: "underline",
                                             }
-                                        })
+                                        }),
+                                        width: header?.cellWidth ?? "auto"
                                     }}
                                     align={header.align}
                                 >
