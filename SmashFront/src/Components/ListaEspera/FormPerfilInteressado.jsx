@@ -53,7 +53,7 @@ export const FormInfo = ({
       userInfo.nome &&
       userInfo.dataInteresse &&
       userInfo.email &&
-      userInfo.horarioPref?.horarioAula &&
+      userInfo.horarioPref?.id &&
     userInfo.celular;
 
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -301,13 +301,13 @@ export const FormInfo = ({
             <TextField
               select
               disabled={operacao === "visualizacao" || loadingHorarios}
-              value={userInfo.horarioPref?.horarioAula || ""}
+              value={userInfo.horarioPref?.id || ""}
               onChange={e =>
                 setUserInfo({
                   ...userInfo,
                   horarioPref:{
                       ...userInfo.horarioPref,
-                      horarioAula: e.target.value === "" ? null : Number(e.target.value)
+                      id: e.target.value === "" ? null : Number(e.target.value)
                   }  
                 })
               }

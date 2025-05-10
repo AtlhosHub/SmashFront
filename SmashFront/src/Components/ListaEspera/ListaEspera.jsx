@@ -22,6 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { dateFormater } from "../../utils/dateFormaterService";
 import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { toasterMsg } from "../../utils/toasterService";
 
 export const ListaEspera = () => {
   const navigate = useNavigate();
@@ -194,6 +195,7 @@ export const ListaEspera = () => {
       </Box>
       <ToastContainer />
       <ModalDelete
+        textoModal={"o Perfil de Pessoa Interessada"}
         isModalOpen={isModalDeleteOpen}
         setIsModalOpen={setIsModalDeleteOpen}
         handleDelete={() => handleDelete(rowToDelete)}

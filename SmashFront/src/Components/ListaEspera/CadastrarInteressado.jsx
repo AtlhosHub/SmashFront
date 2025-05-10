@@ -26,12 +26,12 @@ export const CadastrarInteressado = () => {
     nome: null,
     nomeSocial: null,
     genero: null,
-    dataContato: null,
+    dataInteresse: null,
     dataNascimento: null,
     celular: null,
     telefone: null,
     email: null,
-    horarioPreferencia: null,
+    horarioPref: null,
     usuarioInclusao: {
       id: sessionStorage.getItem("idUsuario"),
     }
@@ -49,11 +49,12 @@ export const CadastrarInteressado = () => {
   ];
 
   const cadastrarPessoaInteressada = () => {
+    console.log(userInfo);
     const payload = {
       nome: userInfo.nome,
       email: userInfo.email,
-      dataInteresse: userInfo.dataContato
-        ? dayjs(userInfo.dataContato).toISOString()
+      dataInteresse: userInfo.dataInteresse
+        ? dayjs(userInfo.dataInteresse).toISOString()
         : null,
       celular: userInfo.celular,
       nomeSocial: userInfo.nomeSocial,
@@ -62,7 +63,7 @@ export const CadastrarInteressado = () => {
         ? dayjs(userInfo.dataNascimento).format("YYYY-MM-DD")
         : null,
       telefone: userInfo.telefone,
-      horarioPref: userInfo.horarioPreferencia,
+      horarioPref: userInfo.horarioPref,
     };
 
     console.log(payload)
@@ -147,7 +148,6 @@ export const CadastrarInteressado = () => {
         })
 }
 
-
   return (
     <>
       <Box sx={{ display: "grid", gridTemplateRows: "auto auto 1fr", height: "100vh" }}>
@@ -186,6 +186,7 @@ export const CadastrarInteressado = () => {
       </Box>
       <ToastContainer />
       <ModalDelete
+        textoModal ={"o perfil de Pessoa Interessada"}
         isModalOpen={isModalDeleteOpen}
         setIsModalOpen={setIsModalDeleteOpen}
         handleDelete={deletarPessoaInteressada}
