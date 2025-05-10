@@ -19,7 +19,7 @@ export const CadastrarInteressado = () => {
 
   const [tabAtiva, setTabAtiva] = useState("info");
   const [infoConcluido, setInfoConcluido] = useState(false);
-  const [operacao, setOperacao] = useState(location.state?.operacao || "cadastro");
+  const [operacao, setOperacao] = useState(location.state?.operacao);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
@@ -49,7 +49,6 @@ export const CadastrarInteressado = () => {
   ];
 
   const cadastrarPessoaInteressada = () => {
-    console.log(userInfo);
     const payload = {
       nome: userInfo.nome,
       email: userInfo.email,
@@ -66,7 +65,6 @@ export const CadastrarInteressado = () => {
       horarioPref: userInfo.horarioPref,
     };
 
-    console.log(payload)
     api.post("/lista-espera", payload, {
       headers: {
         "Content-Type": "application/json",
@@ -99,6 +97,9 @@ export const CadastrarInteressado = () => {
     if (operacao !== "cadastro") {
       listarDadosPessoaInteressada(location.state?.idPessoa);
     }
+
+    console.log(location.state?.operacao)
+    console.log(operacao, "----")
   }, []);
 
   const listarDadosPessoaInteressada = (id) => {
@@ -155,7 +156,7 @@ export const CadastrarInteressado = () => {
         <DefaultBreadcrumb rotas={rotas} />
         <Box sx={{ display: "flex", flex: 1 }}>
           <MenuCadastro
-            operacao="cadastro"
+            operacao={operacao}
             tabAtiva={tabAtiva}
             setTabAtiva={setTabAtiva}
             etapas={[

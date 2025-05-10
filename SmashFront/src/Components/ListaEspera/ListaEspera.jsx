@@ -14,8 +14,7 @@ import {
   Add,
   Search
 } from "@mui/icons-material"
-import { useNavigate } from "react-router-dom";
-import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonthRange";
+import { useLocation, useNavigate } from "react-router-dom";
 import ActionMenu from "../iconButton/iconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
@@ -26,6 +25,7 @@ import { toasterMsg } from "../../utils/toasterService";
 
 export const ListaEspera = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const timeoutRef = useRef(null);
   const searchValueRef = useRef("");
@@ -54,6 +54,12 @@ export const ListaEspera = () => {
 
   useEffect(() => {
     handleApplyFilter();
+
+    if(location.state?.userDeleted) {
+      toasterMsg("success", "Perfil de Pessoa Interessada excluído com sucesso!")
+    } else if(location.state?.saved) {
+      toasterMsg("success", "Perfil de Pessoa Interessada criado com sucesso!")
+    }
   }, []);
 
   const handleInputChange = e => {
@@ -97,7 +103,7 @@ export const ListaEspera = () => {
       }
     })
       .then(() => {
-        toasterMsg("success", "Perfil de Pessoa Interessada deletado com sucesso!");
+        toasterMsg("success", "Perfil de Pessoa Interessada excluído com sucesso!");
         setIsModalDeleteOpen(false);
         fetchListaEspera({});
         setRowToDelete(undefined);
