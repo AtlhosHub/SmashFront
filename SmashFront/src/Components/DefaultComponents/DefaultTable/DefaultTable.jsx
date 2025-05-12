@@ -23,7 +23,14 @@ export const DefaultTable = ({
                         {withPagStatus &&
                             <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
                         }
-                        <TableCell sx={{ width: "10%", textAlign: "center", }}></TableCell>
+                        <TableCell
+                            sx={{
+                                display: !!rowData[0]?.acoes ? "flex" : "none",
+                                width: "10%"
+                            }}
+                        >
+                            &nbsp;
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -34,12 +41,7 @@ export const DefaultTable = ({
                             sx={{
                                 backgroundColor: index % 2 !== 0
                                     ? "#ebeff5"
-                                    : "white",
-                                '&:hover': {
-                                    textDecorationColor: "black",
-                                    cursor: "pointer",
-                                    backgroundColor: "#d5dae0"
-                                }
+                                    : "white"
                             }}
                             onClick={() => { onRowClick && onRowClick(row) }}
                         >
@@ -48,7 +50,6 @@ export const DefaultTable = ({
                                     sx={{
                                         textAlign: "center",
                                         '&:hover': {
-                                            textDecoration: "underline",
                                             textDecorationColor: "black"
                                         }
                                     }}
@@ -66,9 +67,9 @@ export const DefaultTable = ({
                                         ...(withStatus && header.name === "nomeAluno" && {
                                             '&:hover': {
                                                 cursor: "pointer",
-                                                textDecoration: "underline",
                                             }
-                                        })
+                                        }),
+                                        width: header?.cellWidth ?? "auto"
                                     }}
                                     align={header.align}
                                 >
@@ -91,7 +92,13 @@ export const DefaultTable = ({
                                     </Box>
                                 </TableCell>
                             }
-                            <TableCell>
+                            <TableCell
+                                sx={{
+                                    display: !!row.acoes ? "flex" : "none",
+                                    width: "10%",
+                                    justifyContent: "center"
+                                }}
+                            >
                                 {row.acoes}
                             </TableCell>
                         </TableRow>

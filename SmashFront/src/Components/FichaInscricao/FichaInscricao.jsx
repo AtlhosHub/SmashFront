@@ -304,6 +304,7 @@ export const FichaInscricao = () => {
             </Box >
             <ToastContainer />
             <ModalDelete
+                textoModal={"a Ficha de Inscrição do Aluno"}
                 isModalOpen={isModalDeleteOpen}
                 setIsModalOpen={setIsModalDeleteOpen}
                 handleDelete={deletarAluno}

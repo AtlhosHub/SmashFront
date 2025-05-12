@@ -17,6 +17,7 @@ export const MenuCadastro = ({ operacao, tabAtiva, setTabAtiva, etapas }) => {
                 : "menu-cadastro-item ocioso";
         }
 
+
         return "menu-cadastro-item";
     };
 

@@ -9,6 +9,7 @@ import { ControleUsuarios } from './Components/ControleUsuarios/ControleUsuarios
 import { CadastroUsuarios } from './Components/ControleUsuarios/CadastroUsuarios';
 import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha/TelaEsqueciSenha';
 import { TelaEsqueciSenha2 } from './Components/TelaEsqueciSenha/TelaEsqueciSenha2';
+import { CadastrarInteressado } from './Components/ListaEspera/CadastrarInteressado';
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
         <Route path="/cadastroUsuarios" element={<CadastroUsuarios />} />
         <Route path="/fichaInscricao" element={<FichaInscricao />} />
         <Route path="/esqueciSenha" element={<TelaEsqueciSenha />} />
-      </Routes>
+        <Route path="/cadastrarListaEspera" element={<CadastrarInteressado />} />
+        </Routes>
     </>
   )
 }
