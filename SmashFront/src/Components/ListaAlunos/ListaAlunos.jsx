@@ -24,6 +24,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import dayjs from "dayjs";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -37,9 +38,12 @@ export const ListaAlunos = () => {
     const [searchValue, setSearchValue] = useState("");
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
-    const [dateRange, setDateRange] = useState(getMonthRange());
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-    
+    const [selectedMonth, setSelectedMonth] = useState(dayjs().startOf('month'));
+    const [selectedMonthRange, setSelectedMonthRange] = useState({
+        start: dayjs().startOf('month'),
+        end: dayjs().endOf('month')
+    });
 
     const headCells = [
         {
@@ -49,6 +53,16 @@ export const ListaAlunos = () => {
         {
             name: "dataEnvio",
             description: "Data de Envio"
+        },
+        {
+            name: "formaPagamento",
+            description: "Forma de Pagamento",
+            align: "center"
+        },
+        {
+            name: "valor",
+            description: "Valor Pago",
+            align: "center"
         }
     ]
 
@@ -82,8 +96,8 @@ export const ListaAlunos = () => {
             nome: searchValueRef.current != "" ? searchValueRef.current : null,
             status: statusPagamento?.label,
             ativo: statusPresenca?.value,
-            dataEnvioForm: dateRange?.[0].format("YYYY-MM-DD"),
-            dataEnvioTo: dateRange?.[1].format("YYYY-MM-DD")
+            dataEnvioFrom: selectedMonthRange.start,
+            dataEnvioTo: selectedMonthRange.end
         }
 
         fetchAlunos(objFilter);
@@ -194,8 +208,9 @@ export const ListaAlunos = () => {
                     <DefaultFilter
                         statusPagamento={statusPagamento}
                         statusPresenca={statusPresenca}
-                        dateRange={dateRange}
-                        setDateRange={setDateRange}
+                        selectedMonth={selectedMonth}
+                        setSelectedMonthRange={setSelectedMonthRange}
+                        setSelectedMonth={setSelectedMonth}
                         setStatusPagamento={setStatusPagamento}
                         setStatusPresenca={setStatusPresenca}
                         handleApplyFilter={handleApplyFilter}

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DefaultButton } from "../DefaultButton/DefaultButton"
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {
     Autocomplete,
     Box,
@@ -14,15 +14,17 @@ import {
 import "./DefaultFilter.css"
 import dayjs from "dayjs";
 
+
 export const DefaultFilter = ({
     statusPagamento,
     statusPresenca,
     horarioPref,
     setStatusPagamento,
     setStatusPresenca,
+    setSelectedMonthRange,
     setHorarioPref,
-    dateRange,
-    setDateRange,
+    selectedMonth,
+    setSelectedMonth,
     handleApplyFilter,
     handleClearFilter
 }) => {
@@ -46,6 +48,18 @@ export const DefaultFilter = ({
 
     const handleOpenFilter = (event) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
+    };
+
+    const handleMonthChange = (date) => {
+        if (date) {
+            const start = dayjs(date).startOf('month').format('YYYY-MM-DD');
+            const end = dayjs(date).endOf('month').format('YYYY-MM-DD');
+            setSelectedMonth(date);
+            setSelectedMonthRange({ start, end });
+        } else {
+            setSelectedMonth(null);
+            setSelectedMonthRange({ start: null, end: null });
+        }
     };
 
     return (
@@ -108,24 +122,39 @@ export const DefaultFilter = ({
                                         onChange={(e, newValue) => setHorarioPref(newValue)}
                                     />
                                 }
-                                {setDateRange && dateRange &&
+                                {setSelectedMonth &&
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DateRangePicker
-                                            value={dateRange}
-                                            onChange={(e) => setDateRange(e)}
-                                            localeText={{ start: 'Início', end: 'Fim' }}
-                                            format="DD/MM/YYYY"
-                                            calendars={1}
-                                            minDate={dayjs().startOf('month')}
-                                            maxDate={dayjs().endOf('month')}                                          
-                                            slotProps={{ textField: { size: 'small', placeholder: 'DD/MM/AAAA' } }}
-                                            renderInput={(startProps, endProps) => (
-                                                <Box sx={{ display: 'flex', gap: 2 }}>
-                                                    <TextField {...startProps} sx={{border: "0px"}} />
-                                                    <TextField {...endProps} />
-                                                </Box>
-                                            )}
-                                        />
+                                        <Box components={['DatePicker']}>
+                                            <DatePicker
+                                                label={'Mês de Vencimento'}
+                                                openTo="month"
+                                                slotProps={{
+                                                    textField:
+                                                    {
+                                                        size: 'small',
+                                                        placeholder: 'MM/AAAA',
+                                                     
+                                                    }
+                                                }} 
+                                                sx={{
+                                                    "& .MuiInputBase-root": {
+                                                        borderRadius: "5px"
+                                                    },
+                                                    '& .MuiInputBase-input.Mui-disabled': {
+                                                        "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                                    },
+                                                    '& .MuiInputBase-input': {
+                                                        textTransform: "capitalize"
+                                                    },
+                                                    width: "100%",
+                                                }}
+
+                                                views={['year', 'month']}
+                                                value={selectedMonth}
+                                                onChange={handleMonthChange}
+                                            />
+                                        </Box>
+
                                     </LocalizationProvider>
                                 }
                             </Box>
