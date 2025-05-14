@@ -2,7 +2,6 @@ import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader"
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
 import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
-import DefaultFilter from "../DefaultComponents/DefaultFilter/DefaultFilter"
 import { ToastContainer } from "react-toastify"
 import { api } from "../../provider/apiProvider"
 import {
@@ -15,35 +14,29 @@ import {
   Add,
   Search
 } from "@mui/icons-material"
-import { useNavigate } from "react-router-dom";
-import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonthRange";
+import { useLocation, useNavigate } from "react-router-dom";
 import ActionMenu from "../iconButton/iconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { dateFormater } from "../../utils/dateFormaterService";
-
+import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { toasterMsg } from "../../utils/toasterService";
 
 export const ListaEspera = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const timeoutRef = useRef(null);
   const searchValueRef = useRef("");
   const [searchValue, setSearchValue] = useState("");
-  const [statusFiltro, setStatusFiltro] = useState(null);
-  const [dateRange, setDateRange] = useState(getMonthRange());
-
-  const menuOptions = [
-    { label: 'Visualizar', icon: <VisibilityIcon fontSize="small" /> },
-    { label: 'Editar', icon: <EditIcon fontSize="small" /> },
-    { label: 'Excluir', icon: <DeleteIcon fontSize="small" /> },
-  ];
+  const [rowToDelete, setRowToDelete] = useState(undefined);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
   const headCells = [
-    { name: "nome", description: "Nome" },
-    { name: "dataInteresse", description: "Data de Contato" },
-    { name: "horarioPreferencia", description: "Horário de Preferência" },
-    { name: "acoes", description: "Ações" },
+    { name: "nome", description: "Nome", cellWidth: "40%" },
+    { name: "dataInteresse", description: "Data de Contato", cellWidth: "33%" },
+    { name: "horarioPreferencia", description: "Horário de Preferência", cellWidth: "33%" },
   ];
 
   const [rowData, setRowData] = useState([]);
@@ -55,15 +48,18 @@ export const ListaEspera = () => {
   const handleApplyFilter = () => {
     const filtro = {
       nome: searchValueRef.current || null,
-      status: statusFiltro?.label,
-      dataFrom: dateRange[0]?.format("YYYY-MM-DD"),
-      dataTo: dateRange[1]?.format("YYYY-MM-DD")
     };
     fetchListaEspera(filtro);
   };
 
   useEffect(() => {
     handleApplyFilter();
+
+    if(location.state?.userDeleted) {
+      toasterMsg("success", "Perfil de Pessoa Interessada excluído com sucesso!")
+    } else if(location.state?.saved) {
+      toasterMsg("success", "Perfil de Pessoa Interessada criado com sucesso!")
+    }
   }, []);
 
   const handleInputChange = e => {
@@ -95,9 +91,28 @@ export const ListaEspera = () => {
           sessionStorage.clear();
           navigate("/", { state: { tokenLogout: true } });
         }
-        console.error("Erro ao buscar lista de espera:", err)
+        console.error("Erro ao buscar lista de espera:", error)
       });
   };
+
+  const handleDelete = (id) => {
+    api.delete(`lista-espera/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+      }
+    })
+      .then(() => {
+        toasterMsg("success", "Perfil de Pessoa Interessada excluído com sucesso!");
+        setIsModalDeleteOpen(false);
+        fetchListaEspera({});
+        setRowToDelete(undefined);
+      })
+      .catch((error) => {
+        toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+        console.error("Erro ao excluir Pessoa Interessada:", error)
+      })
+  }
 
   return (
     <>
@@ -112,6 +127,18 @@ export const ListaEspera = () => {
             label="Nome"
             variant="outlined"
             size="small"
+            sx={{
+
+              '& .MuiInputBase-root': {
+                borderRadius: '8px',
+              },
+              '& .MuiInputBase-input': {
+                fontFamily: 'Poppins, sans-serif',
+                fontWeight: 400,
+                fontSize: '14px',
+                color: 'black',
+              },
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -124,7 +151,7 @@ export const ListaEspera = () => {
             variant="contained"
             label="Novo Cadastro"
             endIcon={<Add />}
-            onClick={() => navigate("/cadastrarListaEspera", { state: { operacao: "cadastrar" } })}
+            onClick={() => navigate("/cadastrarListaEspera", { state: { operacao: "cadastro" } })}
           />
         </Box>
         <Box>
@@ -132,13 +159,52 @@ export const ListaEspera = () => {
             headCells={headCells}
             rowData={rowData.map(row => ({
               ...row,
-              acoes: <ActionMenu menuOptions={menuOptions} />
+              acoes: <ActionMenu menuOptions={[
+                {
+                  label: 'Visualizar',
+                  icon: <VisibilityIcon fontSize="small" />,
+                  onClickFunc: () => {
+                    navigate("/cadastrarListaEspera", {
+                      state: {
+                        idPessoa: row.id,
+                        operacao: "visualizacao"
+                      }
+                    })
+                  }
+                },
+                {
+                  label: 'Editar',
+                  icon: <EditIcon fontSize="small" />,
+                  onClickFunc: () => {
+                    navigate("/cadastrarListaEspera", {
+                      state: {
+                        idPessoa: row.id,
+                        operacao: "edicao"
+                      }
+                    })
+                  }
+                },
+                {
+                  label: 'Excluir',
+                  icon: <DeleteIcon fontSize="small" />,
+                  onClickFunc: () => {
+                    setRowToDelete(row.id);
+                    setIsModalDeleteOpen(true);
+                  }
+                },
+              ]} />
             }))}
             withActions={false}
           />
         </Box>
       </Box>
       <ToastContainer />
+      <ModalDelete
+        textoModal={"o Perfil de Pessoa Interessada"}
+        isModalOpen={isModalDeleteOpen}
+        setIsModalOpen={setIsModalDeleteOpen}
+        handleDelete={() => handleDelete(rowToDelete)}
+      />
     </>
   );
 };
