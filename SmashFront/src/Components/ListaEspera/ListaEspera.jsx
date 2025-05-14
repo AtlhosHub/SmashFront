@@ -117,7 +117,6 @@ export const ListaEspera = () => {
   return (
     <>
       <Box>
-        <DefaultHeader pageTitle="Lista de Espera" />
         <DefaultBreadcrumb rotas={rotas} />
       </Box>
       <Box className="main-content">

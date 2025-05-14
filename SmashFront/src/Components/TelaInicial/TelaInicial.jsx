@@ -10,6 +10,7 @@ import team from '../../assets/Team Management.svg';
 import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box } from "@mui/material";
 
 
 export const TelaInicial = () => {
@@ -35,7 +36,7 @@ export const TelaInicial = () => {
         {
             label: "DASHBOARD",
             sidebarcolor: "#17778D",
-            rota: "/telaInicial",
+            rota: "/dashboard",
             icon: <img src={dashIcon} width={65} height={70} alt="Dashboard" />
         },
         {
@@ -60,39 +61,36 @@ export const TelaInicial = () => {
                 navigate("/", { state: { tokenLogout: true } });
             }
         };
-    
+
         validateToken();
     }, []);
 
     return (
-        <>
-            <DefaultHeader pageTitle={"Tela Inicial"} />
-            <div style={{
-                display: "flex",
+        <Box style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "calc(100vh - 64px)",
+            padding: "24px",
+            boxSizing: "border-box",
+        }}>
+            <Box style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "16px",
                 justifyContent: "center",
-                alignItems: "center",
-                height: "calc(100vh - 64px)",
-                padding: "24px",
-                boxSizing: "border-box",
             }}>
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: "16px",
-                    justifyContent: "center",
-                }}>
-                    {cards.map((card, index) => (
-                        <DefaultCardMenu
-                            key={index}
-                            label={card.label}
-                            sidebarcolor={card.sidebarcolor}
-                            rota={card.rota}
-                            icon={card.icon}
-                        />
-                    ))}
-                </div>
-            </div>
-        </>
+                {cards.map((card, index) => (
+                    <DefaultCardMenu
+                        key={index}
+                        label={card.label}
+                        sidebarcolor={card.sidebarcolor}
+                        rota={card.rota}
+                        icon={card.icon}
+                    />
+                ))}
+            </Box>
+        </Box>
     );
 };
 

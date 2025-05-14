@@ -148,7 +148,6 @@ export const CadastroUsuarios = () => {
                     height: "100vh",
                 }}
             >
-                <DefaultHeader pageTitle="Cadastrar Usuário" />
                 <DefaultBreadcrumb rotas={rotas} />
 
                 <Box

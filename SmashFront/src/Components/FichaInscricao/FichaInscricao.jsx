@@ -233,10 +233,9 @@ export const FichaInscricao = () => {
         <>
             <Box sx={{
                 display: "grid",
-                gridTemplateRows: "auto auto 1fr",
-                height: "100vh",
+                gridTemplateRows: "auto 1fr",
+                height: "90.9vh"
             }}>
-                <DefaultHeader pageTitle={definirNomePagina()} />
                 <DefaultBreadcrumb rotas={rotas} />
                 <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
                     <MenuCadastro
