@@ -134,25 +134,28 @@ export const CadastrarInteressado = () => {
 
   const deletarPessoaInteressada = () => {
     api.delete(`lista-espera/${location.state?.idPessoa}`, {
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-        }
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+      }
     })
-        .then(() => {
-            toasterMsg("success", "Perfil de Pessoa Interessada deletado com sucesso!");
-            navigate("/listaEspera", { state: { userDeleted: true } })
-        })
-        .catch((error) => {
-            toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-            console.error("Erro ao excluir Perfil de Pessoa Interessada:", error)
-        })
-}
+      .then(() => {
+        toasterMsg("success", "Perfil de Pessoa Interessada deletado com sucesso!");
+        navigate("/listaEspera", { state: { userDeleted: true } })
+      })
+      .catch((error) => {
+        toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
+        console.error("Erro ao excluir Perfil de Pessoa Interessada:", error)
+      })
+  }
 
   return (
     <>
-      <Box sx={{ display: "grid", gridTemplateRows: "auto auto 1fr", height: "100vh" }}>
-        <DefaultHeader pageTitle={definirNomePagina()} />
+      <Box sx={{
+        display: "grid",
+        gridTemplateRows: "auto 1fr",
+        height: "90.9vh"
+      }}>
         <DefaultBreadcrumb rotas={rotas} />
         <Box sx={{ display: "flex", flex: 1 }}>
           <MenuCadastro
@@ -187,7 +190,7 @@ export const CadastrarInteressado = () => {
       </Box>
       <ToastContainer />
       <ModalDelete
-        textoModal ={"o perfil de Pessoa Interessada"}
+        textoModal={"o perfil de Pessoa Interessada"}
         isModalOpen={isModalDeleteOpen}
         setIsModalOpen={setIsModalDeleteOpen}
         handleDelete={deletarPessoaInteressada}

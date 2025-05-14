@@ -30,7 +30,6 @@ function App() {
         <Route path="/cadastrarListaEspera" element={<CadastrarInteressado />} />
       </Route>
     </Routes>
-    </>
   )
 }
 
