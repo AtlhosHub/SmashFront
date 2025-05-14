@@ -3,9 +3,11 @@ import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultB
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DefaultTable } from "../../../DefaultComponents/DefaultTable/DefaultTable";
 import { dateFormater } from "../../../../utils/dateFormaterService";
+import { api } from "../../../../provider/apiProvider";
+
 
 export const HistPagamento = ({ userInfo }) => {
     const [filtroData, setFiltroData] = useState();
@@ -28,14 +30,32 @@ export const HistPagamento = ({ userInfo }) => {
         }
     ]
 
-    const rowData = [
-        {
-            dataEnvio: dateFormater("2025-05-02T15:50:43.756066800"),
-            formaPagamento: "PIX",
-            valor: "R$100,00",
-            status: "PAGO"
-        }
-    ]
+    const [rowData, setRowData] = useState([])
+
+    useEffect(() => {
+        listarHistoricoPagamento(userInfo.id)
+    }, [])
+
+     const listarHistoricoPagamento = (id) => {
+        api.get(`/alunos/${id}/historicoMensalidade`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+          }
+        })
+          .then((response) => {
+            const formattedData = response.data.map((aluno) => ({
+                    ...aluno,
+                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
+                    valor: aluno.valor != null
+                  ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                  : null
+                }));
+
+                setRowData(formattedData);
+          })
+          .catch((error) => console.error("Erro ao buscar dados:", error));
+      }
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: "25px", pt: "30px", pr: "30px", flex: 1 }}>

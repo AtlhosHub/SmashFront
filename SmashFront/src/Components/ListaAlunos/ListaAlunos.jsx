@@ -48,7 +48,8 @@ export const ListaAlunos = () => {
     const headCells = [
         {
             name: "nome",
-            description: "Nome do Aluno"
+            description: "Nome do Aluno",
+            cellWidth: "20%"
         },
         {
             name: "dataEnvio",
@@ -132,7 +133,10 @@ export const ListaAlunos = () => {
             .then((res) => {
                 const formattedData = res.data.map((aluno) => ({
                     ...aluno,
-                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null
+                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
+                      valor: aluno.valor != null
+                  ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                  : null
                 }));
 
                 setRowData(formattedData);

@@ -75,7 +75,6 @@ export const FormInfo = ({
     useEffect(() => {
 
         const cpf = userInfo?.cpf || "";
-        console.log(validarCpf(cpf))
         setCpfUser(formatCPF(cpf));
         setCpfValido(validarCpf(cpf));
     }, [userInfo?.cpf]);
