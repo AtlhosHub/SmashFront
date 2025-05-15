@@ -20,10 +20,10 @@
 }
 
 .mes-niver-box.atual {
-    border-color: #17778D;
+    border-color: #286DA8;
 
     span {
-        color: #17778D;
+        color: #286DA8;
         font-weight: 600;
     }
 }
@@ -33,16 +33,12 @@
 }
 
 .niver-atual {
-    color: #17778D;
+    color: #286DA8;
     font-weight: 600
 }
 
 .niver-futuro {
     color: black
-}
-
-.datas-box{
-    border-radius: 10px 5px 5px 10px;
 }
 
 .datas-box::-webkit-scrollbar {
@@ -56,7 +52,7 @@
 }
 
 .datas-box::-webkit-scrollbar-thumb {
-    background: #17778D;
+    background: #286DA8;
     border-radius: 10px;
 }
 

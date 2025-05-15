@@ -5,7 +5,9 @@
 
   color-scheme: light dark;
   color: black;
-  background-color: /*#242424*/ white;
+  background-color:
+    /*#242424*/
+    white;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,6 +15,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-*{
+* {
   margin: 0;
+}
+
+body {
+  height: 100vh;
 }

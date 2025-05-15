@@ -30,9 +30,10 @@ export const Kpi = ({ startIcon, endIcon, title, content }) => {
             >
                 <span
                     style={{
-                        fontWeight: 500,
+                        fontWeight: 700,
                         fontSize: "1.2rem",
-                        textAlign: "center"
+                        textAlign: "center",
+                        textTransform: "capitalize"
                     }}
                 >
                     {title}

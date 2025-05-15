@@ -5,6 +5,7 @@ import people from "../../assets/Users.png"
 import discount from "../../assets/Discount.png"
 import { Grafico } from "./Grafico/Grafico"
 import { Aniversariantes } from "./Aniversariantes/Aniversariantes"
+import { useEffect } from "react"
 
 export const Dashboard = () => {
     const rotas = [
@@ -13,6 +14,14 @@ export const Dashboard = () => {
             description: "Dashboard"
         }
     ]
+
+    useEffect(() => {
+        document.body.style.backgroundColor = "#F3F9F9";
+
+        return () => {
+            document.body.style.backgroundColor = "white"; // volta pro padrão
+        };
+    }, []);
 
     const aniversariantes = [
         {
@@ -86,16 +95,21 @@ export const Dashboard = () => {
     ]
 
     return (
-        <Box fontFamily={"Poppins, sans-serif"}>
+        <Box fontFamily={"Poppins, sans-serif"}
+            sx={{
+                display: "grid",
+                gridTemplateRows: "auto 1fr",
+            }}
+        >
             <DefaultBreadcrumb rotas={rotas} altura={70} />
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    backgroundColor: "#F3F9F9",
                     p: "30px",
                     gap: "30px",
-                }}>
+                }}
+            >
                 <Box
                     sx={{
                         width: "100%",
@@ -112,14 +126,14 @@ export const Dashboard = () => {
                         }}
                     >
                         <Kpi
-                            title={<span>total de alunos ativos</span>}
+                            title="total de alunos ativos"
                             content={"54"}
                             startIcon={
                                 <img src={people} />
                             }
                         />
                         <Kpi
-                            title={"PAGAMENTOS COM DESCONTO"}
+                            title="pagamentos com desconto"
                             content={"12"}
                             startIcon={
                                 <img

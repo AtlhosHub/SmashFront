@@ -66,7 +66,7 @@ export const Grafico = () => {
                 </span>
                 <Box sx={{ display: "flex", gap: "15px", alignItems: "center" }}>
                     <Box sx={{ color: "black", display: "flex" }}>
-                        <Square sx={{ color: "#17778D" }} />
+                        <Square sx={{ color: "#286DA8" }} />
                         Pago
                     </Box>
                     <Box sx={{ color: "black", display: "flex" }}>
@@ -85,7 +85,7 @@ export const Grafico = () => {
                     <YAxis type="number" ticks={getTotalTickes()} />
                     <Tooltip />
                     <CartesianGrid strokeDasharray="0 0" />
-                    <Bar dataKey="normal" stackId="a" fill="#17778D" name="Pago Normal" />
+                    <Bar dataKey="normal" stackId="a" fill="#286DA8" name="Pago Normal" />
                     <Bar dataKey="desconto" stackId="a" fill="#FFAE03" name="Pago com Desconto" />
                     <Bar dataKey="atraso" stackId="a" fill="#CF3333" name="Em Atraso" />
                 </BarChart>
