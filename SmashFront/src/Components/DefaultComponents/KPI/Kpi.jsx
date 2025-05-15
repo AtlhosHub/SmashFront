@@ -13,7 +13,6 @@ export const Kpi = ({ startIcon, endIcon, title, content }) => {
                 border: "1px solid black",
                 borderRadius: "10px",
                 backgroundColor: "white",
-                // maxWidth: "20rem",
                 alignItems: "flex-start",
                 fontFamily: "Poppins, sans-serif"
             }}
@@ -31,9 +30,8 @@ export const Kpi = ({ startIcon, endIcon, title, content }) => {
             >
                 <span
                     style={{
-                        fontWeight: 400,
+                        fontWeight: 500,
                         fontSize: "1.2rem",
-                        // lineHeight: "1.2rem",
                         textAlign: "center"
                     }}
                 >
@@ -41,9 +39,8 @@ export const Kpi = ({ startIcon, endIcon, title, content }) => {
                 </span>
                 <span
                     style={{
-                        fontWeight: 800,
+                        fontWeight: 700,
                         fontSize: "2rem",
-                        // lineHeight: "1.8rem",
                         textAlign: "center",
                         display: "flex",
                         flexDirection: "row",
