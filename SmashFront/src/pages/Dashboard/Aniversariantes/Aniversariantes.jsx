@@ -64,11 +64,13 @@ export const Aniversariantes = ({ alunos }) => {
                 flexDirection: "column",
                 bgcolor: "white",
                 border: "1px solid black",
-                height: "100%",
+                height: "72vh",
+                overflowY: "scroll",
                 p: "30px 40px",
                 boxSizing: "border-box",
                 borderRadius: "10px"
             }}
+            className="datas-box"
         >
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.8 }}>
                 <Box

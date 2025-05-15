@@ -57,7 +57,7 @@ export const FormEndereco = ({
     };
 
     useEffect(() => {
-        const camposPreenchidos = (operacao === "cadastrar" ? cepValido : true) && userInfo.endereco.numLogradouro;
+        const camposPreenchidos = (operacao === "cadastro" ? cepValido : true) && userInfo.endereco.numLogradouro;
 
         setBotaoLiberado(camposPreenchidos);
         setEnderecoConcluido(camposPreenchidos);
@@ -75,6 +75,7 @@ export const FormEndereco = ({
     };
 
     const handleCepChange = async (e) => {
+        console.log(cepValido);
         const valorFormatado = formatarCep(e.target.value);
 
         const cepNumerico = valorFormatado?.replace(/\D/g, "");
@@ -91,7 +92,7 @@ export const FormEndereco = ({
             },
         }));
 
-        if (cepNumerico.length === 8) {
+        if (cepNumerico?.length === 8) {
             try {
                 const response = await fetch(
                     `https://viacep.com.br/ws/${cepNumerico}/json/`
@@ -118,20 +119,22 @@ export const FormEndereco = ({
             } catch (error) {
                 console.error("Erro ao buscar CEP:", error);
             }
+        } else {
+            setCepValido(false);
         }
     };
 
     const navigate = useNavigate();
-      useEffect(() => {
-          const validateToken = async () => {
-              const isValid = await tokenValidationFunction();
-              if (!isValid) {
-                  navigate("/", { state: { tokenLogout: true } });
-              }
-          };
-      
-          validateToken();
-      }, []);
+    useEffect(() => {
+        const validateToken = async () => {
+            const isValid = await tokenValidationFunction();
+            if (!isValid) {
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        };
+
+        validateToken();
+    }, []);
 
 
     return (

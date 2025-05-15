@@ -79,7 +79,7 @@ export const Grafico = () => {
                     </Box>
                 </Box>
             </Box>
-            <ResponsiveContainer width="100%" height={309}>
+            <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={data}>
                     <XAxis dataKey="mes" />
                     <YAxis type="number" ticks={getTotalTickes()} />

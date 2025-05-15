@@ -43,6 +43,46 @@ export const Dashboard = () => {
             nomeAluno: "CAROL TEIXEIRA NERES",
             dataNascimento: "2000-05-14T00:00:00",
         },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
+        {
+            nomeAluno: "CAROL TEIXEIRA NERES",
+            dataNascimento: "2000-05-14T00:00:00",
+        },
     ]
 
     return (
@@ -92,7 +132,7 @@ export const Dashboard = () => {
                 </Box>
                 <Box
                     sx={{
-                        width: "60%"
+                        width: "60%",
                     }}
                 >
                     <Aniversariantes
