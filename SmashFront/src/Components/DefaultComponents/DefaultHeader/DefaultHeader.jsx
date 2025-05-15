@@ -32,6 +32,8 @@ export const DefaultHeader = () => {
         return "Cadastro de Usuários"
       case "/fichaInscricao":
         return "Ficha de Inscrição"
+      case "/cadastrarListaEspera":
+        return "Adicionar Perfil do Interessado"
       default:
         return "Sistema"
     }
