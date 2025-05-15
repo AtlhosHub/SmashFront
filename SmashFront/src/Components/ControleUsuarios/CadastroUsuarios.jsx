@@ -144,8 +144,8 @@ export const CadastroUsuarios = () => {
             <Box
                 sx={{
                     display: "grid",
-                    gridTemplateRows: "auto auto 1fr",
-                    height: "100vh",
+                    gridTemplateRows: "auto 1fr",
+                    height: "90.9vh",
                 }}
             >
                 <DefaultBreadcrumb rotas={rotas} />

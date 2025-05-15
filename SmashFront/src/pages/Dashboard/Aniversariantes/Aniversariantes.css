@@ -41,6 +41,10 @@
     color: black
 }
 
+.datas-box{
+    border-radius: 10px 5px 5px 10px;
+}
+
 .datas-box::-webkit-scrollbar {
     width: 8px;
 }
