@@ -48,14 +48,17 @@ export const Grafico = () => {
                 backgroundColor: "white",
                 border: "1px solid black",
                 borderRadius: "10px",
+                pr: "2.5rem",
+
             }}
         >
             <Box
                 sx={{
-                    px: "2.5rem",
                     py: "1rem",
                     display: "flex",
                     justifyContent: "space-between",
+                    pl: "2.5rem",
+                    pr: "0.4rem",
                 }}
             >
                 <span style={{ color: "black", fontWeight: 700, fontSize: "1.3rem" }}>
@@ -76,7 +79,7 @@ export const Grafico = () => {
                     </Box>
                 </Box>
             </Box>
-            <ResponsiveContainer width="100%" height={285}>
+            <ResponsiveContainer width="100%" height={309}>
                 <BarChart data={data}>
                     <XAxis dataKey="mes" />
                     <YAxis type="number" ticks={getTotalTickes()} />

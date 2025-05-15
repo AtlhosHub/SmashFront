@@ -18,30 +18,23 @@ export const Kpi = ({ startIcon, endIcon, title, content }) => {
                 fontFamily: "Poppins, sans-serif"
             }}
         >
-            <Box
-                display={startIcon ? "flex" : "none"}
-                sx={{
-                    "& svg": {
-                        fontSize: "4.8rem",
-                        alignSelf: "flex-start"
-                    },
-                    height: "70px"
-                }}
-            >
-                {startIcon}
-            </Box>
+
             <Box
                 sx={{
                     textTransform: "uppercase",
                     display: "flex",
                     flexDirection: "column",
+                    justifyContent: "center",
+                    height: "100%",
+                    width: "100%",
                 }}
             >
                 <span
                     style={{
                         fontWeight: 400,
                         fontSize: "1.2rem",
-                        lineHeight: "1.2rem"
+                        // lineHeight: "1.2rem",
+                        textAlign: "center"
                     }}
                 >
                     {title}
@@ -50,9 +43,25 @@ export const Kpi = ({ startIcon, endIcon, title, content }) => {
                     style={{
                         fontWeight: 800,
                         fontSize: "2rem",
-                        lineHeight: "1.8rem"
+                        // lineHeight: "1.8rem",
+                        textAlign: "center",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        width: "100%",
+                        justifyContent: "center",
+                        gap: "10px",
                     }}
                 >
+                    <Box
+                        display={startIcon ? "flex" : "none"}
+                        sx={{
+
+                            height: "40px"
+                        }}
+                    >
+                        {startIcon}
+                    </Box>
                     {content}
                 </span>
             </Box>

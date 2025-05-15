@@ -3,14 +3,14 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import breadcrumb from "../../../assets/breadcrumb.png";
 import { useNavigate } from "react-router-dom";
 
-export const DefaultBreadcrumb = ({ rotas }) => {
+export const DefaultBreadcrumb = ({ rotas, altura = 150 }) => {
   const navigate = useNavigate();
 
   return (
     <Box className="breadcrumb-container">
       <Box
         sx={{
-          height: "150px",
+          height: `${altura}px`,
           padding: "20px 24px",
           backgroundImage: `url(${breadcrumb})`,
           backgroundSize: "cover",

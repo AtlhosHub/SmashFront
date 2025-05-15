@@ -45,12 +45,9 @@ export const Dashboard = () => {
         },
     ]
 
-
-
     return (
         <Box fontFamily={"Poppins, sans-serif"}>
-            <DefaultBreadcrumb rotas={rotas} />
-
+            <DefaultBreadcrumb rotas={rotas} altura={70} />
             <Box
                 sx={{
                     display: "flex",
@@ -75,14 +72,14 @@ export const Dashboard = () => {
                         }}
                     >
                         <Kpi
-                            title={<span>total de alunos<br />ativos</span>}
+                            title={<span>total de alunos ativos</span>}
                             content={"54"}
                             startIcon={
                                 <img src={people} />
                             }
                         />
                         <Kpi
-                            title={"PAGAMENTOS COM DESCONTO (MÊS)"}
+                            title={"PAGAMENTOS COM DESCONTO"}
                             content={"12"}
                             startIcon={
                                 <img
@@ -95,7 +92,7 @@ export const Dashboard = () => {
                 </Box>
                 <Box
                     sx={{
-                        width: "100%"
+                        width: "60%"
                     }}
                 >
                     <Aniversariantes
