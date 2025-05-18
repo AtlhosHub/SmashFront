@@ -8,7 +8,8 @@ import { api } from "../../provider/apiProvider"
 import {
     Box,
     InputAdornment,
-    TextField
+    TextField,
+    Tooltip
 } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import {
@@ -48,7 +49,8 @@ export const ListaAlunos = () => {
     const headCells = [
         {
             name: "nome",
-            description: "Nome do Aluno"
+            description: "Nome do Aluno",
+            cellWidth: "20%"
         },
         {
             name: "dataEnvio",
@@ -132,7 +134,11 @@ export const ListaAlunos = () => {
             .then((res) => {
                 const formattedData = res.data.map((aluno) => ({
                     ...aluno,
-                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null
+                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
+                    valor: aluno.valor != null
+                        ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                        : null,
+                    valorColor: aluno.desconto ? '#286DA8' : 'inherit'
                 }));
 
                 setRowData(formattedData);
@@ -173,15 +179,26 @@ export const ListaAlunos = () => {
                         variant="outlined"
                         size="small"
                         sx={{
-
                             '& .MuiInputBase-root': {
                                 borderRadius: '8px',
+                                height: '35px',
                             },
                             '& .MuiInputBase-input': {
                                 fontFamily: 'Poppins, sans-serif',
                                 fontWeight: 400,
                                 fontSize: '14px',
                                 color: 'black',
+                                padding: '8px 14px',
+                                display: 'flex',
+                                alignItems: 'center',
+                            },
+                            '& .MuiInputLabel-root': {
+                                top: '-4px',
+                                fontSize: '16px',
+                            },
+                            '& .MuiInputLabel-shrink': {
+                                top: 0,
+                                fontSize: '16px',
                             },
                         }}
                         InputProps={{
@@ -190,18 +207,6 @@ export const ListaAlunos = () => {
                                     <Search sx={{ color: "black" }} />
                                 </InputAdornment>
                             ),
-                            sx: {
-                                height: "35px",
-                                '& input': {
-                                    padding: '8px 14px',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    lineHeight: '35px',
-                                },
-                                '& .MuiInputLabel-shrink': {
-                                    lineHeight: '1.2',
-                                },
-                            },
                         }}
                     />
                     <DefaultFilter
@@ -230,7 +235,13 @@ export const ListaAlunos = () => {
                     <DefaultTable
                         headCells={headCells}
                         rowData={rowData.map(row => ({
-                            ...row,
+                            ...row, valor: (
+                                <Tooltip title="Pago com desconto" arrow placement="top">
+                                    <span style={{ color: row.valorColor }}>
+                                        {row.valor}
+                                    </span>
+                                </Tooltip>
+                            ),
                             acoes: <ActionMenu menuOptions={[
                                 {
                                     label: 'Visualizar',

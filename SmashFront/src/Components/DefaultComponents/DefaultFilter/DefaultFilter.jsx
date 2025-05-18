@@ -133,9 +133,9 @@ export const DefaultFilter = ({
                                                     {
                                                         size: 'small',
                                                         placeholder: 'MM/AAAA',
-                                                     
+
                                                     }
-                                                }} 
+                                                }}
                                                 sx={{
                                                     "& .MuiInputBase-root": {
                                                         borderRadius: "5px"
@@ -160,12 +160,16 @@ export const DefaultFilter = ({
                             </Box>
                             <Box sx={{ display: "flex", gap: "10px", marginLeft: "auto" }}>
                                 <DefaultButton size="small" label="Limpar"
-                                    onClick={() => handleClearFilter()}
+                                    onClick={() => {
+                                        handleClearFilter()
+                                        setSelectedMonth(null);   
+                                    }}
+
                                 />
                                 <DefaultButton size="small" variant="contained" label="Aplicar"
                                     onClick={() => {
                                         handleApplyFilter();
-                                        setAnchorEl(null)
+                                        setAnchorEl(null);
                                     }}
                                 />
                             </Box>
