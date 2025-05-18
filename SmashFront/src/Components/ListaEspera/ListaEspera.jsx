@@ -42,7 +42,7 @@ export const ListaEspera = () => {
   const [rowData, setRowData] = useState([]);
 
   const rotas = [
-    { route: "/listaEspera", description: "Lista de Espera" }
+    { route: "/listaEspera", description: "Lista de Espera", cellWidth: "100%" },
   ];
 
   const handleApplyFilter = () => {

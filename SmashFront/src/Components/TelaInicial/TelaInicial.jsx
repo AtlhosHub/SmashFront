@@ -48,7 +48,7 @@ export const TelaInicial = () => {
         {
             label: "CONFIGURAÇÕES DO SISTEMA",
             sidebarcolor: "#17778D",
-            rota: "/telaInicial",
+            rota: "/config",
             icon: <img src={settingsIcon} width={70} height={70} alt="Config" />
         },
     ];

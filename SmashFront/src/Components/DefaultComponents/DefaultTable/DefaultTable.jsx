@@ -25,8 +25,8 @@ export const DefaultTable = ({
                         }
                         <TableCell
                             sx={{
-                                display: !!rowData[0]?.acoes ? "flex" : "none",
-                                width: "10%"
+                                display: !!rowData[0]?.acoes ? "table-cell" : "none",
+                                // width: "10%"
                             }}
                         >
                             &nbsp;
@@ -94,8 +94,8 @@ export const DefaultTable = ({
                             }
                             <TableCell
                                 sx={{
-                                    display: !!row.acoes ? "flex" : "none",
-                                    width: "10%",
+                                    display: !!row.acoes ? "table-cell" : "none",
+                                    // width: "100%",
                                     justifyContent: "center"
                                 }}
                             >

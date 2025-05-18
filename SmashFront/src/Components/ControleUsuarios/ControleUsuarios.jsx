@@ -41,7 +41,8 @@ export const ControleUsuarios = () => {
     const headCells = [
         {
             name: "nome",
-            description: "Nome do Usuário Admnistrador"
+            description: "Nome do Usuário Admnistrador",
+            cellWidth: "100%"
         }
     ]
 
