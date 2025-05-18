@@ -12,11 +12,12 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HelpIcon from "@mui/icons-material/Help";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { formatarTelefone } from "../../utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
 import { tokenValidationFunction } from "../../../../utils/tokenValidationFunction";
+import { checkDateFilled } from "../../utils/checkDateFilled";
 
 export const FormInfo = ({
     userInfo,
@@ -73,7 +74,6 @@ export const FormInfo = ({
     const [cpfUser, setCpfUser] = useState(formatCPF(userInfo?.cpf));
 
     useEffect(() => {
-
         const cpf = userInfo?.cpf || "";
         setCpfUser(formatCPF(cpf));
         setCpfValido(validarCpf(cpf));
@@ -102,7 +102,7 @@ export const FormInfo = ({
     };
 
     useEffect(() => {
-        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && userInfo.dataNascimento;
+        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && checkDateFilled(userInfo.dataNascimento, setMaiorIdade);
 
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         const emailValido = regexEmail.test(userInfo.email);
@@ -242,8 +242,9 @@ export const FormInfo = ({
                                         : null
                                     }
                                     format="DD/MM/YYYY"
+                                    maxDate={dayjs()}
                                     onChange={(newValue) => {
-                                        isMaiorDeIdade(newValue);
+                                        checkDateFilled(newValue, setMaiorIdade) && isMaiorDeIdade(newValue);
                                         setUserInfo({ ...userInfo, dataNascimento: newValue });
                                     }}
                                     slotProps={{
