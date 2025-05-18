@@ -8,7 +8,8 @@ import { api } from "../../provider/apiProvider"
 import {
     Box,
     InputAdornment,
-    TextField
+    TextField,
+    Tooltip
 } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import {
@@ -134,9 +135,10 @@ export const ListaAlunos = () => {
                 const formattedData = res.data.map((aluno) => ({
                     ...aluno,
                     dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
-                      valor: aluno.valor != null
-                  ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                  : null
+                    valor: aluno.valor != null
+                        ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                        : null,
+                    valorColor: aluno.desconto ? '#286DA8' : 'inherit'
                 }));
 
                 setRowData(formattedData);
@@ -234,7 +236,13 @@ export const ListaAlunos = () => {
                     <DefaultTable
                         headCells={headCells}
                         rowData={rowData.map(row => ({
-                            ...row,
+                            ...row, valor: (
+                                <Tooltip title="Pago com desconto" arrow placement="top">
+                                    <span style={{ color: row.valorColor }}>
+                                        {row.valor}
+                                    </span>
+                                </Tooltip>
+                            ),
                             acoes: <ActionMenu menuOptions={[
                                 {
                                     label: 'Visualizar',

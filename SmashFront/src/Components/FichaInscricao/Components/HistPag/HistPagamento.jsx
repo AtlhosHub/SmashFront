@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box, Tooltip } from "@mui/material"
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton"
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -10,7 +10,7 @@ import { api } from "../../../../provider/apiProvider";
 
 
 export const HistPagamento = ({ userInfo }) => {
-    const [filtroData, setFiltroData] = useState();
+    const [selectedMonth, setSelectedMonth] = useState(null);
 
     const headCells = [
         {
@@ -36,26 +36,44 @@ export const HistPagamento = ({ userInfo }) => {
         listarHistoricoPagamento(userInfo.id)
     }, [])
 
-     const listarHistoricoPagamento = (id) => {
-        api.get(`/alunos/${id}/historicoMensalidade`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-          }
-        })
-          .then((response) => {
-            const formattedData = response.data.map((aluno) => ({
+    const handleBuscarClick = () => {
+        if (selectedMonth) {
+            const dateFrom = dayjs(selectedMonth).startOf('month').format('YYYY-MM-DD');
+            const dateTo = dayjs(selectedMonth).endOf('month').format('YYYY-MM-DD');
+            listarHistoricoPagamento(userInfo.id, dateFrom, dateTo);
+        } else {
+            listarHistoricoPagamento(userInfo.id, null, null);
+        }
+    };
+
+    const listarHistoricoPagamento = (id, dateFrom, dateTo) => {
+        api.post(
+            `/alunos/${id}/historicoMensalidade`,
+            {
+                dateFrom: dateFrom || null,
+                dateTo: dateTo || null
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                }
+            }
+        )
+            .then((response) => {
+                const formattedData = response.data.map((aluno) => ({
                     ...aluno,
                     dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
                     valor: aluno.valor != null
-                  ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                  : null
+                        ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                        : null,
+                    valorColor: aluno.desconto ? '#286DA8' : 'inherit'
                 }));
 
                 setRowData(formattedData);
-          })
-          .catch((error) => console.error("Erro ao buscar dados:", error));
-      }
+            })
+            .catch((error) => console.error("Erro ao buscar dados:", error));
+    }
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: "25px", pt: "30px", pr: "30px", flex: 1 }}>
@@ -64,11 +82,11 @@ export const HistPagamento = ({ userInfo }) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                         size="small"
-                        value={filtroData}
+                        value={selectedMonth}
                         format="MMMM/YYYY"
                         views={['year', 'month']}
-                        maxDate={dayjs()}
-                        onChange={(e) => setFiltroData(e)}
+                        maxDate={dayjs().endOf('year')}
+                        onChange={(e) => setSelectedMonth(e)}
                         slotProps={{
                             textField: { size: "small", placeholder: "Mês/Ano" },
                         }}
@@ -90,16 +108,30 @@ export const HistPagamento = ({ userInfo }) => {
                 <DefaultButton
                     label="Buscar"
                     variant="contained"
+                    onClick={handleBuscarClick}
                 />
                 <DefaultButton
                     label="Limpar"
                     variant="outlined"
-                    onClick={() => setFiltroData(undefined)}
+                    onClick={() => selectedMonth(undefined)}
                 />
             </Box>
             <DefaultTable
                 headCells={headCells}
-                rowData={rowData}
+                rowData={rowData.map(row => ({
+                    ...row,
+                    valor: row.desconto ? (
+                        <Tooltip title="Pago com desconto" arrow placement="top">
+                            <span style={{ color: row.valorColor }}>
+                                {row.valor}
+                            </span>
+                        </Tooltip>
+                    ) : (
+                        <span style={{ color: row.valorColor }}>
+                            {row.valor}
+                        </span>
+                    )
+                }))}
                 withPagStatus={true}
             />
         </Box>
