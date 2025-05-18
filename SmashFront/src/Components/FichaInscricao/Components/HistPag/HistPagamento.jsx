@@ -98,17 +98,27 @@ export const HistPagamento = ({ userInfo }) => {
                             textField: { size: "small", placeholder: "Mês/Ano" },
                         }}
                         sx={{
-                            "& .MuiInputBase-root": {
-                                height: "35px",
-                                borderRadius: "8px"
-                            },
-                            '& .MuiInputBase-input.Mui-disabled': {
-                                "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                            '& .MuiInputBase-root': {
+                                borderRadius: '8px',
+                                height: '35px',
                             },
                             '& .MuiInputBase-input': {
-                                textTransform: "capitalize"
+                                fontFamily: 'Poppins, sans-serif',
+                                fontWeight: 400,
+                                fontSize: '14px',
+                                color: 'black',
+                                padding: '8px 14px',
+                                display: 'flex',
+                                alignItems: 'center',
                             },
-                            width: "200px",
+                            '& .MuiInputLabel-root': {
+                                top: '-4px',
+                                fontSize: '16px',
+                            },
+                            '& .MuiInputLabel-shrink': {
+                                top: 0,
+                                fontSize: '16px',
+                            },
                         }}
                     />
                 </LocalizationProvider>

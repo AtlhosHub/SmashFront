@@ -179,15 +179,26 @@ export const ListaAlunos = () => {
                         variant="outlined"
                         size="small"
                         sx={{
-
                             '& .MuiInputBase-root': {
                                 borderRadius: '8px',
+                                height: '35px',
                             },
                             '& .MuiInputBase-input': {
                                 fontFamily: 'Poppins, sans-serif',
                                 fontWeight: 400,
                                 fontSize: '14px',
                                 color: 'black',
+                                padding: '8px 14px',
+                                display: 'flex',
+                                alignItems: 'center',
+                            },
+                            '& .MuiInputLabel-root': {
+                                top: '-4px',
+                                fontSize: '16px',
+                            },
+                            '& .MuiInputLabel-shrink': {
+                                top: 0,
+                                fontSize: '16px',
                             },
                         }}
                         InputProps={{
@@ -196,18 +207,6 @@ export const ListaAlunos = () => {
                                     <Search sx={{ color: "black" }} />
                                 </InputAdornment>
                             ),
-                            sx: {
-                                height: "35px",
-                                '& input': {
-                                    padding: '8px 14px',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    lineHeight: '35px',
-                                },
-                                '& .MuiInputLabel-shrink': {
-                                    lineHeight: '1.2',
-                                },
-                            },
                         }}
                     />
                     <DefaultFilter
