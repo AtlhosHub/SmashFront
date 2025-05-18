@@ -10,9 +10,7 @@ import 'dayjs/locale/pt-br';
 dayjs.locale('pt-br');
 
 createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>,
 )

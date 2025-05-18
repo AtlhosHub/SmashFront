@@ -12,6 +12,7 @@ import { TelaEsqueciSenha2 } from './Components/TelaEsqueciSenha/TelaEsqueciSenh
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
 import { CadastrarInteressado } from './Components/ListaEspera/CadastrarInteressado';
+import ConfigSistema from './pages/ConfigSistema/ConfigSistema';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/fichaInscricao" element={<FichaInscricao />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/cadastrarListaEspera" element={<CadastrarInteressado />} />
+        <Route path="/config" element={<ConfigSistema />} />
       </Route>
     </Routes>
   )
