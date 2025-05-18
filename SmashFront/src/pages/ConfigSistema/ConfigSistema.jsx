@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Box,
     Typography,
@@ -15,70 +15,74 @@ import { DefaultBreadcrumb } from '../../Components/DefaultComponents/DefaultBre
 import { DefaultButton } from '../../Components/DefaultComponents/DefaultButton/DefaultButton';
 import { toasterMsg } from '../../utils/toasterService';
 import { ToastContainer } from 'react-toastify';
-import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { treatEndHour, treatStartHour } from './utils/treatConfigDateTime';
+import { normalizeData } from './utils/treatConfigDateTime';
 import dayjs from 'dayjs';
+import ControleInputHora from './muitolegal';
 
 export default function ConfigSistema() {
     const [modoEdicao, setModoEdicao] = useState(false);
+    const [carregado, setCarregado] = useState(false);
 
     const [abertas, setAbertas] = useState({
-        'Horário de Aulas': true,
-        'Valor de Mensalidade': false,
+        horarioAulas: true,
+        valorMensalidade: false,
     });
 
     const [dados, setDados] = useState({
-        'Horário de Aulas': {
-            data: [],
-            key: 'diaHorario',
+        horarioAulas: {
+            description: 'Horário de Aulas',
             type: 'multiple',
+            data: [],
         },
-        'Valor de Mensalidade': {
-            data: null,
-            key: 'valorMensalidade',
+        valorMensalidade: {
+            description: 'Valor de Mensalidade',
             type: 'single',
+            data: null,
         }
     });
 
+    const [dadosTemporarios, setDadosTemporarios] = useState(() => structuredClone(dados));
+
     useEffect(() => {
         const novoDados = {
-            'Horário de Aulas': {
-                data: [
-                    { dia: 'Segunda', horaInic: treatStartHour('08:00 às 10:00'), horaFim: treatEndHour('08:00 às 10:00') },
-                    { dia: 'Quarta', horaInic: treatStartHour('14:00 às 16:00'), horaFim: treatEndHour('14:00 às 16:00') }
-                ],
-                key: 'diaHorario',
+            horarioAulas: {
+                description: 'Horário de Aulas',
                 type: 'multiple',
+                data: [
+                    { dia: 'Segunda', hora: '08:00 às 10:00' },
+                    { dia: 'Quarta', hora: '14:00 às 16:00' }
+                ],
             },
-            'Valor de Mensalidade': {
-                data: 250.00,
-                key: 'valorMensalidade',
+            'valorMensalidade': {
+                description: 'Valor de Mensalidade',
                 type: 'single',
+                data: 250.00,
             }
         };
 
-        setDados(novoDados);
-    }, []);
+        setDados(normalizeData(novoDados));
+    }, [abertas, modoEdicao]);
 
     const toggleSecao = (secao) => {
         setAbertas((prev) => ({ ...prev, [secao]: !prev[secao] }));
     };
 
     const adicionarItem = (secao) => {
-        const novoArray = [...dados[secao].data, ''];
-        setDados({
-            ...dados,
-            [secao]: { ...dados[secao], data: novoArray },
+        const novoArray = [...dadosTemporarios[secao].data, ''];
+        setDadosTemporarios({
+            ...dadosTemporarios,
+            [secao]: { ...dadosTemporarios[secao], data: novoArray },
         });
     };
 
     const removerItem = (secao, index) => {
-        const novoArray = [...dados[secao].data];
+        const novoArray = [...dadosTemporarios[secao].data];
         novoArray.splice(index, 1);
-        setDados({
-            ...dados,
-            [secao]: { ...dados[secao], data: novoArray },
+        setDadosTemporarios({
+            ...dadosTemporarios,
+            [secao]: { ...dadosTemporarios[secao], data: novoArray },
         });
     };
 
@@ -87,9 +91,17 @@ export default function ConfigSistema() {
     ];
 
     const handleSaveConfig = () => {
+        setDados(dadosTemporarios);
         toasterMsg("success", "Configurações salvas com sucesso!");
         setModoEdicao(false);
     }
+
+    useEffect(() => {
+        if (dados?.horarioAulas?.data.length > 0 && !carregado) {
+            setDadosTemporarios(structuredClone(dados));
+            setCarregado(true);
+        }
+    }, [dados, carregado]);
 
     return (
         <Box>
@@ -110,7 +122,7 @@ export default function ConfigSistema() {
                     </Box>
                 </Box>
 
-                {Object.entries(dados).map(([secao, secaoData]) => (
+                {Object.entries(dadosTemporarios).map(([secao, secaoData]) => (
                     <Paper key={secao} variant="outlined" sx={{ mb: 2 }}>
                         <Box
                             display="flex"
@@ -121,7 +133,7 @@ export default function ConfigSistema() {
                             onClick={() => toggleSecao(secao)}
                             sx={{ cursor: 'pointer', backgroundColor: '#f9f9f9' }}
                         >
-                            <Typography variant="subtitle1">{secao.toUpperCase()}</Typography>
+                            <Typography variant="subtitle1">{secaoData.description.toUpperCase()}</Typography>
                             <Box display="flex" alignItems="center" gap={1}>
                                 {modoEdicao && secaoData.type === 'multiple' && (
                                     <IconButton
@@ -143,61 +155,73 @@ export default function ConfigSistema() {
                                 {secaoData.type === 'multiple' ? (
                                     secaoData.data.map((valor, index) => (
                                         <Box
-                                            key={index}
+                                            key={valor + index}
                                             display="flex"
                                             alignItems="center"
                                             justifyContent="space-between"
                                             gap={2}
                                         >
-                                            {modoEdicao && secao === 'Horário de Aulas' ? (
+                                            {modoEdicao && secao === 'horarioAulas' ? (
                                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                                                    ●
                                                     <Autocomplete
                                                         value={valor.dia}
+                                                        onChange={(_, newValue) => {
+                                                            setDadosTemporarios((prev) => ({
+                                                                ...prev,
+                                                                [secao]: {
+                                                                    ...prev[secao],
+                                                                    data: prev[secao].data.map((item, i) =>
+                                                                        i === index ? { ...item, dia: newValue } : item
+                                                                    )
+                                                                }
+                                                            }));
+                                                        }}
                                                         renderInput={(p) => <TextField sx={{ width: "10rem" }} {...p} label="Dia da Semana" />}
                                                         options={['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']}
                                                         size="small"
                                                     />
                                                     -
                                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                        <TimePicker
-                                                            label="Escolha a Hora"
-                                                            slotProps={{
-                                                                textField: {
-                                                                    InputProps: {
-                                                                        endAdornment: null,
-                                                                    },
-                                                                    size: "small",
-                                                                },
+                                                        <ControleInputHora
+                                                            hora={valor.horaInic}
+                                                            setHora={(novaHora) => {
+                                                                setDadosTemporarios((prev) => ({
+                                                                    ...prev,
+                                                                    [secao]: {
+                                                                        ...prev[secao],
+                                                                        data: prev[secao].data.map((item, i) =>
+                                                                            i === index ? { ...item, horaInic: dayjs(novaHora).format("HH:mm") } : item
+                                                                        )
+                                                                    }
+                                                                }));
                                                             }}
-                                                            ampm={false}
-                                                            value={dayjs(valor.horaInic, "HH:mm")}
                                                         />
                                                         às
-                                                        <TimePicker
-                                                            label="Escolha a Hora"
-                                                            slotProps={{
-                                                                textField: {
-                                                                    InputProps: {
-                                                                        endAdornment: null,
-                                                                    },
-                                                                    size: "small",
-                                                                },
+                                                        <ControleInputHora
+                                                            hora={valor.horaFim}
+                                                            setHora={(novaHora) => {
+                                                                setDadosTemporarios((prev) => ({
+                                                                    ...prev,
+                                                                    [secao]: {
+                                                                        ...prev[secao],
+                                                                        data: prev[secao].data.map((item, i) =>
+                                                                            i === index ? { ...item, horaFim: dayjs(novaHora).format("HH:mm") } : item
+                                                                        )
+                                                                    }
+                                                                }));
                                                             }}
-                                                            ampm={false}
-                                                            value={dayjs(valor.horaFim, "HH:mm")}
                                                         />
                                                     </LocalizationProvider>
                                                 </Box>
                                             ) : (
-                                                <Typography>{valor.dia} - {valor.horaInic} às {valor.horaFim}</Typography>
+                                                <Typography>● {valor.dia} - {valor.horaInic} às {valor.horaFim}</Typography>
                                             )}
 
                                             {modoEdicao && (
-                                                <Box>
-                                                    <IconButton onClick={() => removerItem(secao, index)}>
-                                                        <Delete fontSize="small" />
-                                                    </IconButton>
-                                                </Box>
+                                                <IconButton onClick={(e) => { e.stopPropagation(); removerItem(secao, index) }}>
+                                                    <Delete fontSize="small" />
+                                                </IconButton>
                                             )}
                                         </Box>
                                     ))
@@ -207,7 +231,15 @@ export default function ConfigSistema() {
                                         type="number"
                                         value={secaoData.data}
                                         disabled={!modoEdicao}
-                                        onChange={(e) => atualizarValorUnico(secao, parseFloat(e.target.value))}
+                                        onChange={(e) => {
+                                            setDadosTemporarios((prev) => ({
+                                                ...prev,
+                                                [secao]: {
+                                                    ...prev[secao],
+                                                    data: e.target.value
+                                                }
+                                            }))
+                                        }}
                                     />
                                 )}
                             </Box>
@@ -217,5 +249,6 @@ export default function ConfigSistema() {
             </Box>
             <ToastContainer />
         </Box>
+
     );
 }
