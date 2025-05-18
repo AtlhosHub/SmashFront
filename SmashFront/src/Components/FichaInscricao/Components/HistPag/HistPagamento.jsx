@@ -14,8 +14,13 @@ export const HistPagamento = ({ userInfo }) => {
 
     const headCells = [
         {
+            name: "dataVencimento",
+            description: "Data de Vencimento",
+            align: "center"
+        },
+        {
             name: "dataEnvio",
-            description: "Data de Envio",
+            description: "Data de Pagamento",
             align: "center"
         },
         {
@@ -113,7 +118,7 @@ export const HistPagamento = ({ userInfo }) => {
                 <DefaultButton
                     label="Limpar"
                     variant="outlined"
-                    onClick={() => selectedMonth(undefined)}
+                    onClick={() => setSelectedMonth(null)}
                 />
             </Box>
             <DefaultTable
