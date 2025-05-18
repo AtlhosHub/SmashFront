@@ -72,7 +72,8 @@ export const HistPagamento = ({ userInfo }) => {
                     valor: aluno.valor != null
                         ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                         : null,
-                    valorColor: aluno.desconto ? '#286DA8' : 'inherit'
+                    valorColor: aluno.desconto ? '#286DA8' : 'inherit',
+                    dataVencimento: aluno.dataVencimento ? dateFormater(aluno.dataVencimento) : null,
                 }));
 
                 setRowData(formattedData);
@@ -86,6 +87,7 @@ export const HistPagamento = ({ userInfo }) => {
             <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                        label="Data de Pagamento"
                         size="small"
                         value={selectedMonth}
                         format="MMMM/YYYY"
