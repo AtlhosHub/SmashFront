@@ -102,10 +102,10 @@ export const FichaInscricao = () => {
                 navigate("/alunos", { state: { userCreated: true } })
             })
             .catch((error) => {
-                if (error.status === 409) {
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao cadastrar aluno, por favor contacte os admnistradores.");
+                } else {
                     toasterMsg("error", error.response.data);
-                } else if (error.status === 500) {
-                    toasterMsg("error", "Aconteceu um erro! Por favor consulto um admnistrador");
                 }
             });
     }
@@ -128,8 +128,11 @@ export const FichaInscricao = () => {
                 setOperacao("visualizacao")
             })
             .catch((error) => {
-                toasterMsg("error", "Algum erro aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao editar aluno:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao editar aluno, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
             })
     }
 
@@ -144,8 +147,11 @@ export const FichaInscricao = () => {
                 navigate("/alunos", { state: { userCreated: true } })
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir aluno:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao deletar aluno, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
             })
     }
 
@@ -164,8 +170,11 @@ export const FichaInscricao = () => {
                 setMaiorIdade(hoje.diff(nascimento, 'year') >= 18);
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao exibir aluno:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao listar alunos, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
             })
             .finally(() => {
 

@@ -100,7 +100,13 @@ export const CadastrarInteressado = () => {
       .then((response) => {
         setUserInfo(response.data)
       })
-      .catch((error) => console.error("Erro ao buscar dados:", error));
+      .catch((error) => {
+        if (error.message.status === 500) {
+          toasterMsg("error", "Erro ao cadastrar interessado, por favor contacte os admnistradores.");
+        } else {
+          toasterMsg("error", error.response.data);
+        }
+      });
   }
 
   const editarPessoaInteressada = () => {
@@ -115,8 +121,11 @@ export const CadastrarInteressado = () => {
         setOperacao("visualizacao")
       })
       .catch((error) => {
-        toasterMsg("error", "Algum erro aconteceu, por favor contacte os admnistradores.")
-        console.error("Erro ao editar Perfil de Pessoa Interessada:", error)
+        if (error.message.status === 500) {
+          toasterMsg("error", "Erro ao editar interessado, por favor contacte os admnistradores.");
+        } else {
+          toasterMsg("error", error.response.data);
+        }
       })
   }
 
@@ -132,8 +141,11 @@ export const CadastrarInteressado = () => {
         navigate("/listaEspera", { state: { userDeleted: true } })
       })
       .catch((error) => {
-        toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-        console.error("Erro ao excluir Perfil de Pessoa Interessada:", error)
+        if (error.message.status === 500) {
+          toasterMsg("error", "Erro ao deletar interessado, por favor contacte os admnistradores.");
+        } else {
+          toasterMsg("error", error.response.data);
+        }
       })
   }
 

@@ -88,8 +88,11 @@ export const ListaAlunos = () => {
                 handleApplyFilter();
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir aluno:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao deletar aluno, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
             })
     }
 
@@ -144,12 +147,11 @@ export const ListaAlunos = () => {
                 setRowData(formattedData);
             })
             .catch((error) => {
-                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
-                    sessionStorage.clear();
-                    navigate("/", { state: { tokenLogout: true } });
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao listar alunos, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
                 }
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao buscar os alunos:", error)
             })
     }
 

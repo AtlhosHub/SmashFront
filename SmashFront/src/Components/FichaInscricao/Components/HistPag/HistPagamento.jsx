@@ -78,7 +78,13 @@ export const HistPagamento = ({ userInfo }) => {
 
                 setRowData(formattedData);
             })
-            .catch((error) => console.error("Erro ao buscar dados:", error));
+            .catch((error) => {
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao listar mensalidades, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
+            });
     }
 
     return (
