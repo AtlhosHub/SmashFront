@@ -18,24 +18,34 @@ import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 
 export const TelaLogin = () => {
-    const locate = useLocation();
-    const [usuario, setUsuario] = useState('');
-    const [senha, setSenha] = useState('');
-
-    const [mostrarSenha, setMostrarSenha] = useState(false);
-
+    const location = useLocation();
     const navigate = useNavigate();
 
+    const [usuario, setUsuario] = useState();
+    const [senha, setSenha] = useState();
+
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [erroLogin, setErroLogin] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+
     useEffect(() => {
-        if (locate.state?.tokenLogout) {
+        if (location.state?.tokenLogout) {
             toasterMsg("error", "Sessão expirada, por favor faça o login novamente.")
         }
-    }, [locate])
+    }, [location])
 
     const handleLogin = (e) => {
-        // Aplica o fetch pra validar o login
         e.preventDefault();
 
+        if(isProcessing) return;
+
+        if (!usuario?.trim() && !senha?.trim()) {
+            setErroLogin(true);
+            toasterMsg("error", "Por favor preencha todos os campos antes de enviar!")
+            return;
+        }
+
+        setIsProcessing(true);
         api.post('usuarios/login', {
             email: usuario,
             senha: senha
@@ -52,13 +62,21 @@ export const TelaLogin = () => {
 
                     setTimeout(() => {
                         navigate('/telaInicial');
-                    }, 1000);
+                    }, 500);
                 } else {
                     throw new Error('Ops! Ocorreu um erro interno.');
                 }
             })
             .catch(error => {
-                toasterMsg("error", 'Ops! Ocorreu um erro interno.');
+                if (error.response.status === 401) {
+                    toasterMsg("error", `${error.response.data.message}.`)
+                    setErroLogin(true);
+                } else {
+                    toasterMsg("error", "Erro interno! Por favor contacte os desenvolvedores.")
+                }
+            })
+            .finally(() => {
+                setIsProcessing(false);
             });
     }
 
@@ -69,8 +87,8 @@ export const TelaLogin = () => {
                     backgroundImage: `url(${bgImg})`,
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'start',
-                    backgroundSize: '900px', // largura x altura fixa
-                    height: '99vh',
+                    backgroundSize: '900px',
+                    height: '100vh',
                     width: '100vw',
                     display: 'flex',
                     flexDirection: 'row',
@@ -90,7 +108,7 @@ export const TelaLogin = () => {
                         SMASH
                     </Typography>
                     <Typography sx={{ fontSize: "25px", fontFamily: "'Poppins', sans-serif ", fontWeight: "400", lineHeight: "30px" }}>
-                        Sistema de Financiamento Financeiro
+                        Sistema de Gerenciamento Financeiro
                     </Typography>
                 </Box>
                 <Box sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -99,12 +117,14 @@ export const TelaLogin = () => {
                         withButton={true}
                         onClickButton={handleLogin}
                         buttonLabel="Entrar"
+                        isProcessing={isProcessing}
                     >
                         <img src={logo} style={{ maxHeight: "auto", maxWidth: "150px", marginInline: "auto" }} />
                         <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                             <TextField
                                 value={usuario}
-                                onChange={(e) => setUsuario(e.target.value)}
+                                error={erroLogin}
+                                onChange={(e) => { setUsuario(e.target.value); setErroLogin(false) }}
                                 label="Email"
                                 variant="outlined"
                                 size="small"
@@ -118,7 +138,8 @@ export const TelaLogin = () => {
                             <Box sx={{ alignItems: "end", display: "flex", flexDirection: "column", gap: "0.9rem" }}>
                                 <TextField
                                     value={senha}
-                                    onChange={(e) => setSenha(e.target.value)}
+                                    error={erroLogin}
+                                    onChange={(e) => { setSenha(e.target.value); setErroLogin(false) }}
                                     label="Senha"
                                     type={mostrarSenha ? "text" : "password"}
                                     variant="outlined"

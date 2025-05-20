@@ -26,7 +26,7 @@ export const TelaEsqueciSenha = () => {
                 backgroundImage: `url(${bgImg2})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'right 10%',
-                backgroundSize: '800px',
+                backgroundSize: '900px',
                 height: '100vh',
                 width: '100vw',
                 display: 'flex',

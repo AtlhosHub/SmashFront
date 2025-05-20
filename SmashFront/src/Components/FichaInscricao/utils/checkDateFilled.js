@@ -1,9 +1,7 @@
 import dayjs from "dayjs";
 
 export const checkDateFilled = (date, setMaiorIdade) => {
-    console.log("checkDateFilled", date);
-
-    if (String(date?.year()).length !== 4) {
+    if (String(dayjs(date)?.year()).length !== 4) {
         setMaiorIdade(true);
         return false;
     };

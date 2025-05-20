@@ -46,7 +46,7 @@ export const DefaultHeader = () => {
           position="static"
           sx={{
             backgroundColor: "#286DA8 !important",
-            zIndex: 10
+            position: "relative"
           }}
         >
           <Toolbar>
