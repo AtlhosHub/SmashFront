@@ -88,19 +88,6 @@ export const FormResponsavel = ({
         setRespConcluido(condicionalLiberacao);
     }, [userInfo, cpfValido]);
 
-    const navigate = useNavigate();
-    useEffect(() => {
-        const validateToken = async () => {
-            const isValid = await tokenValidationFunction();
-            if (!isValid) {
-                navigate("/", { state: { tokenLogout: true } });
-            }
-        };
-
-        validateToken();
-    }, []);
-
-
     return (
         <FormControl
             sx={{

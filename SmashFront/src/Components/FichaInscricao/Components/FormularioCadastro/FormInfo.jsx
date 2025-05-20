@@ -12,7 +12,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HelpIcon from "@mui/icons-material/Help";
 import dayjs from "dayjs";
-import { use, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { formatarTelefone } from "../../utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +37,7 @@ export const FormInfo = ({
     const navigate = useNavigate();
 
     const [botaoLiberado, setBotaoLiberado] = useState(false);
+    const dataPreenchida = useRef(false);
 
     const nomeSocialText =
         "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
@@ -102,7 +103,7 @@ export const FormInfo = ({
     };
 
     useEffect(() => {
-        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && checkDateFilled(userInfo.dataNascimento, setMaiorIdade);
+        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && dataPreenchida.current;
 
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         const emailValido = regexEmail.test(userInfo.email);
@@ -117,17 +118,6 @@ export const FormInfo = ({
     useEffect(() => {
         if (!isDeficiente) setUserInfo({ ...userInfo, deficiencia: null })
     }, [isDeficiente])
-
-    useEffect(() => {
-        const validateToken = async () => {
-            const isValid = await tokenValidationFunction();
-            if (!isValid) {
-                navigate("/", { state: { tokenLogout: true } });
-            }
-        };
-
-        validateToken();
-    }, []);
 
     return (
         <FormControl
@@ -244,8 +234,8 @@ export const FormInfo = ({
                                     format="DD/MM/YYYY"
                                     maxDate={dayjs()}
                                     onChange={(newValue) => {
-                                        checkDateFilled(newValue, setMaiorIdade) && isMaiorDeIdade(newValue);
-                                        setUserInfo({ ...userInfo, dataNascimento: newValue });
+                                        checkDateFilled(newValue, setMaiorIdade, dataPreenchida) && isMaiorDeIdade(newValue);
+                                        setUserInfo({ ...userInfo, dataNascimento: dayjs(newValue).format("YYYY-MM-DD") });
                                     }}
                                     slotProps={{
                                         textField: { size: "small", placeholder: "DD/MM/AAAA" },

@@ -20,7 +20,6 @@ export const TelaEsqueciSenha2 = () => {
             alert('As senhas não coincidem. Por favor, tente novamente.');
             return;
         }
-        console.log('Nova senha:', novaSenha);
         alert('Senha alterada com sucesso!');
     };
 

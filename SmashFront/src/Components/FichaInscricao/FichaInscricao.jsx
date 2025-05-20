@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
-import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
 import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
 import { useEffect, useState } from "react";
 import { FormInfo } from "./Components/FormularioCadastro/FormInfo";
@@ -17,7 +16,6 @@ import { HistPagamento } from "./Components/HistPag/HistPagamento";
 import { toasterMsg } from "../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
 import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
-import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
 import { defaultUser } from "./utils/defaultUser";
 import { setTabName } from "./utils/setTabName";
 
@@ -106,8 +104,8 @@ export const FichaInscricao = () => {
             .catch((error) => {
                 if (error.status === 409) {
                     toasterMsg("error", error.response.data);
-                } else if (error.status === 400) {
-                    toasterMsg("error", error.response.data);
+                } else if (error.status === 500) {
+                    toasterMsg("error", "Aconteceu um erro! Por favor consulto um admnistrador");
                 }
             });
     }
@@ -177,18 +175,6 @@ export const FichaInscricao = () => {
     useEffect(() => {
         if (operacao !== "cadastro") listarDadosAluno(location.state?.idAluno)
     }, []);
-
-    useEffect(() => {
-        const validateToken = async () => {
-            const isValid = await tokenValidationFunction();
-            if (!isValid) {
-                navigate("/", { state: { tokenLogout: true } });
-            }
-        };
-
-        validateToken();
-    }, []);
-
 
     return (
         <>

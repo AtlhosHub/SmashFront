@@ -125,15 +125,6 @@ export const CadastroUsuarios = () => {
     }
 
     useEffect(() => {
-        const validateToken = async () => {
-            const isValid = await tokenValidationFunction();
-            if (!isValid) {
-                navigate("/", { state: { tokenLogout: true } });
-            }
-        };
-
-        validateToken();
-
         if (operacao !== "cadastro") {
             listarDadosUsuario(location.state?.idUsuario)
         }

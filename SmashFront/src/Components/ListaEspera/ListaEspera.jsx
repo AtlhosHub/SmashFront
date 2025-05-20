@@ -78,7 +78,6 @@ export const ListaEspera = () => {
       },
     })
       .then((res) => {
-        console.log("Resposta da API:", res.data);
         const formattedData = res.data.map((item) => ({
           ...item,
           dataInteresse: item.dataInteresse ? dateFormater(item.dataInteresse) : null,

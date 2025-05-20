@@ -85,21 +85,9 @@ export const CadastrarInteressado = () => {
   };
 
   useEffect(() => {
-    const validateToken = async () => {
-      const isValid = await tokenValidationFunction();
-      if (!isValid) {
-        navigate("/", { state: { tokenLogout: true } });
-      }
-    };
-
-    validateToken();
-
     if (operacao !== "cadastro") {
       listarDadosPessoaInteressada(location.state?.idPessoa);
     }
-
-    console.log(location.state?.operacao)
-    console.log(operacao, "----")
   }, []);
 
   const listarDadosPessoaInteressada = (id) => {

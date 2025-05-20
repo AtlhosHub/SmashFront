@@ -15,7 +15,6 @@ export const TelaEsqueciSenha = () => {
     const navigate = useNavigate();
 
     const handleRecuperarSenha = () => {
-        console.log('E-mail para recuperação:', email);
         alert('Se o e-mail estiver cadastrado, você receberá um link para recuperação de senha.');
         navigate('/esqueciSenha2');
     };
