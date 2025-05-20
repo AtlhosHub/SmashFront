@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
-import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
 import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
 import { useEffect, useState } from "react";
 import { FormInfo } from "./Components/FormularioCadastro/FormInfo";
@@ -17,75 +16,28 @@ import { HistPagamento } from "./Components/HistPag/HistPagamento";
 import { toasterMsg } from "../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
 import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
-import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
+import { defaultUser } from "./utils/defaultUser";
+import { setTabName } from "./utils/setTabName";
 
 export const FichaInscricao = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    //Variaveis de Controle Tela
+    const [userInfo, setUserInfo] = useState(defaultUser);
+
     const [tabAtiva, setTabAtiva] = useState("info");
+    const [operacao, setOperacao] = useState(location.state?.operacao || "cadastro");
+
     const [infoConcluido, setInfoConcluido] = useState(false);
     const [enderecoConcluido, setEnderecoConcluido] = useState(false);
     const [respConcluido, setRespConcluido] = useState(false);
-    const [operacao, setOperacao] = useState(location.state?.operacao || "cadastro");
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
-    // Variaveis de Controle Form
     const [maiorIdade, setMaiorIdade] = useState(true);
+    const [isDeficiente, setIsDeficiente] = useState(false)
     const [cpfValidoAluno, setCpfValidoAluno] = useState(false);
     const [cpfValidoResp, setCpfValidoResp] = useState(false);
     const [cepValido, setCepValido] = useState(false);
-    const [isDeficiente, setIsDeficiente] = useState(false)
-
-    const definirNomePagina = () => {
-        if (operacao === "cadastro") return "Adicionar Ficha de Inscrição"
-        if (operacao === "visualizacao") return "Visualizar Ficha de Inscrição"
-        return "Editar Ficha de Inscrição"
-    }
-
-    const [userInfo, setUserInfo] = useState({
-        nome: null,
-        email: null,
-        dataNascimento: null,
-        cpf: null,
-        rg: null,
-        nomeSocial: null,
-        genero: null,
-        celular: null,
-        nacionalidade: null,
-        naturalidade: null,
-        telefone: null,
-        profissao: null,
-        ativo: true,
-        temAtestado: true,
-        deficiencia: null,
-        autorizado: null,
-        dataInclusao: null,
-        endereco: {
-            logradouro: null,
-            numLogradouro: null,
-            bairro: null,
-            cidade: null,
-            cep: null
-        },
-        responsaveis: [
-            {
-                nome: null,
-                nomeSocial: null,
-                cpf: null,
-                rg: null,
-                profissao: null,
-                genero: null,
-                telefone: null,
-                celular: null,
-                email: null
-            }
-        ],
-        usuarioInclusao: {
-            id: sessionStorage.getItem("idUsuario"),
-        }
-    });
 
     const rotas = [
         {
@@ -94,7 +46,7 @@ export const FichaInscricao = () => {
         },
         {
             route: "/fichaInscricao",
-            description: definirNomePagina()
+            description: setTabName(operacao)
         }
     ]
 
@@ -149,14 +101,14 @@ export const FichaInscricao = () => {
             .then(() => {
                 navigate("/alunos", { state: { userCreated: true } })
             })
-            .catch((error) => console.error("Erro ao adicionar aluno:", error));
+            .catch((error) => {
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao cadastrar aluno, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
+            });
     }
-
-    useEffect(() => {
-        if (operacao !== "cadastro") {
-            listarDadosAluno(location.state?.idAluno);
-        }
-    }, []);
 
     const editarAluno = () => {
         const dadosAluno = { ...userInfo };
@@ -176,8 +128,11 @@ export const FichaInscricao = () => {
                 setOperacao("visualizacao")
             })
             .catch((error) => {
-                toasterMsg("error", "Algum erro aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao editar aluno:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao editar aluno, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
             })
     }
 
@@ -192,8 +147,11 @@ export const FichaInscricao = () => {
                 navigate("/alunos", { state: { userCreated: true } })
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir aluno:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao deletar aluno, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
             })
     }
 
@@ -212,22 +170,20 @@ export const FichaInscricao = () => {
                 setMaiorIdade(hoje.diff(nascimento, 'year') >= 18);
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao exibir aluno:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao listar alunos, por favor contacte os admnistradores.");
+                } else {
+                    toasterMsg("error", error.response.data);
+                }
+            })
+            .finally(() => {
+
             })
     }
 
     useEffect(() => {
-        const validateToken = async () => {
-            const isValid = await tokenValidationFunction();
-            if (!isValid) {
-                navigate("/", { state: { tokenLogout: true } });
-            }
-        };
-
-        validateToken();
+        if (operacao !== "cadastro") listarDadosAluno(location.state?.idAluno)
     }, []);
-
 
     return (
         <>

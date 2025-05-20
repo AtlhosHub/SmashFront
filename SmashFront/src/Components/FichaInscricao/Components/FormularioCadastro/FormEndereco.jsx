@@ -75,7 +75,6 @@ export const FormEndereco = ({
     };
 
     const handleCepChange = async (e) => {
-        console.log(cepValido);
         const valorFormatado = formatarCep(e.target.value);
 
         const cepNumerico = valorFormatado?.replace(/\D/g, "");
@@ -123,19 +122,6 @@ export const FormEndereco = ({
             setCepValido(false);
         }
     };
-
-    const navigate = useNavigate();
-    useEffect(() => {
-        const validateToken = async () => {
-            const isValid = await tokenValidationFunction();
-            if (!isValid) {
-                navigate("/", { state: { tokenLogout: true } });
-            }
-        };
-
-        validateToken();
-    }, []);
-
 
     return (
         <FormControl

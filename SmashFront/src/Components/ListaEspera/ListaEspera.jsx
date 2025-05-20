@@ -55,9 +55,9 @@ export const ListaEspera = () => {
   useEffect(() => {
     handleApplyFilter();
 
-    if(location.state?.userDeleted) {
+    if (location.state?.userDeleted) {
       toasterMsg("success", "Perfil de Pessoa Interessada excluído com sucesso!")
-    } else if(location.state?.saved) {
+    } else if (location.state?.saved) {
       toasterMsg("success", "Perfil de Pessoa Interessada criado com sucesso!")
     }
   }, []);
@@ -78,7 +78,6 @@ export const ListaEspera = () => {
       },
     })
       .then((res) => {
-        console.log("Resposta da API:", res.data);
         const formattedData = res.data.map((item) => ({
           ...item,
           dataInteresse: item.dataInteresse ? dateFormater(item.dataInteresse) : null,
@@ -87,11 +86,11 @@ export const ListaEspera = () => {
         setRowData(formattedData);
       })
       .catch((error) => {
-        if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
-          sessionStorage.clear();
-          navigate("/", { state: { tokenLogout: true } });
+        if (error.message.status === 500) {
+          toasterMsg("error", "Erro ao listar interessados, por favor contacte os admnistradores.");
+        } else {
+          toasterMsg("error", error.response.data);
         }
-        console.error("Erro ao buscar lista de espera:", error)
       });
   };
 
@@ -109,8 +108,11 @@ export const ListaEspera = () => {
         setRowToDelete(undefined);
       })
       .catch((error) => {
-        toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-        console.error("Erro ao excluir Pessoa Interessada:", error)
+        if (error.message.status === 500) {
+          toasterMsg("error", "Erro ao deletar interessado, por favor contacte os admnistradores.");
+        } else {
+          toasterMsg("error", error.response.data);
+        }
       })
   }
 

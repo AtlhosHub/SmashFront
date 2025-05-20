@@ -1,19 +1,20 @@
 import { Logout, Person } from "@mui/icons-material";
 import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import { getUserInicial, getUserName } from "../../FichaInscricao/utils/getUserData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { validateToken } from "../../../utils/validateToken";
 
 export const DefaultHeader = () => {
   const { pathname } = useLocation();
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl);
 
   const sairSessao = () => {
     sessionStorage.clear();
-    navigation("/");
+    navigate("/");
   }
 
   const definirTitulo = () => {
@@ -39,6 +40,10 @@ export const DefaultHeader = () => {
     }
   };
 
+  useEffect(() => {
+    validateToken(navigate);
+  }, [pathname])
+
   return (
     <Box sx={{flex: 1}}>
       <Box>
@@ -46,7 +51,7 @@ export const DefaultHeader = () => {
           position="static"
           sx={{
             backgroundColor: "#286DA8 !important",
-            zIndex: 10
+            position: "relative"
           }}
         >
           <Toolbar>

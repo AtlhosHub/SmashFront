@@ -1,17 +1,14 @@
-import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
 import { Box } from "@mui/material";
 import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
 import { FormInfoUsuario } from "./Components/FormularioCadastroUsuario/FormInfoUsuario";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../../provider/apiProvider"
 import { useLocation, useNavigate } from "react-router-dom";
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { ToastContainer } from "react-toastify";
-import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
-import { useEffect } from "react";
 import { toasterMsg } from "../../utils/toasterService";
 import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 export const CadastroUsuarios = () => {
     const navigate = useNavigate();
@@ -70,11 +67,16 @@ export const CadastroUsuarios = () => {
             .then(() => {
                 navigate("/controleUsuarios", { state: { userCreated: true } })
             })
-            .catch((error) => console.error("Erro ao adicionar usuário: ", error));
+            .catch((error) => {
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao cadastrar usuário, por favor contacte os admnistradores.")
+                } else {
+                    toasterMsg("error", error.response.message)
+                }
+            });
     }
 
     const deletarUsuario = () => {
-        // Deletar Usuário
         api.delete(`usuarios/${location.state?.idUsuario}`, {
             headers: {
                 "Content-Type": "application/json",
@@ -86,8 +88,11 @@ export const CadastroUsuarios = () => {
                 navigate("/controleUsuarios", { state: { userDeleted: true } })
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir Usuário:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao deletar usuário, por favor contacte os admnistradores.")
+                } else {
+                    toasterMsg("error", error.message.data)
+                }
             })
     }
 
@@ -103,8 +108,11 @@ export const CadastroUsuarios = () => {
                 setOperacao("visualizacao")
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao editar Usuário:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao editar usuário, por favor contacte os admnistradores.")
+                } else {
+                    toasterMsg("error", error.message.data)
+                }
             })
     }
 
@@ -119,21 +127,15 @@ export const CadastroUsuarios = () => {
                 setUserInfo(response.data)
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir aluno:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao lista dados do usuário, por favor contacte os admnistradores.")
+                } else {
+                    toasterMsg("error", error.message.data)
+                }
             })
     }
 
     useEffect(() => {
-        const validateToken = async () => {
-            const isValid = await tokenValidationFunction();
-            if (!isValid) {
-                navigate("/", { state: { tokenLogout: true } });
-            }
-        };
-
-        validateToken();
-
         if (operacao !== "cadastro") {
             listarDadosUsuario(location.state?.idUsuario)
         }

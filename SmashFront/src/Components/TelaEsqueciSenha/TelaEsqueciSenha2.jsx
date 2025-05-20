@@ -20,7 +20,6 @@ export const TelaEsqueciSenha2 = () => {
             alert('As senhas não coincidem. Por favor, tente novamente.');
             return;
         }
-        console.log('Nova senha:', novaSenha);
         alert('Senha alterada com sucesso!');
     };
 
@@ -30,7 +29,7 @@ export const TelaEsqueciSenha2 = () => {
                 backgroundImage: `url(${bgImg2})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'right 10%',
-                backgroundSize: '800px',
+                backgroundSize: '900px',
                 height: '100vh',
                 width: '100vw',
                 display: 'flex',

@@ -1,7 +1,7 @@
-import { Box } from "@mui/material"
+import { Box, CircularProgress } from "@mui/material"
 import { DefaultButton } from "../DefaultButton/DefaultButton"
 
-export const DefaultLoginCard = ({children, typeButton, withButton, onClickButton, buttonLabel}) => {
+export const DefaultLoginCard = ({ children, typeButton, withButton, onClickButton, buttonLabel, isProcessing }) => {
     return (
         <Box
             sx={{
@@ -18,9 +18,9 @@ export const DefaultLoginCard = ({children, typeButton, withButton, onClickButto
             {children}
             {withButton && (
                 <DefaultButton
-                    label={buttonLabel}
                     variant={typeButton}
                     onClick={onClickButton}
+                    label={isProcessing ? <CircularProgress size="25px" sx={{color: "white", fontSize: 1}} /> : buttonLabel}
                 />
             )}
         </Box>

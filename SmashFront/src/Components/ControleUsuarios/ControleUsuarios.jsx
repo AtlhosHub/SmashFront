@@ -57,16 +57,15 @@ export const ControleUsuarios = () => {
                 setRowData(response.data || [])
             })
             .catch((error) => {
-                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
-                    sessionStorage.clear();
-                    navigate("/", { state: { tokenLogout: true } });
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao listar usuários, por favor contacte os admnistradores.")
+                } else {
+                    toasterMsg("error", error.message.data)
                 }
-                console.error("Erro ao buscar dados:", error)
             });
     }
 
     const handleDelete = (id) => {
-        // Deletar usuário
         api.delete(`usuarios/${id}`, {
             headers: {
                 "Content-Type": "application/json",
@@ -80,8 +79,11 @@ export const ControleUsuarios = () => {
                 listarUsuarios();
             })
             .catch((error) => {
-                toasterMsg("error", "Algum ero aconteceu, por favor contacte os admnistradores.")
-                console.error("Erro ao excluir Usuário:", error)
+                if (error.message.status === 500) {
+                    toasterMsg("error", "Erro ao deletar usuário, por favor contacte os admnistradores.")
+                } else {
+                    toasterMsg("error", error.message.data)
+                }
             })
     }
 

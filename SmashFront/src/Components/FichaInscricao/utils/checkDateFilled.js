@@ -1,18 +1,21 @@
 import dayjs from "dayjs";
 
-export const checkDateFilled = (date, setMaiorIdade) => {
-    console.log("checkDateFilled", date);
-
-    if (String(date?.year()).length !== 4) {
+export const checkDateFilled = (date, setMaiorIdade, dataPreenchida) => {
+    if (String(dayjs(date)?.year()).length !== 4 || !dayjs(date).isValid()) {
         setMaiorIdade(true);
-        return false;
-    };
-    if (!dayjs(date).isValid()) {
-        setMaiorIdade(true);
+        dataPreenchida.current = false;
         return false;
     };
 
-    const dateString = date?.format("DD-MM-YYYY");
+    let dateString;
+
+    if (date instanceof String) {
+        dateString = dayjs(date).format("DD-MM-YYYY");
+    } else {
+        dateString = date.format("DD-MM-YYYY");
+    }
+
     const regex = /^\d{2}-\d{2}-\d{4}/;
+    dataPreenchida.current = regex.test(dateString);
     return regex.test(dateString);
 };

@@ -15,7 +15,6 @@ export const TelaEsqueciSenha = () => {
     const navigate = useNavigate();
 
     const handleRecuperarSenha = () => {
-        console.log('E-mail para recuperação:', email);
         alert('Se o e-mail estiver cadastrado, você receberá um link para recuperação de senha.');
         navigate('/esqueciSenha2');
     };
@@ -26,7 +25,7 @@ export const TelaEsqueciSenha = () => {
                 backgroundImage: `url(${bgImg2})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'right 10%',
-                backgroundSize: '800px',
+                backgroundSize: '900px',
                 height: '100vh',
                 width: '100vw',
                 display: 'flex',
