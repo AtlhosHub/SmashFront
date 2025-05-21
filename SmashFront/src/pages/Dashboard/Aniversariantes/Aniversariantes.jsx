@@ -12,7 +12,7 @@ export const Aniversariantes = ({ alunos }) => {
     const formatarResposta = () => {
         const respostaObj = {};
 
-        alunos.forEach(({ nomeAluno, dataNascimento }) => {
+        alunos.forEach(({ nome, dataNascimento }) => {
             const date = new Date(dataNascimento);
             const dia = String(date.getUTCDate()).padStart(2, '0');
             const mes = date.getUTCMonth(); // 0 a 11
@@ -22,7 +22,7 @@ export const Aniversariantes = ({ alunos }) => {
             if (!respostaObj[nomeMes]) respostaObj[nomeMes] = [];
 
             respostaObj[nomeMes].push({
-                nome: nomeAluno,
+                nome: nome,
                 data: `${dia}/${mesStr}`
             });
         });

@@ -9,29 +9,25 @@ import {
     ResponsiveContainer,
     CartesianGrid,
 } from "recharts";
+import { meses } from "../Aniversariantes/enum";
 
-export const Grafico = () => {
-    const data = [
-        { mes: "Jan", normal: 30, desconto: 15, atraso: 5 },
-        { mes: "Fev", normal: 25, desconto: 20, atraso: 7 },
-        { mes: "Mar", normal: 28, desconto: 18, atraso: 3 },
-        { mes: "Abr", normal: 20, desconto: 22, atraso: 10 },
-        { mes: "Mai", normal: 33, desconto: 15, atraso: 4 },
-        { mes: "Jun", normal: 27, desconto: 20, atraso: 5 },
-        { mes: "Jul", normal: 22, desconto: 25, atraso: 4 },
-        { mes: "Ago", normal: 35, desconto: 12, atraso: 5 },
-        { mes: "Set", normal: 30, desconto: 16, atraso: 6 },
-        { mes: "Out", normal: 29, desconto: 18, atraso: 3 },
-        { mes: "Nov", normal: 26, desconto: 20, atraso: 6 },
-        { mes: "Dez", normal: 24, desconto: 19, atraso: 8 },
-    ];
+export const Grafico = ({ dadosDash }) => {
+    const data = dadosDash.map(row => {
+        const mesIndex = (row.mes.meses || row.mes) - 1;
+        const mesNome = meses[mesIndex];
+        const mesPascal = mesNome.charAt(0).toUpperCase() + mesNome.slice(1).toLowerCase();
+        return {
+            ...row,
+            mes: mesPascal
+        };
+    });
 
     const getTotalTickes = () => {
         let maxTicks = 0;
         let ticksArray = [];
 
         data.forEach((row) => {
-            let totalSum = row.normal + row.desconto + row.atraso;
+            let totalSum = row.pagos + row.pagos_com_desconto + row.atrasados;
             maxTicks = totalSum > maxTicks ? totalSum : maxTicks;
         });
 
@@ -75,7 +71,7 @@ export const Grafico = () => {
                     </Box>
                     <Box sx={{ color: "black", display: "flex" }}>
                         <Square sx={{ color: "#CF3333" }} />
-                        Em Atraso
+                        Atrasado
                     </Box>
                 </Box>
             </Box>
@@ -85,9 +81,9 @@ export const Grafico = () => {
                     <YAxis type="number" ticks={getTotalTickes()} />
                     <Tooltip />
                     <CartesianGrid strokeDasharray="0 0" />
-                    <Bar dataKey="normal" stackId="a" fill="#286DA8" name="Pago Normal" />
-                    <Bar dataKey="desconto" stackId="a" fill="#FFAE03" name="Pago com Desconto" />
-                    <Bar dataKey="atraso" stackId="a" fill="#CF3333" name="Em Atraso" />
+                    <Bar dataKey="pagos" stackId="a" fill="#286DA8" name="Pago" />
+                    <Bar dataKey="pagos_com_desconto" stackId="a" fill="#FFAE03" name="Pago com Desconto" />
+                    <Bar dataKey="atrasados" stackId="a" fill="#CF3333" name="Atrasado" />
                 </BarChart>
             </ResponsiveContainer>
         </Box>
