@@ -5,7 +5,8 @@ import people from "../../assets/Users.png"
 import discount from "../../assets/Discount.png"
 import { Grafico } from "./Grafico/Grafico"
 import { Aniversariantes } from "./Aniversariantes/Aniversariantes"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { api } from "../../provider/apiProvider"
 
 export const Dashboard = () => {
     const rotas = [
@@ -15,6 +16,11 @@ export const Dashboard = () => {
         }
     ]
 
+    const [aniversariantes, setAniversariantes] = useState([])
+    const [qtdAlunosAtivos, setQtdAlunosAtivos] = useState("0")
+    const [qtdPagamentosComDesconto, setQtdPagamentosComDesconto] = useState("0")
+    const [dadosDash, setDadosDash] = useState([])
+
     useEffect(() => {
         document.body.style.backgroundColor = "#F3F9F9";
 
@@ -23,76 +29,89 @@ export const Dashboard = () => {
         };
     }, []);
 
-    const aniversariantes = [
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-04-07T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-06-07T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-07T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-08T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-16T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-        {
-            nomeAluno: "CAROL TEIXEIRA NERES",
-            dataNascimento: "2000-05-14T00:00:00",
-        },
-    ]
+    useEffect(() => {
+        listarAniversariantes();
+        listarQtdAlunosAtivos();
+        listarPagamentosComDesconto();
+        listarDadosDashboard();
+    }, [])
+
+    const listarAniversariantes = () => {
+        api.get("/alunos/aniversariantes", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then((response) => {
+                setAniversariantes(response.data)
+            })
+            .catch((error) => {
+                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                    sessionStorage.clear();
+                    navigate("/", { state: { tokenLogout: true } });
+                }
+                console.error("Erro ao buscar dados:", error)
+            });
+    }
+
+    const listarQtdAlunosAtivos = () => {
+        api.get("/alunos/ativos", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then((response) => {
+                setQtdAlunosAtivos(response.data)
+            })
+            .catch((error) => {
+                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                    sessionStorage.clear();
+                    navigate("/", { state: { tokenLogout: true } });
+                }
+                console.error("Erro ao buscar dados:", error)
+            });
+    }
+
+    const listarPagamentosComDesconto = () => {
+        api.get("/mensalidades/qtd-descontos", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then((response) => {
+                setQtdPagamentosComDesconto(response.data);
+            })
+            .catch((error) => {
+                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                    sessionStorage.clear();
+                    navigate("/", { state: { tokenLogout: true } });
+                }
+                console.error("Erro ao buscar dados:", error)
+            });
+    }
+
+    const listarDadosDashboard = () => {
+        api.get("/mensalidades/grafico", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+            }
+        })
+            .then((response) => {
+                setDadosDash(response.data);
+              
+            })
+            .catch((error) => {
+                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                    sessionStorage.clear();
+                    navigate("/", { state: { tokenLogout: true } });
+                }
+                console.error("Erro ao buscar dados:", error)
+            });
+    }
 
     return (
         <Box fontFamily={"Poppins, sans-serif"}
@@ -127,14 +146,14 @@ export const Dashboard = () => {
                     >
                         <Kpi
                             title="total de alunos ativos"
-                            content={"54"}
+                            content={qtdAlunosAtivos}
                             startIcon={
                                 <img src={people} />
                             }
                         />
                         <Kpi
                             title="pagamentos com desconto"
-                            content={"12"}
+                            content={qtdPagamentosComDesconto}
                             startIcon={
                                 <img
                                     src={discount}
@@ -142,7 +161,9 @@ export const Dashboard = () => {
                             }
                         />
                     </Box>
-                    <Grafico />
+                    <Grafico 
+                        dadosDash={dadosDash}
+                    />
                 </Box>
                 <Box
                     sx={{
