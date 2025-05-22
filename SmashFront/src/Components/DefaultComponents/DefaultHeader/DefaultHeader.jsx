@@ -36,7 +36,7 @@ export const DefaultHeader = () => {
       case "/cadastrarListaEspera":
         return "Adicionar Perfil do Interessado"
       default:
-        return "Sistema"
+        return "Configurações do Sistema"
     }
   };
 
