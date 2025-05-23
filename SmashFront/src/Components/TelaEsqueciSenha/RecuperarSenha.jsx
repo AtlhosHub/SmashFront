@@ -1,27 +1,59 @@
-import {
-    Box,
-    Link,
-    TextField,
-    Typography,
-    Button
-} from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Box, Link, TextField, Typography, Button } from '@mui/material';
 import bgImg2 from '../../assets/loginBg2.png';
-import { useState } from "react";
-import { DefaultLoginCard } from "../DefaultComponents/DefaultLoginCard/DefaultLoginCard";
-import { useNavigate } from "react-router-dom";
+import { DefaultLoginCard } from '../DefaultComponents/DefaultLoginCard/DefaultLoginCard';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { api } from "../../provider/apiProvider"
+import { toasterMsg } from "../../utils/toasterService";
+import { ToastContainer } from "react-toastify"
 
-export const TelaEsqueciSenha2 = () => {
-    const [novaSenha, setNovaSenha] = useState('');
-    const [confirmarSenha, setConfirmarSenha] = useState('');
-    const navigate = useNavigate();
+export const RecuperarSenha = () => {
+  const [novaSenha, setNovaSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [validToken, setValidToken] = useState(false);
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const token = params.get('token');
 
-    const handleAlterarSenha = () => {
-        if (novaSenha !== confirmarSenha) {
-            alert('As senhas não coincidem. Por favor, tente novamente.');
-            return;
-        }
-        alert('Senha alterada com sucesso!');
-    };
+  useEffect(() => {
+    if (!token) {
+      toasterMsg('error', 'Token ausente.');
+      navigate('/');
+      return;
+    }
+
+    api
+      .get(`/resetPassword/validate`, { params: { token } })
+      .then(() => setValidToken(true))
+      .catch(() => {
+        toasterMsg('error', 'Link inválido ou expirado.');
+        navigate('/');
+      });
+  }, [token, navigate]);
+
+  const handleAlterarSenha = () => {
+    if (novaSenha !== confirmarSenha) {
+      toasterMsg('error', 'As senhas não coincidem.');
+      return;
+    }
+    api
+      .post('/resetPassword/reset-password', { token, novaSenha }, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(() => {
+        toasterMsg('success', 'Senha alterada com sucesso!');
+        navigate('/');
+      })
+      .catch(err => {
+        const msg = err.response?.data?.error || 'Erro ao alterar senha';
+        toasterMsg('error', msg);
+      });
+  };
+
+  if (!validToken) {
+    return null;
+  }
 
     return (
         <Box
@@ -82,7 +114,7 @@ export const TelaEsqueciSenha2 = () => {
                         </Typography>
                         <TextField
                             value={novaSenha}
-                            onChange={(e) => setNovaSenha(e.target.value)}
+                            onChange={e => setNovaSenha(e.target.value)}
                             label="Senha"
                             type="password"
                             variant="outlined"
@@ -99,8 +131,8 @@ export const TelaEsqueciSenha2 = () => {
                             }}
                         />
                         <TextField
-                            value={confirmarSenha}
-                            onChange={(e) => setConfirmarSenha(e.target.value)}
+                             value={confirmarSenha}
+                            onChange={e => setConfirmarSenha(e.target.value)}
                             label="Confirmar Senha"
                             type="password"
                             variant="outlined"
@@ -135,7 +167,7 @@ export const TelaEsqueciSenha2 = () => {
                             Alterar
                         </Button>
                         <Link
-                            onClick={() => navigate('/telaInicial')}
+                            onClick={() => navigate('/')}
                             sx={{
                                 textAlign: "center",
                                 color: "#0D3C53",
@@ -187,8 +219,9 @@ export const TelaEsqueciSenha2 = () => {
                     Sistema de Gerenciamento Financeiro
                 </Typography>
             </Box>
+        <ToastContainer />
         </Box>
     );
 };
 
-export default TelaEsqueciSenha2;
+export default RecuperarSenha;
