@@ -150,7 +150,7 @@ export const FichaInscricao = () => {
             }
         })
             .then(() => {
-                navigate("/alunos", { state: { userCreated: true } })
+                navigate("/alunos", { state: { userDeleted: true } })
             })
             .catch((error) => {
                 if (error.message.status === 500) {

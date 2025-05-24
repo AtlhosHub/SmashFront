@@ -92,11 +92,22 @@ export const ControleUsuarios = () => {
     }, [])
 
     useEffect(() => {
-        if (location.state?.userCreated) {
-            toasterMsg("success", "Usuário cadastrado com sucesso!")
-        }
-        if (location.state?.userDeleted) {
-            toasterMsg("success", "Usuário deletado com sucesso!")
+        const flags = [
+            { key: 'userCreated', type: 'success', msg: 'Usuário cadastrado com sucesso!' },
+            { key: 'userDeleted', type: 'success', msg: 'Usuário deletado com sucesso!' },
+        ];
+
+        let newState = { ...location.state };
+
+        flags.forEach(({ key, type, msg }) => {
+            if (location.state?.[key]) {
+                toasterMsg(type, msg);
+                delete newState[key];
+            }
+        });
+
+        if (JSON.stringify(newState) !== JSON.stringify(location.state)) {
+            window.history.replaceState(newState, document.title);
         }
     }, [location])
 

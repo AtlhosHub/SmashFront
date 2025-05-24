@@ -156,8 +156,22 @@ export const ListaAlunos = () => {
     }
 
     useEffect(() => {
-        if (location.state?.userCreated) {
-            toasterMsg("success", "Aluno cadastrado com sucesso!")
+        const flags = [
+            { key: 'userCreated', type: 'success', msg: 'Aluno cadastrado com sucesso!' },
+            { key: 'userDeleted', type: 'success', msg: 'Aluno deletado com sucesso!' },
+        ];
+
+        let newState = { ...location.state };
+
+        flags.forEach(({ key, type, msg }) => {
+            if (location.state?.[key]) {
+                toasterMsg(type, msg);
+                delete newState[key];
+            }
+        });
+
+        if (JSON.stringify(newState) !== JSON.stringify(location.state)) {
+            window.history.replaceState(newState, document.title);
         }
     }, [location])
 
