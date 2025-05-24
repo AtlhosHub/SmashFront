@@ -13,8 +13,6 @@ import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import HelpIcon from "@mui/icons-material/Help";
 import { formatarTelefone } from "../../utils/validacaoForm";
-import { useNavigate } from "react-router-dom";
-import { tokenValidationFunction } from "../../../../utils/tokenValidationFunction";
 
 export const FormResponsavel = ({
     userInfo,
@@ -502,6 +500,7 @@ export const FormResponsavel = ({
                                 ? setIsModalDeleteOpen(true)
                                 : setTabAtiva("ende");
                         }}
+                        color={operacao === "visualizacao" ? "red" : ""}
                     />
                     <DefaultButton
                         variant="contained"

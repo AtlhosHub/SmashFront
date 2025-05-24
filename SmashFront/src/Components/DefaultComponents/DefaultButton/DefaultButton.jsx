@@ -7,6 +7,7 @@ export const DefaultButton = ({
     endIcon,
     onClick,
     label,
+    color = "#286DA8",
     ...props
 }) => {
     return (
@@ -17,9 +18,9 @@ export const DefaultButton = ({
             sx={{
                 height: 35,
                 paddingInline: "25px",
-                backgroundColor: variant === "outlined" ? "transparent" : "#286DA8",
-                border: variant === "outlined" ? "1px solid #286DA8" : 0,
-                color: variant === "outlined" ? "#286DA8" : "white",
+                backgroundColor: variant === "outlined" ? "transparent" : {color},
+                color: variant === "outlined" ? {color} : "white",
+                border: variant === "outlined" ? `1px solid ${color}` : 0,
                 fontWeight: 600,
                 borderRadius: "8px"
             }}

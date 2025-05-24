@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { DefaultTable } from "../../../DefaultComponents/DefaultTable/DefaultTable";
 import { dateFormater } from "../../../../utils/dateFormaterService";
 import { api } from "../../../../provider/apiProvider";
+import { toasterMsg } from "../../../../utils/toasterService";
 
 
 export const HistPagamento = ({ userInfo }) => {

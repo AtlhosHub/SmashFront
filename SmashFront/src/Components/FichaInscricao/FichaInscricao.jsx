@@ -23,7 +23,10 @@ export const FichaInscricao = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [userInfo, setUserInfo] = useState(defaultUser);
+    const [userInfo, setUserInfo] = useState({
+        ...defaultUser,
+        usuarioInclusao: { id: sessionStorage.getItem("idUsuario") }
+    });
 
     const [tabAtiva, setTabAtiva] = useState("info");
     const [operacao, setOperacao] = useState(location.state?.operacao || "cadastro");
@@ -111,7 +114,10 @@ export const FichaInscricao = () => {
     }
 
     const editarAluno = () => {
-        const dadosAluno = { ...userInfo };
+        const dadosAluno = {
+            ...userInfo,
+            usuarioInclusao: { id: sessionStorage.getItem("idUsuario") }
+        };
 
         if (maiorIdade) {
             dadosAluno.responsaveis = [];

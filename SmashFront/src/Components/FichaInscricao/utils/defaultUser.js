@@ -35,8 +35,5 @@ export const defaultUser = {
             celular: null,
             email: null
         }
-    ],
-    usuarioInclusao: {
-        id: sessionStorage.getItem("idUsuario"),
-    }
+    ]
 }

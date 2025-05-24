@@ -3,8 +3,6 @@ import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultB
 import { useEffect, useRef, useState } from "react";
 import { toasterMsg } from "../../../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { tokenValidationFunction } from "../../../../utils/tokenValidationFunction";
 
 export const FormEndereco = ({
     userInfo,
@@ -21,6 +19,7 @@ export const FormEndereco = ({
     handleSalvar
 }) => {
     const [botaoLiberado, setBotaoLiberado] = useState(false);
+    const [numLogDisabled, setNumLogDisabled] = useState(true);
     const messagemErroCEP = useRef();
 
     const isVisualizacao = operacao === "visualizacao";
@@ -56,13 +55,6 @@ export const FormEndereco = ({
         }
     };
 
-    useEffect(() => {
-        const camposPreenchidos = (operacao === "cadastro" ? cepValido : true) && userInfo.endereco.numLogradouro;
-
-        setBotaoLiberado(camposPreenchidos);
-        setEnderecoConcluido(camposPreenchidos);
-    }, [userInfo, cepValido]);
-
     const formatarCep = (valor) => {
         if (!valor) return;
         const apenasNumeros = valor.replace(/\D/g, "").slice(0, 8);
@@ -75,7 +67,7 @@ export const FormEndereco = ({
     };
 
     const handleCepChange = async (e) => {
-        const valorFormatado = formatarCep(e.target.value);
+        const valorFormatado = formatarCep(e?.target?.value || e);
 
         const cepNumerico = valorFormatado?.replace(/\D/g, "");
 
@@ -91,6 +83,8 @@ export const FormEndereco = ({
             },
         }));
 
+        setNumLogDisabled(true);
+
         if (cepNumerico?.length === 8) {
             try {
                 const response = await fetch(
@@ -104,15 +98,17 @@ export const FormEndereco = ({
                         endereco: {
                             cep: data.cep,
                             logradouro: data.logradouro,
-                            numLogradouro: null,
+                            numLogradouro: operacao !== "cadastro" ? userInfo.endereco.numLogradouro : null,
                             bairro: data.bairro,
                             cidade: data.localidade,
                             estado: data.uf,
                         },
                     });
                     setCepValido(true);
+                    setNumLogDisabled(false);
                 } else {
                     toasterMsg("error", "CEP não encontrado!");
+                    setNumLogDisabled(true);
                     setCepValido(false);
                 }
             } catch (error) {
@@ -122,6 +118,17 @@ export const FormEndereco = ({
             setCepValido(false);
         }
     };
+
+    useEffect(() => {
+        const camposPreenchidos = (operacao === "cadastro" ? cepValido : true) && userInfo.endereco.numLogradouro;
+
+        setBotaoLiberado(camposPreenchidos);
+        setEnderecoConcluido(camposPreenchidos);
+    }, [userInfo, cepValido]);
+
+    useEffect(() => {
+        handleCepChange(userInfo.endereco.cep);
+    }, [])
 
     return (
         <FormControl
@@ -172,7 +179,7 @@ export const FormEndereco = ({
                                     borderRadius: "8px",
                                 },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)",
                                 },
                                 width: "100%",
                             }}
@@ -185,7 +192,7 @@ export const FormEndereco = ({
                         </label>
                         <TextField
                             required
-                            disabled={operacao === "visualizacao"}
+                            disabled={operacao === "visualizacao" || numLogDisabled}
                             value={userInfo.endereco.numLogradouro}
                             onChange={(e) =>
                                 setUserInfo({
@@ -202,6 +209,11 @@ export const FormEndereco = ({
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
                                 },
+                                ...(operacao != "visualizacao" && {
+                                    "& .MuiInputBase-root.Mui-disabled": {
+                                        backgroundColor: "#00000015",
+                                    }
+                                }),
                                 '& .MuiInputBase-input.Mui-disabled': {
                                     "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
                                 },
@@ -223,8 +235,12 @@ export const FormEndereco = ({
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
-                                    backgroundColor: "#00000015",
                                 },
+                                ...(operacao != "visualizacao" && {
+                                    "& .MuiInputBase-root.Mui-disabled": {
+                                        backgroundColor: "#00000015",
+                                    }
+                                }),
                                 width: "100%",
                             }}
                         />
@@ -242,8 +258,12 @@ export const FormEndereco = ({
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
-                                    backgroundColor: "#00000015",
                                 },
+                                ...(operacao != "visualizacao" && {
+                                    "& .MuiInputBase-root.Mui-disabled": {
+                                        backgroundColor: "#00000015",
+                                    }
+                                }),
                                 width: "100%",
                             }}
                         />
@@ -261,8 +281,12 @@ export const FormEndereco = ({
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
-                                    backgroundColor: "#00000015",
                                 },
+                                ...(operacao != "visualizacao" && {
+                                    "& .MuiInputBase-root.Mui-disabled": {
+                                        backgroundColor: "#00000015",
+                                    }
+                                }),
                                 width: "100%",
                             }}
                         />
@@ -280,8 +304,12 @@ export const FormEndereco = ({
                             sx={{
                                 "& .MuiInputBase-root": {
                                     borderRadius: "8px",
-                                    backgroundColor: "#00000015",
                                 },
+                                ...(operacao != "visualizacao" && {
+                                    "& .MuiInputBase-root.Mui-disabled": {
+                                        backgroundColor: "#00000015",
+                                    }
+                                }),
                                 width: "100%",
                             }}
                         />
@@ -316,6 +344,7 @@ export const FormEndereco = ({
                                 ? setIsModalDeleteOpen(true)
                                 : setTabAtiva("info");
                         }}
+                        color={operacao === "visualizacao" ? "red" : ""}
                     />
                     <DefaultButton
                         variant="contained"

@@ -16,7 +16,6 @@ import { useEffect, useRef, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { formatarTelefone } from "../../utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
-import { tokenValidationFunction } from "../../../../utils/tokenValidationFunction";
 import { checkDateFilled } from "../../utils/checkDateFilled";
 
 export const FormInfo = ({
@@ -74,18 +73,13 @@ export const FormInfo = ({
 
     const [cpfUser, setCpfUser] = useState(formatCPF(userInfo?.cpf));
 
-    useEffect(() => {
-        const cpf = userInfo?.cpf || "";
-        setCpfUser(formatCPF(cpf));
-        setCpfValido(validarCpf(cpf));
-    }, [userInfo?.cpf]);
-
     const isMaiorDeIdade = (dataNascimento) => {
-        const hoje = new Date();
-        const nascimento = dayjs(dataNascimento).toDate();
-        let idade = hoje.getFullYear() - nascimento.getFullYear();
-        const mes = hoje.getMonth() - nascimento.getMonth();
-        const dia = hoje.getDate() - nascimento.getDate();
+        console.log(dataNascimento)
+        const hoje = dayjs();
+        const nascimento = dayjs(dataNascimento);
+        let idade = hoje.year() - nascimento.year();
+        const mes = hoje.month() - nascimento.month();
+        const dia = hoje.date() - nascimento.date();
 
         if (mes < 0 || (mes === 0 && dia < 0)) {
             idade--;
@@ -103,7 +97,13 @@ export const FormInfo = ({
     };
 
     useEffect(() => {
-        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && dataPreenchida.current;
+        const cpf = userInfo?.cpf || "";
+        setCpfUser(formatCPF(cpf));
+        setCpfValido(validarCpf(cpf));
+    }, [userInfo?.cpf]);
+
+    useEffect(() => {
+        const camposPreenchidos = userInfo.nome && userInfo.rg && cpfValido && checkDateFilled(userInfo?.dataNascimento, setMaiorIdade, dataPreenchida);
 
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         const emailValido = regexEmail.test(userInfo.email);
@@ -721,6 +721,7 @@ export const FormInfo = ({
                         ? () => setIsModalDeleteOpen(true)
                         : () => navigate("/alunos")
                     }
+                    color={operacao === "visualizacao" ? "red" : ""}
                 />
                 <DefaultButton
                     variant="contained"
