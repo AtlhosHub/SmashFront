@@ -8,7 +8,7 @@ import { ListaEspera } from './Components/ListaEspera/ListaEspera';
 import { ControleUsuarios } from './Components/ControleUsuarios/ControleUsuarios';
 import { CadastroUsuarios } from './Components/ControleUsuarios/CadastroUsuarios';
 import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha/TelaEsqueciSenha';
-import { TelaEsqueciSenha2 } from './Components/TelaEsqueciSenha/TelaEsqueciSenha2';
+import { RecuperarSenha } from './Components/TelaEsqueciSenha/RecuperarSenha';
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
 import { CadastrarInteressado } from './Components/ListaEspera/CadastrarInteressado';
@@ -19,7 +19,7 @@ function App() {
     <Routes>
       <Route path="/" element={<TelaLogin />} />
       <Route path="/esqueciSenha" element={<TelaEsqueciSenha />} />
-      <Route path="/esqueciSenha2" element={<TelaEsqueciSenha2 />} />
+      <Route path="/recuperarSenha" element={<RecuperarSenha />} />
       <Route element={<DefaultHeader />}>
         <Route path="/telaInicial" element={<TelaInicial />} />
         <Route path="/alunos" element={<ListaAlunos />} />
