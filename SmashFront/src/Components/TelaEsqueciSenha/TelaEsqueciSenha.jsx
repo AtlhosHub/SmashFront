@@ -1,23 +1,42 @@
-import {
-    Box,
-    Link,
-    TextField,
-    Typography,
-    Button
-} from "@mui/material";
+import { Box, Link, TextField, Typography, Button } from "@mui/material";
 import bgImg2 from '../../assets/loginBg2.png';
 import { useState } from "react";
 import { DefaultLoginCard } from "../DefaultComponents/DefaultLoginCard/DefaultLoginCard";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../provider/apiProvider"
+import { toasterMsg } from "../../utils/toasterService";
+import { ToastContainer } from "react-toastify"
+
 
 export const TelaEsqueciSenha = () => {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
     const handleRecuperarSenha = () => {
-        alert('Se o e-mail estiver cadastrado, você receberá um link para recuperação de senha.');
-        navigate('/esqueciSenha2');
-    };
+     if (!email.trim()) {
+    toasterMsg('error', 'Por favor, preencha o campo de e-mail.');
+    return;
+    }
+    api.post('/resetPassword/request-reset', { email }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+       .then(res => {
+        if (res.status === 204) {
+        toasterMsg('error', 'E-mail não está cadastrado.');
+        } else {
+        toasterMsg('success', 'E-mail enviado com sucesso!');
+        }
+        })
+      .catch((error) => {
+        if (error.response?.status === 500) {
+          toasterMsg('error', 'Erro ao enviar e-mail, por favor contacte os administradores.');
+        } else {
+          toasterMsg('error', error.response?.data?.error || 'Erro ao enviar e-mail');
+        }
+      });
+  };
 
     return (
         <Box
@@ -76,25 +95,27 @@ export const TelaEsqueciSenha = () => {
                         >
                             Informe seu email e enviaremos um link para a recuperação da sua senha.
                         </Typography>
+                         <Box>
+                        <label>
+                            Email <span style={{ color: "red" }}>*</span>
+                        </label>
                         <TextField
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            label="E-mail:"
-                            placeholder=""
                             variant="outlined"
                             size="small"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
+                            InputLabelProps={{ shrink: true }}
                             sx={{
-                                width: "100%",
-                                marginTop: "5rem",
-                                marginBottom: "3rem",
-                                '& .MuiInputBase-root': {
-                                    borderRadius: '8px',
+                                "& .MuiInputBase-root": {
+                                    borderRadius: "8px"
                                 },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                },
+                                width: "100%",
                             }}
                         />
+                    </Box>
                         <Button
                             variant="contained"
                             onClick={handleRecuperarSenha}
@@ -166,8 +187,9 @@ export const TelaEsqueciSenha = () => {
                     Sistema de Gerenciamento Financeiro
                 </Typography>
             </Box>
+           <ToastContainer />
         </Box>
     );
 };
 
-export default TelaEsqueciSenha;    
+export default TelaEsqueciSenha;
