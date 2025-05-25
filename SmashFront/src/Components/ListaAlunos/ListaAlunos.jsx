@@ -26,6 +26,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
 import dayjs from "dayjs";
+import { ModalStatus } from "../Modals/ModalStatus/ModalStatus";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -40,10 +41,21 @@ export const ListaAlunos = () => {
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [isModalStatusOpen, setIsModalStatusOpen] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState(dayjs().startOf('month'));
     const [selectedMonthRange, setSelectedMonthRange] = useState({
         start: dayjs().startOf('month'),
         end: dayjs().endOf('month')
+    });
+    const [statusInfoModal, setStatusInfoModal] = useState({
+        idAluno: null,
+        idMensalidade: null,
+        dataVencimento: null,
+        nome: null,
+        status: null,
+        dataPagamento: null,
+        formaPagamento: null,
+        valor: null,
     });
 
     const headCells = [
@@ -137,6 +149,7 @@ export const ListaAlunos = () => {
             .then((res) => {
                 const formattedData = res.data.map((aluno) => ({
                     ...aluno,
+                    dataEnvioOriginal: aluno.dataEnvio,
                     dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
                     valor: aluno.valor != null
                         ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -258,6 +271,23 @@ export const ListaAlunos = () => {
                                     }
                                 },
                                 {
+                                    label: 'Alterar Status',
+                                    icon: <VisibilityIcon fontSize="small" />,
+                                    onClickFunc: () => {
+                                        setIsModalStatusOpen(true);
+                                        setStatusInfoModal({
+                                            idAluno: row.id,
+                                            idMensalidade: row.idMensalidade,
+                                            dataVencimento: row.dataVencimento,
+                                            nome: row.nome,
+                                            status: row.status,
+                                            dataPagamento: row.dataEnvioOriginal,
+                                            formaPagamento: row.formaPagamento,
+                                            valor: row.valor,
+                                        })
+                                    }
+                                },
+                                {
                                     label: 'Editar',
                                     icon: <EditIcon fontSize="small" />,
                                     onClickFunc: () => {
@@ -289,6 +319,12 @@ export const ListaAlunos = () => {
                 isModalOpen={isModalDeleteOpen}
                 setIsModalOpen={setIsModalDeleteOpen}
                 handleDelete={() => handleDeletarAluno(idToDelete.current)}
+            />
+            <ModalStatus
+                isModalOpen={isModalStatusOpen}
+                setIsModalOpen={setIsModalStatusOpen}
+                statusInfoModal={statusInfoModal}
+                handleApplyFilter={handleApplyFilter}
             />
             <ToastContainer />
         </>
