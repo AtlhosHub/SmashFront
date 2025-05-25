@@ -16,7 +16,7 @@ import { Box } from "@mui/material";
 export const TelaInicial = () => {
     const cards = [
         {
-            label: "MENSALIDADE",
+            label: "MENSALIDADES",
             sidebarcolor: "#FFAE03",
             rota: "/alunos",
             icon: <img src={mensalidadeIcon} width={70} height={70} alt="Mensalidade" />

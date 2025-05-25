@@ -45,7 +45,7 @@ export const FichaInscricao = () => {
     const rotas = [
         {
             route: "/alunos",
-            description: "Lista de Alunos"
+            description: "Mensalidade"
         },
         {
             route: "/fichaInscricao",
@@ -150,7 +150,7 @@ export const FichaInscricao = () => {
             }
         })
             .then(() => {
-                navigate("/alunos", { state: { userCreated: true } })
+                navigate("/alunos", { state: { userDeleted: true } })
             })
             .catch((error) => {
                 if (error.message.status === 500) {

@@ -55,10 +55,22 @@ export const ListaEspera = () => {
   useEffect(() => {
     handleApplyFilter();
 
-    if (location.state?.userDeleted) {
-      toasterMsg("success", "Perfil de Pessoa Interessada excluído com sucesso!")
-    } else if (location.state?.saved) {
-      toasterMsg("success", "Perfil de Pessoa Interessada criado com sucesso!")
+    const flags = [
+      { key: 'userDeleted', type: 'success', msg: 'Perfil de Pessoa Interessada excluído com sucesso!' },
+      { key: 'saved', type: 'success', msg: 'Perfil de Pessoa Interessada criado com sucesso!' },
+    ];
+
+    let newState = { ...location.state };
+
+    flags.forEach(({ key, type, msg }) => {
+      if (location.state?.[key]) {
+        toasterMsg(type, msg);
+        delete newState[key];
+      }
+    });
+
+    if (JSON.stringify(newState) !== JSON.stringify(location.state)) {
+      window.history.replaceState(newState, document.title);
     }
   }, []);
 
