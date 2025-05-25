@@ -1,4 +1,3 @@
-import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader"
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
 import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
@@ -17,7 +16,7 @@ import {
     Search
 } from "@mui/icons-material"
 import { useLocation, useNavigate } from "react-router-dom";
-import { getMonthRange } from "../DefaultComponents/DefaultFilter/utils/getMonthRange";
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { dateFormater } from "../../utils/dateFormaterService";
 import { toasterMsg } from "../../utils/toasterService";
 import ActionMenu from "../iconButton/iconButton";
@@ -272,7 +271,7 @@ export const ListaAlunos = () => {
                                 },
                                 {
                                     label: 'Alterar Status',
-                                    icon: <VisibilityIcon fontSize="small" />,
+                                    icon: <CurrencyExchangeIcon fontSize="small" />,
                                     onClickFunc: () => {
                                         setIsModalStatusOpen(true);
                                         setStatusInfoModal({
