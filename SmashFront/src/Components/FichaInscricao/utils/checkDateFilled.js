@@ -11,8 +11,6 @@ export const checkDateFilled = (date, setMaiorIdade, dataPreenchida) => {
 
     let dateString;
 
-    console.log(date)
-
     if (dayjs.isDayjs(date)) {
         dateString = date.format("DD-MM-YYYY");
     } else {

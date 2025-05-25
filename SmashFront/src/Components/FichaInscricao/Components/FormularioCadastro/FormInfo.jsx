@@ -74,7 +74,6 @@ export const FormInfo = ({
     const [cpfUser, setCpfUser] = useState(formatCPF(userInfo?.cpf));
 
     const isMaiorDeIdade = (dataNascimento) => {
-        console.log(dataNascimento)
         const hoje = dayjs();
         const nascimento = dayjs(dataNascimento);
         let idade = hoje.year() - nascimento.year();

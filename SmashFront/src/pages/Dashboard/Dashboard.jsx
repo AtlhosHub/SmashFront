@@ -102,7 +102,7 @@ export const Dashboard = () => {
         })
             .then((response) => {
                 setDadosDash(response.data);
-              
+                console.log(response.data)
             })
             .catch((error) => {
                 if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {

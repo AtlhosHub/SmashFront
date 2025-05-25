@@ -1,5 +1,5 @@
 import { Square } from "@mui/icons-material";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
     BarChart,
     Bar,
@@ -45,7 +45,6 @@ export const Grafico = ({ dadosDash }) => {
                 border: "1px solid black",
                 borderRadius: "10px",
                 pr: "2.5rem",
-
             }}
         >
             <Box
@@ -75,17 +74,34 @@ export const Grafico = ({ dadosDash }) => {
                     </Box>
                 </Box>
             </Box>
-            <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={data}>
-                    <XAxis dataKey="mes" />
-                    <YAxis type="number" ticks={getTotalTickes()} />
-                    <Tooltip />
-                    <CartesianGrid strokeDasharray="0 0" />
-                    <Bar dataKey="pagos" stackId="a" fill="#286DA8" name="Pago" />
-                    <Bar dataKey="pagos_com_desconto" stackId="a" fill="#FFAE03" name="Pago com Desconto" />
-                    <Bar dataKey="atrasados" stackId="a" fill="#CF3333" name="Atrasado" />
-                </BarChart>
-            </ResponsiveContainer>
+            {dadosDash.length > 0 ?
+                <ResponsiveContainer width="100%" height={302}>
+                    <BarChart data={data}>
+                        <XAxis dataKey="mes" />
+                        <YAxis type="number" ticks={getTotalTickes()} />
+                        <Tooltip />
+                        <CartesianGrid strokeDasharray="0 0" />
+                        <Bar dataKey="pagos" stackId="a" fill="#286DA8" name="Pago" />
+                        <Bar dataKey="pagos_com_desconto" stackId="a" fill="#FFAE03" name="Pago com Desconto" />
+                        <Bar dataKey="atrasados" stackId="a" fill="#CF3333" name="Atrasado" />
+                    </BarChart>
+                </ResponsiveContainer>
+                :
+                <Box sx={{ height: 302, ml: "2.5rem", pb: "1.2rem", boxSizing: "border-box" }}>
+                    <Box
+                        sx={{
+                            background: "rgb(243, 249, 249)",
+                            border: "2px solid #bfbfbf",
+                            borderRadius: 2,
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+                        <Typography sx={{ fontWeight: 600, color: "#c7c7c7" }}>NENHUM DADO DISPONÍVEL</Typography>
+                    </Box>
+                </Box>
+            }
         </Box>
     );
 };
