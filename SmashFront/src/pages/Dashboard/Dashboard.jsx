@@ -152,7 +152,7 @@ export const Dashboard = () => {
                             }
                         />
                         <Kpi
-                            title="pagamentos com desconto"
+                            title="pagamentos com desconto (ano)"
                             content={qtdPagamentosComDesconto}
                             startIcon={
                                 <img
