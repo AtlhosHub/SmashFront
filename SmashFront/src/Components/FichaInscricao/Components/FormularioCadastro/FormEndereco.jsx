@@ -67,7 +67,7 @@ export const FormEndereco = ({
     };
 
     const handleCepChange = async (e) => {
-        const valorFormatado = formatarCep(e?.target?.value || e);
+        const valorFormatado = formatarCep(e?.target?.value || "");
 
         const cepNumerico = valorFormatado?.replace(/\D/g, "");
 
