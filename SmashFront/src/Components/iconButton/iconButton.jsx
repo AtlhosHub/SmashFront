@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Tooltip } from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 
@@ -58,14 +59,34 @@ export default function ActionMenu({ menuOptions }) {
         }}
       >
         {menuOptions.map((opt) => (
-          <MenuItem key={opt.label} onClick={() => handleItemClick(opt)}>
-            <ListItemIcon sx={{ color: '#2C2C2C' }}>
-              {opt.icon}
-            </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ style: { color: '#2C2C2C' } }}>
-              {opt.label}
-            </ListItemText>
-          </MenuItem>
+          <Tooltip
+            title={opt.disabled && opt?.disabledLabel}
+            arrow
+            slotProps={{
+              popper: {
+                modifiers: [{ name: 'offset', options: { offset: [0, -14] } }]
+              },
+            }}>
+            <MenuItem
+              key={opt.label}
+              onClick={() => !opt.disabled && handleItemClick(opt)}
+              sx={{
+                ...(opt.disabled && {
+                  opacity: 0.5,
+                  ":hover": {
+                    backgroundColor: 'white',
+                    cursor: "default"
+                  }
+                }),
+              }}>
+              <ListItemIcon sx={{ color: '#2C2C2C' }}>
+                {opt.icon}
+              </ListItemIcon>
+              <ListItemText primaryTypographyProps={{ style: { color: '#2C2C2C' } }}>
+                {opt.label}
+              </ListItemText>
+            </MenuItem>
+          </Tooltip>
         ))}
       </Menu>
     </div>

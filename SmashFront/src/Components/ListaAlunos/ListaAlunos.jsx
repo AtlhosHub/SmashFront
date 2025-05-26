@@ -263,12 +263,16 @@ export const ListaAlunos = () => {
                     <DefaultTable
                         headCells={headCells}
                         rowData={rowData.map(row => ({
-                            ...row, valor: (
+                            ...row, valor: row.desconto ? (
                                 <Tooltip title="Pago com desconto" arrow placement="top">
                                     <span style={{ color: row.valorColor }}>
                                         {row.valor}
                                     </span>
                                 </Tooltip>
+                            ) : (
+                                <span style={{ color: row.valorColor }}>
+                                    {row.valor}
+                                </span>
                             ),
                             acoes: <ActionMenu menuOptions={[
                                 {
@@ -298,7 +302,9 @@ export const ListaAlunos = () => {
                                             formaPagamento: row.formaPagamento,
                                             valor: row.valor,
                                         })
-                                    }
+                                    },
+                                    disabled: row.manual === false,
+                                    disabledLabel: "Não é possível alterar o status de Pagamentos Automáticos",
                                 },
                                 {
                                     label: 'Editar',

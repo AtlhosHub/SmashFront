@@ -106,7 +106,6 @@ export const DefaultTable = ({
                                 <TableCell
                                     sx={{
                                         display: !!row.acoes ? "table-cell" : "none",
-                                        // width: "100%",
                                         justifyContent: "center"
                                     }}
                                 >
