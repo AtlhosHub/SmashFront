@@ -24,7 +24,7 @@ export const DefaultHeader = () => {
       case "/dashboard":
         return "Dashboard"
       case "/alunos":
-        return "Mensalidade"
+        return "Mensalidades"
       case "/listaEspera":
         return "Lista de Espera"
       case "/controleUsuarios":
@@ -45,7 +45,7 @@ export const DefaultHeader = () => {
   }, [pathname])
 
   return (
-    <Box sx={{flex: 1}}>
+    <Box sx={{ flex: 1 }}>
       <Box>
         <AppBar
           position="static"
@@ -139,7 +139,16 @@ export const DefaultHeader = () => {
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          <MenuItem onClick={() => setAnchorEl(null)} disabled>
+          <MenuItem
+            onClick={() => {
+              navigate("/cadastroUsuarios", {
+                state: {
+                  idUsuario: sessionStorage.getItem("idUsuario"),
+                  operacao: "visualizacao"
+                }
+              })
+            }}
+          >
             <ListItemIcon>
               <Person fontSize="small" />
             </ListItemIcon>

@@ -19,6 +19,7 @@ export const CadastroUsuarios = () => {
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
     const [userInfo, setUserInfo] = useState({
+        ...(operacao !== "cadastro" && { id: location.state?.idUsuario }),
         nome: null,
         email: null,
         dataNascimento: null,
@@ -35,6 +36,12 @@ export const CadastroUsuarios = () => {
         }
     });
 
+    const definirNomePagina = () => {
+        if (operacao === "cadastro") return "Adicionar Usuário"
+        if (operacao === "visualizacao") return "Visualizar Perfil de Usuário"
+        return "Editar Perfil de Usuário"
+    }
+
     const rotas = [
         {
             route: "/controleUsuarios",
@@ -42,7 +49,7 @@ export const CadastroUsuarios = () => {
         },
         {
             route: "/cadastroUsuarios",
-            description: "Cadastrar Usuário",
+            description: definirNomePagina(),
         },
     ];
 
