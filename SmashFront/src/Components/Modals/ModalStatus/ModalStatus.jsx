@@ -2,7 +2,7 @@ import { use, useEffect, useState } from "react";
 import { DefaultButton } from "../../DefaultComponents/DefaultButton/DefaultButton"
 import { DefaultModal } from "../../DefaultComponents/DefaultModal/DefaultModal"
 import { Autocomplete, Box, TextField, Typography } from "@mui/material"
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, DateTimePicker, LocalizationProvider, renderTimeViewClock } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
 import { api } from "../../../provider/apiProvider";
@@ -64,34 +64,34 @@ export const ModalStatus = ({
         setStatusInfo({ ...statusInfo, valorPago: valorDecimal });
     };
 
-useEffect(() => {
-    if (isModalOpen) {
-        const statusSelecionado = statusPagArray.find(
-            s => s.label === statusInfoModal.status?.toUpperCase()
-        );
-        setStatusPagamento(statusSelecionado || null);
+    useEffect(() => {
+        if (isModalOpen) {
+            const statusSelecionado = statusPagArray.find(
+                s => s.label === statusInfoModal.status?.toUpperCase()
+            );
+            setStatusPagamento(statusSelecionado || null);
 
-        // Preenche a forma de pagamento
-        const formaSelecionada = formaPagArray.find(
-            f => f.label === statusInfoModal.formaPagamento?.toUpperCase()
-        );
-        setFormaPagamento(formaSelecionada || null);
+            // Preenche a forma de pagamento
+            const formaSelecionada = formaPagArray.find(
+                f => f.label === statusInfoModal.formaPagamento?.toUpperCase()
+            );
+            setFormaPagamento(formaSelecionada || null);
 
-        // Preenche data de pagamento
-        setDataPagamento(statusInfoModal.dataPagamento ? dayjs(statusInfoModal.dataPagamento) : null);
+            // Preenche data de pagamento
+            setDataPagamento(statusInfoModal.dataPagamento ? dayjs(statusInfoModal.dataPagamento) : null);
 
-        // Preenche valor pago formatado
-        if (statusInfoModal.valor) {
-            const valorFormatado = (statusInfoModal.valor).toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-            });
-            setValorPago(valorFormatado);
-        } else {
-            setValorPago("");
+            // Preenche valor pago formatado
+            if (statusInfoModal.valor) {
+                const valorFormatado = (statusInfoModal.valor).toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                });
+                setValorPago(valorFormatado);
+            } else {
+                setValorPago("");
+            }
         }
-    }
-}, [isModalOpen, statusInfoModal]);
+    }, [isModalOpen, statusInfoModal]);
 
     useEffect(() => {
         if (statusPagamento?.label !== "PAGO") {
@@ -223,32 +223,57 @@ useEffect(() => {
                         <strong>Data do Pagamento</strong><br />
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
+                        <DateTimePicker
                             value={dataPagamento ? dayjs(dataPagamento) : null}
                             onChange={(newValue) => {
                                 setDataPagamento(newValue);
                                 setStatusInfo({
                                     ...statusInfo,
-                                    dataPagamento: newValue ? dayjs(newValue).format("YYYY-MM-DDTHH:mm:ss") : null
+                                    dataPagamento: newValue
+                                        ? dayjs(newValue).format('YYYY-MM-DDTHH:mm:ss')
+                                        : null,
                                 });
                             }}
-                            format="DD/MM/YYYY"
+                            ampm={false} // Formato 24h
+                            format="DD/MM/YYYY HH:mm"
+                            viewRenderers={{
+                                hours: renderTimeViewClock,
+                                minutes: renderTimeViewClock,
+                                seconds: renderTimeViewClock,
+                            }}
                             slotProps={{
                                 textField: {
-                                    size: "small",
+                                    size: 'small',
                                     fullWidth: true,
-                                    placeholder: "DD/MM/AAAA"
+                                    placeholder: 'DD/MM/AAAA HH:mm',
+                                },
+                                layout: {
+                                    sx: {
+                                        '& .MuiClock-root': {
+                                            marginBottom: 0,
+                                        },
+                                        '& .MuiClock': {
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: 'auto',
+                                        },
+                                        '& .MuiPickersLayout-contentWrapper': {
+                                            alignItems: 'center',
+                                        },
+                                    },
                                 },
                             }}
-                            disabled={statusPagamento?.label !== "PAGO"}
-                            sx={{
-                                "& .MuiInputBase-root.Mui-disabled": {
-                                    backgroundColor: "#00000015",
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
-                                },
-                            }}
+                        disabled={statusPagamento?.label !== 'PAGO'}
+                        sx={{
+                            '& .MuiInputBase-root.Mui-disabled': {
+                                backgroundColor: '#00000015',
+                            },
+                            '& .MuiInputBase-input.Mui-disabled': {
+                                '-webkit-text-fill-color': 'rgba(0, 0, 0, 0.60)',
+                            },
+                        }}
+                            
+                            
                         />
                     </LocalizationProvider>
                 </Box>

@@ -58,13 +58,27 @@ export default function ActionMenu({ menuOptions }) {
           'aria-labelledby': 'action-menu-button',
         }}
       >
-        {menuOptions.map((opt) => {
-          const menuItem = (
+        {menuOptions.map((opt) => (
+          <Tooltip
+            title={opt.disabled && opt?.disabledLabel}
+            arrow
+            slotProps={{
+              popper: {
+                modifiers: [{ name: 'offset', options: { offset: [0, -14] } }]
+              },
+            }}>
             <MenuItem
               key={opt.label}
               onClick={() => !opt.disabled && handleItemClick(opt)}
-              disabled={!!opt.disabled}
-            >
+              sx={{
+                ...(opt.disabled && {
+                  opacity: 0.5,
+                  ":hover": {
+                    backgroundColor: 'white',
+                    cursor: "default"
+                  }
+                }),
+              }}>
               <ListItemIcon sx={{ color: '#2C2C2C' }}>
                 {opt.icon}
               </ListItemIcon>
@@ -72,19 +86,8 @@ export default function ActionMenu({ menuOptions }) {
                 {opt.label}
               </ListItemText>
             </MenuItem>
-          );
-
-          if (opt.label === 'Excluir' && opt.disabled) {
-            return (
-              <Tooltip key={opt.label} title="Você não pode excluir seu próprio usuário" placement="bottom" arrow>
-                <span>{menuItem}</span>
-              </Tooltip>
-            );
-          }
-
-          return React.cloneElement(menuItem, { key: opt.label });
-        })}
-
+          </Tooltip>
+        ))}
       </Menu>
     </div>
   );
