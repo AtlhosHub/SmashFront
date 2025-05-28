@@ -38,7 +38,7 @@ export const FormInfoUsuario = ({
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
     const [erroConfirmarSenha, setErroCofirmarSenha] = useState(false);
-    const [idUsuario, setIdUsuario] = useState(userInfo.id);
+    const [idUsuario, setIdUsuario] = useState(null);
     const idUsuarioLogado = sessionStorage.getItem("idUsuario");
 
     useEffect(() => {
