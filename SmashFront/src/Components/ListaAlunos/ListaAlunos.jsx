@@ -303,7 +303,7 @@ export const ListaAlunos = () => {
                                             valor: row.valor,
                                         })
                                     },
-                                    disabled: row.manual === false,
+                                    disabled: row.automatico === true,
                                     disabledLabel: "Não é possível alterar o status de Pagamentos Automáticos",
                                 },
                                 {
