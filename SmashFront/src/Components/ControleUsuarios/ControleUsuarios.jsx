@@ -41,7 +41,7 @@ export const ControleUsuarios = () => {
     const headCells = [
         {
             name: "nome",
-            description: "Nome do Usuário Admnistrador",
+            description: "Nome do Usuário Administrador",
             cellWidth: "100%"
         }
     ]
@@ -194,7 +194,8 @@ export const ControleUsuarios = () => {
                                     onClickFunc: () => {
                                         setRowToDelete(row.id);
                                         setIsModalDeleteOpen(true);
-                                    }
+                                    },
+                                     disabled: String(row.id) === String(sessionStorage.getItem("idUsuario")) 
                                 }
                             ]}
                             />

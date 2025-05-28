@@ -45,7 +45,7 @@ export const FichaInscricao = () => {
     const rotas = [
         {
             route: "/alunos",
-            description: "Mensalidade"
+            description: "Mensalidades"
         },
         {
             route: "/fichaInscricao",

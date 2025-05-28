@@ -35,10 +35,11 @@ export const FormInfoUsuario = ({
     const [senha, setSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
     const [botaoLiberado, setBotaoLiberado] = useState(false);
-
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
     const [erroConfirmarSenha, setErroCofirmarSenha] = useState(false);
+    const [idUsuario, setIdUsuario] = useState(null);
+    const idUsuarioLogado = sessionStorage.getItem("idUsuario");
 
     useEffect(() => {
         const camposPreenchidos = userInfo.nome && userInfo.dataNascimento;
@@ -49,6 +50,10 @@ export const FormInfoUsuario = ({
         const condicionalLiberacao = camposPreenchidos && emailValido && validarSenha();
         setBotaoLiberado(condicionalLiberacao);
     }, [userInfo, senha, confirmarSenha]);
+
+    useEffect(() => {
+        setIdUsuario(userInfo.id)
+    }, [])
 
     const validarSenha = () => {
         let senhaIgual = false;
@@ -72,7 +77,7 @@ export const FormInfoUsuario = ({
             setOperacao("edicao");
         } else if (operacao === "cadastro") {
             handleCadastrar()
-        } else{
+        } else {
             handleSalvar();
         }
     }
@@ -302,7 +307,7 @@ export const FormInfoUsuario = ({
                         />
                     </Box>
 
-                    <Box sx={{ display: operacao === "cadastro" ? "block" : "none"}}>
+                    <Box sx={{ display: operacao === "cadastro" ? "block" : "none" }}>
                         <label>
                             Senha  <span style={{ color: "red" }}>*</span>
                         </label>
@@ -343,7 +348,7 @@ export const FormInfoUsuario = ({
                         />
                     </Box>
 
-                    <Box sx={{ display: operacao === "cadastro" ? "block" : "none"}}>
+                    <Box sx={{ display: operacao === "cadastro" ? "block" : "none" }}>
                         <label>
                             Confirmar senha  <span style={{ color: "red" }}>*</span>
                         </label>
@@ -395,18 +400,20 @@ export const FormInfoUsuario = ({
                     flex: 1,
                 }}
             >
-                <DefaultButton
-                    variant="outlined"
-                    label={operacao === "visualizacao"
-                        ? "Excluir"
-                        : "Cancelar"
-                    }
-                    onClick={() =>
-                        operacao === "visualizacao"
-                            ? handleDeletar()
-                            : navigation("/controleUsuarios")
-                    }
-                />
+                {operacao === "visualizacao" && String(idUsuario) != String(idUsuarioLogado) && (
+                    <DefaultButton
+                        variant="outlined"
+                        label="Excluir"
+                        onClick={handleDeletar}
+                    />
+                )}
+                {operacao !== "visualizacao" && (
+                    <DefaultButton
+                        variant="outlined"
+                        label="Cancelar"
+                        onClick={() => navigation("/controleUsuarios")}
+                    />
+                )}
                 <DefaultButton
                     disabled={!botaoLiberado}
                     variant="contained"
