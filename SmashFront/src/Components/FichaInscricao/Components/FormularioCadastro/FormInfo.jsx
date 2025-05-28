@@ -491,7 +491,7 @@ export const FormInfo = ({
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ marginTop: "10px", display: "flex", gap: "10px" }}>
+            <Box sx={{ marginTop: "10px", display: "flex", gap: "50px" }}>
                 <Box sx={{ color: "black" }}>
                     <label
                         style={{
