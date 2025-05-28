@@ -6,7 +6,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { DatePicker, DateTimePicker, LocalizationProvider, renderTimeViewClock } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HelpIcon from "@mui/icons-material/Help";
 import dayjs from "dayjs";
@@ -54,7 +54,7 @@ export const FormInfo = ({
       userInfo.dataInteresse &&
       userInfo.email &&
       userInfo.horarioPref?.id &&
-    userInfo.celular;
+      userInfo.celular;
 
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const emailValido = regexEmail.test(userInfo.email);
@@ -248,22 +248,43 @@ export const FormInfo = ({
             <label>
               Data de Contato <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
             </label>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                disabled={operacao === "visualizacao"}
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+              <DateTimePicker
+                disabled={operacao === 'visualizacao'}
                 value={userInfo.dataInteresse ? dayjs(userInfo.dataInteresse) : null}
                 onChange={handleDataContato}
-                format="DD/MM/YYYY"
+                ampm={false}
+                format="DD/MM/YYYY HH:mm"
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock,
+                }}
                 slotProps={{
                   textField: {
-                    size: "small",
+                    size: 'small',
                     fullWidth: true,
-                    placeholder: "DD/MM/AAAA"
+                    placeholder: 'DD/MM/AAAA HH:mm',
+                  },
+                  layout: {
+                    sx: {
+                      '& .MuiClock-root': {
+                        marginBottom: 0,
+                      },
+                      '& .MuiClock': {
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 'auto',
+                      },
+                      '& .MuiPickersLayout-contentWrapper': {
+                        alignItems: 'center',
+                      },
+                    },
                   },
                 }}
                 sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '8px',
                   },
                 }}
               />
@@ -305,10 +326,10 @@ export const FormInfo = ({
               onChange={e =>
                 setUserInfo({
                   ...userInfo,
-                  horarioPref:{
-                      ...userInfo.horarioPref,
-                      id: e.target.value === "" ? null : Number(e.target.value)
-                  }  
+                  horarioPref: {
+                    ...userInfo.horarioPref,
+                    id: e.target.value === "" ? null : Number(e.target.value)
+                  }
                 })
               }
               variant="outlined"
