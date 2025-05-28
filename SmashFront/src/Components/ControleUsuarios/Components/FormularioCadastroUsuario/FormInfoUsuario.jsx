@@ -12,7 +12,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { formatarTelefone } from "../../../FichaInscricao/utils/validacaoForm";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { ToastContainer } from "react-toastify";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
