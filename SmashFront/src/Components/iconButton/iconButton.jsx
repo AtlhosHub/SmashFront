@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Tooltip } from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 
@@ -57,16 +58,33 @@ export default function ActionMenu({ menuOptions }) {
           'aria-labelledby': 'action-menu-button',
         }}
       >
-        {menuOptions.map((opt) => (
-          <MenuItem key={opt.label} onClick={() => handleItemClick(opt)}>
-            <ListItemIcon sx={{ color: '#2C2C2C' }}>
-              {opt.icon}
-            </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ style: { color: '#2C2C2C' } }}>
-              {opt.label}
-            </ListItemText>
-          </MenuItem>
-        ))}
+        {menuOptions.map((opt) => {
+          const menuItem = (
+            <MenuItem
+              key={opt.label}
+              onClick={() => !opt.disabled && handleItemClick(opt)}
+              disabled={!!opt.disabled}
+            >
+              <ListItemIcon sx={{ color: '#2C2C2C' }}>
+                {opt.icon}
+              </ListItemIcon>
+              <ListItemText primaryTypographyProps={{ style: { color: '#2C2C2C' } }}>
+                {opt.label}
+              </ListItemText>
+            </MenuItem>
+          );
+
+          if (opt.label === 'Excluir' && opt.disabled) {
+            return (
+              <Tooltip key={opt.label} title="Você não pode excluir seu próprio usuário" placement="bottom" arrow>
+                <span>{menuItem}</span>
+              </Tooltip>
+            );
+          }
+
+          return React.cloneElement(menuItem, { key: opt.label });
+        })}
+
       </Menu>
     </div>
   );
