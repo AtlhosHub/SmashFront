@@ -4,6 +4,10 @@ import dayjs from "dayjs";
 import "./Aniversariantes.css"
 import { meses } from "./enum";
 import { useEffect, useState } from "react";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 export const Aniversariantes = ({ alunos }) => {
     const dataAtual = dayjs().startOf("day");
@@ -89,26 +93,34 @@ export const Aniversariantes = ({ alunos }) => {
                     </Box>
                 </Box>
                 <Box>
-                    {respostaFormatada.map(([mes, aniversariantes]) => (
-                        <Box className="niver-wrap" key={mes}>
-                            <Box className="mes-niver-box atual">
-                                <span>
-                                    {mes.toUpperCase()}
-                                </span>
+                    {respostaFormatada.map(([mes, aniversariantes]) => {
+                        const inicio = dataAtual.subtract(7, 'day');
+                        const fim = dataAtual.add(7, 'day');
+                        const proximos = aniversariantes.filter(({ data }) => {
+                            const [dia, mesStr] = data.split("/");
+                            const aniversario = dayjs(`${dayjs().year()}-${mesStr}-${dia}`);
+                            return aniversario.isSameOrAfter(inicio) && aniversario.isSameOrBefore(fim);
+                        });
+                        if (!proximos.length) return null;
+                        return (
+                            <Box className="niver-wrap" key={mes}>
+                                <Box className="mes-niver-box atual">
+                                    <span>{mes.toUpperCase()}</span>
+                                </Box>
+                                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                                    {proximos.map(({ nome, data }) => {
+                                        const classe = verificarAniversario(data);
+                                        const aniversario = classe === "niver-atual";
+                                        return (
+                                            <Box className="niver-box" key={nome + data}>
+                                                <span className={classe}>{data} - {nome}{aniversario && " 🎉"}</span>
+                                            </Box>
+                                        );
+                                    })}
+                                </Box>
                             </Box>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                                {aniversariantes.map(({ nome, data }) => {
-                                    const classe = verificarAniversario(data);
-                                    const aniversario = classe === "niver-atual";
-                                    return (
-                                        <Box className="niver-box">
-                                            <span className={classe}>{data} - {nome}{aniversario && " 🎉"}</span>
-                                        </Box>
-                                    )
-                                })}
-                            </Box>
-                        </Box>
-                    ))}
+                        );
+                    })}
                 </Box>
             </Box>
         </Box>

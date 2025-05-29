@@ -162,7 +162,7 @@ export const DefaultFilter = ({
                                 <DefaultButton size="small" label="Limpar"
                                     onClick={() => {
                                         handleClearFilter()
-                                        setSelectedMonth(null);   
+                                        handleMonthChange(dayjs())
                                     }}
 
                                 />
