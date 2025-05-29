@@ -522,13 +522,13 @@ export const FormInfo = ({
                     <RadioGroup
                         row
                         defaultValue={true}
-                        value={userInfo.ativo || undefined}
+                        value={String(userInfo.ativo)}
                         onChange={(e) =>
                             setUserInfo({ ...userInfo, ativo: e.target.value })
                         }
                     >
                         <FormControlLabel
-                            value={true}
+                            value="true"
                             control={
                                 <Radio
                                     disabled={operacao === "visualizacao"}
@@ -542,7 +542,7 @@ export const FormInfo = ({
                             label="Ativo"
                         />
                         <FormControlLabel
-                            value={false}
+                            value="false"
                             control={
                                 <Radio
                                     disabled={operacao === "visualizacao"}
@@ -587,13 +587,13 @@ export const FormInfo = ({
                     <RadioGroup
                         row
                         defaultValue="true"
-                        value={userInfo.temAtestado || undefined}
+                        value={String(userInfo.temAtestado)}
                         onChange={(e) =>
                             setUserInfo({ ...userInfo, temAtestado: e.target.value })
                         }
                     >
                         <FormControlLabel
-                            value={true}
+                            value="true"
                             control={
                                 <Radio
                                     disabled={operacao === "visualizacao"}
@@ -607,7 +607,7 @@ export const FormInfo = ({
                             label="Sim"
                         />
                         <FormControlLabel
-                            value={false}
+                            value="false"
                             control={
                                 <Radio
                                     disabled={operacao === "visualizacao"}

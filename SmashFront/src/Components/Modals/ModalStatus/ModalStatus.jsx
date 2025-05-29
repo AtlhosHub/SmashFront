@@ -28,7 +28,6 @@ export const ModalStatus = ({
 
     const formaPagArray = [
         { label: "DINHEIRO" },
-        { label: "CARTÃO" },
         { label: "PIX" }
     ];
 
@@ -145,7 +144,20 @@ export const ModalStatus = ({
             >
                 <Typography >
                     <strong>Nome do Atleta</strong><br />
-                    {statusInfoModal.nome ? statusInfoModal.nome.toUpperCase() : null}
+                    <Box
+                        component="span"
+                        sx={{
+                            display: 'block',
+                            width: '100%',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'bottom'
+                        }}
+                        title={statusInfoModal.nome}
+                    >
+                        {statusInfoModal.nome ? statusInfoModal.nome.toUpperCase() : null}
+                    </Box>
                 </Typography>
                 <Typography >
                     <strong>Mês de Vencimento</strong><br />
@@ -176,7 +188,7 @@ export const ModalStatus = ({
                         size="small"
                         value={formaPagamento}
                         options={formaPagArray}
-                        renderInput={(params) => <TextField {...params} placeholder="Selecione a Forma de Pagamento" />}
+                        renderInput={(params) => <TextField {...params} placeholder={statusPagamento?.label === "PAGO" ? "Selecione a Forma de Pagamento" : ""} />}
                         onChange={(_, newValue) => {
                             setFormaPagamento(newValue),
                                 setStatusInfo({ ...statusInfo, formaPagamento: newValue ? newValue.label : null });
@@ -213,7 +225,7 @@ export const ModalStatus = ({
                         onInput={e => {
                             e.target.value = e.target.value.replace(/\D/g, "");
                         }}
-                        placeholder="R$ 200,00"
+                        placeholder={statusPagamento?.label === "PAGO" ? "R$ 200,00" : ""}
                         inputProps={{ inputMode: "numeric" }}
                         disabled={statusPagamento?.label !== "PAGO"}
                     />
@@ -234,7 +246,7 @@ export const ModalStatus = ({
                                         : null,
                                 });
                             }}
-                            ampm={false} // Formato 24h
+                            ampm={false}
                             format="DD/MM/YYYY HH:mm"
                             viewRenderers={{
                                 hours: renderTimeViewClock,
@@ -245,7 +257,7 @@ export const ModalStatus = ({
                                 textField: {
                                     size: 'small',
                                     fullWidth: true,
-                                    placeholder: 'DD/MM/AAAA HH:mm',
+                                    placeholder: statusPagamento?.label === "PAGO" ? "DD/MM/AAAA HH:mm" : null,
                                 },
                                 layout: {
                                     sx: {
@@ -263,17 +275,17 @@ export const ModalStatus = ({
                                     },
                                 },
                             }}
-                        disabled={statusPagamento?.label !== 'PAGO'}
-                        sx={{
-                            '& .MuiInputBase-root.Mui-disabled': {
-                                backgroundColor: '#00000015',
-                            },
-                            '& .MuiInputBase-input.Mui-disabled': {
-                                '-webkit-text-fill-color': 'rgba(0, 0, 0, 0.60)',
-                            },
-                        }}
-                            
-                            
+                            disabled={statusPagamento?.label !== 'PAGO'}
+                            sx={{
+                                '& .MuiInputBase-root.Mui-disabled': {
+                                    backgroundColor: '#00000015',
+                                },
+                                '& .MuiInputBase-input.Mui-disabled': {
+                                    '-webkit-text-fill-color': 'rgba(0, 0, 0, 0.60)',
+                                },
+                            }}
+
+
                         />
                     </LocalizationProvider>
                 </Box>
