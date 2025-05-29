@@ -137,7 +137,10 @@ export const HistPagamento = ({ userInfo }) => {
                 <DefaultButton
                     label="Limpar"
                     variant="outlined"
-                    onClick={() => setSelectedMonth(null)}
+                    onClick={() => {
+                        setSelectedMonth(null),
+                        listarHistoricoPagamento(userInfo.id)
+                    }}
                 />
             </Box>
             <DefaultTable
