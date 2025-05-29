@@ -68,24 +68,36 @@ export const FormEndereco = ({
 
     const handleCepChange = async (e) => {
         const valorFormatado = formatarCep(e?.target?.value || "");
-
         const cepNumerico = valorFormatado?.replace(/\D/g, "");
+
+        if (!cepNumerico) {
+            setUserInfo((prev) => ({
+                ...prev,
+                endereco: {
+                    cep: "",
+                    logradouro: "",
+                    bairro: "",
+                    cidade: "",
+                    estado: "",
+                    numLogradouro: "",
+                },
+            }));
+            setCepValido(false);
+            return;
+        }
 
         setUserInfo((prev) => ({
             ...prev,
             endereco: {
+                ...prev.endereco,
                 cep: valorFormatado,
-                logradouro: "",
-                numLogradouro: "",
-                bairro: "",
-                cidade: "",
-                estado: "",
             },
         }));
 
-        setNumLogDisabled(true);
-
-        if (cepNumerico?.length === 8) {
+        if (
+            cepNumerico?.length === 8 &&
+            cepNumerico !== (userInfo.endereco.cep || "").replace(/\D/g, "")
+        ) {
             try {
                 const response = await fetch(
                     `https://viacep.com.br/ws/${cepNumerico}/json/`
@@ -93,28 +105,27 @@ export const FormEndereco = ({
                 const data = await response.json();
 
                 if (!data.erro) {
-                    setUserInfo({
-                        ...userInfo,
+                    setUserInfo((prev) => ({
+                        ...prev,
                         endereco: {
+                            ...prev.endereco,
                             cep: data.cep,
                             logradouro: data.logradouro,
-                            numLogradouro: operacao !== "cadastro" ? userInfo.endereco.numLogradouro : null,
                             bairro: data.bairro,
                             cidade: data.localidade,
                             estado: data.uf,
+                            numLogradouro: prev.endereco.numLogradouro,
                         },
-                    });
+                    }));
                     setCepValido(true);
-                    setNumLogDisabled(false);
                 } else {
                     toasterMsg("error", "CEP não encontrado!");
-                    setNumLogDisabled(true);
                     setCepValido(false);
                 }
             } catch (error) {
                 console.error("Erro ao buscar CEP:", error);
             }
-        } else {
+        } else if (cepNumerico?.length !== 8) {
             setCepValido(false);
         }
     };
@@ -126,9 +137,19 @@ export const FormEndereco = ({
         setEnderecoConcluido(camposPreenchidos);
     }, [userInfo, cepValido]);
 
-    useEffect(() => {
-        handleCepChange(userInfo.endereco.cep);
-    }, [])
+        useEffect(() => {
+        const { logradouro, bairro, cidade, estado } = userInfo.endereco;
+        if (logradouro && bairro && cidade && estado) {
+            setNumLogDisabled(false);
+        } else {
+            setNumLogDisabled(true);
+        }
+    }, [
+        userInfo.endereco.logradouro,
+        userInfo.endereco.bairro,
+        userInfo.endereco.cidade,
+        userInfo.endereco.estado
+    ]);
 
     return (
         <FormControl
