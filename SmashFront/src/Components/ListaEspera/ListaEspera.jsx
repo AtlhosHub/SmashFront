@@ -93,8 +93,12 @@ export const ListaEspera = () => {
         const formattedData = res.data.map((item) => ({
           ...item,
           dataInteresse: item.dataInteresse ? dateFormater(item.dataInteresse) : null,
+          horarioPreferencia: item.horarioPreferencia && typeof item.horarioPreferencia === "object"
+            ? `${item.horarioPreferencia.horarioAulaInicio ? item.horarioPreferencia.horarioAulaInicio.slice(0, 5) : ""} - ${item.horarioPreferencia.horarioAulaFim ? item.horarioPreferencia.horarioAulaFim.slice(0, 5) : ""}`
+            : item.horarioPreferencia || ""
         }));
 
+        if (!formattedData) return;
         setRowData(formattedData);
       })
       .catch((error) => {
@@ -127,6 +131,10 @@ export const ListaEspera = () => {
         }
       })
   }
+
+  useEffect(() => {
+    console.log("Row data updated:", rowData);
+  }, [rowData])
 
   return (
     <>
