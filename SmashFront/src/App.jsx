@@ -12,7 +12,7 @@ import { RecuperarSenha } from './Components/TelaEsqueciSenha/RecuperarSenha';
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
 import { CadastrarInteressado } from './Components/ListaEspera/CadastrarInteressado';
-import ConfigSistema from './pages/ConfigSistema/ConfigSistema';
+import { ConfigSistema } from './pages/ConfigSistema/ConfigSistema';
 
 function App() {
   return (
