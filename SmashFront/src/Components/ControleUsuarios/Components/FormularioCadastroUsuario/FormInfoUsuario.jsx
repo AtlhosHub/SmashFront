@@ -405,6 +405,7 @@ export const FormInfoUsuario = ({
                         variant="outlined"
                         label="Excluir"
                         onClick={handleDeletar}
+                        color={operacao === "visualizacao" ? "red" : ""}
                     />
                 )}
                 {operacao !== "visualizacao" && (

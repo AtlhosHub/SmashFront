@@ -373,6 +373,7 @@ export const FormInfo = ({
                                 ? handleDeletar()
                                 : navigate("/listaEspera")
                         }
+                        color={operacao === "visualizacao" ? "red" : ""}
                     />
                     <DefaultButton
                         variant="contained"
