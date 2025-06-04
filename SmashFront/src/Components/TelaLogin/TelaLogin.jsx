@@ -29,10 +29,24 @@ export const TelaLogin = () => {
     const [isProcessing, setIsProcessing] = useState(false);
 
     useEffect(() => {
-        if (location.state?.tokenLogout) {
-            toasterMsg("error", "Sessão expirada, por favor faça o login novamente.")
+        const flags = [
+            { key: 'tokenLogout', type: 'error', msg: 'Sessão expirada, por favor faça o login novamente.' },
+            { key: 'resetedPassword', type: 'success', msg: 'Senha redefinida com sucesso! Faça o login para continuar.' },
+        ];
+
+        let newState = { ...location.state };
+
+        flags.forEach(({ key, type, msg }) => {
+            if (location.state?.[key]) {
+                toasterMsg(type, msg);
+                delete newState[key];
+            }
+        });
+
+        if (JSON.stringify(newState) !== JSON.stringify(location.state)) {
+            window.history.replaceState(newState, document.title);
         }
-    }, [location])
+    }, [location]);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -105,7 +119,7 @@ export const TelaLogin = () => {
                     pb: "1rem",
                 }}>
                     <Typography sx={{ fontSize: "80px", fontFamily: "'Mohave', sans-serif ", fontWeight: "700", lineHeight: "70px" }}>
-                        CT Vila Formosa
+                        SMASH
                     </Typography>
                     <Typography sx={{ fontSize: "25px", fontFamily: "'Poppins', sans-serif ", fontWeight: "400", lineHeight: "30px" }}>
                         Sistema de Gerenciamento Financeiro

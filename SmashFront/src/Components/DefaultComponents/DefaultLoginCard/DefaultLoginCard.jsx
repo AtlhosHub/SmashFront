@@ -1,7 +1,7 @@
 import { Box, CircularProgress } from "@mui/material"
 import { DefaultButton } from "../DefaultButton/DefaultButton"
 
-export const DefaultLoginCard = ({ children, typeButton, withButton, onClickButton, buttonLabel, isProcessing }) => {
+export const DefaultLoginCard = ({ children, typeButton, withButton, onClickButton, buttonLabel, isProcessing, disabledCondition }) => {
     return (
         <Box
             sx={{
@@ -9,7 +9,7 @@ export const DefaultLoginCard = ({ children, typeButton, withButton, onClickButt
                 display: "flex",
                 flexDirection: "column",
                 width: "50%",
-                gap: "4rem",
+                gap: "2rem",
                 color: "black",
                 borderRadius: "20px",
                 border: "2px solid #00000050",
@@ -20,6 +20,7 @@ export const DefaultLoginCard = ({ children, typeButton, withButton, onClickButt
                 <DefaultButton
                     variant={typeButton}
                     onClick={onClickButton}
+                    disabled={isProcessing || disabledCondition}
                     label={isProcessing ? <CircularProgress size="25px" sx={{color: "white", fontSize: 1}} /> : buttonLabel}
                 />
             )}

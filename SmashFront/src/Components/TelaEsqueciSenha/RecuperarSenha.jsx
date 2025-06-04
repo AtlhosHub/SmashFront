@@ -8,52 +8,88 @@ import { toasterMsg } from "../../utils/toasterService";
 import { ToastContainer } from "react-toastify"
 
 export const RecuperarSenha = () => {
-  const [novaSenha, setNovaSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [validToken, setValidToken] = useState(false);
-  const navigate = useNavigate();
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
-  const token = params.get('token');
+    const { search } = useLocation();
+    const navigate = useNavigate();
+    const params = new URLSearchParams(search);
+    const token = params.get('token');
 
-  useEffect(() => {
-    if (!token) {
-      toasterMsg('error', 'Token ausente.');
-      navigate('/');
-      return;
+    const [validToken, setValidToken] = useState(false);
+
+    const [novaSenha, setNovaSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [regrasSenha, setRegrasSenha] = useState({
+        minLength: false,
+        upperCase: false,
+        lowerCase: false,
+        number: false,
+        specialChar: false
+    });
+
+    const handleAlterarSenha = () => {
+        if (novaSenha !== confirmarSenha) {
+            toasterMsg('error', 'As senhas não coincidem.');
+            return;
+        }
+
+        setIsLoading(true);
+        api
+            .post('/resetPassword/reset-password', { token, novaSenha }, {
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(() => {
+                toasterMsg('success', 'Senha alterada com sucesso!');
+                navigate('/', { state: { resetedPassword: true } });
+            })
+            .catch(err => {
+                const msg = err.response?.data?.error || 'Erro ao alterar senha';
+                toasterMsg('error', msg);
+            })
+            .finnaly(() => {
+                setIsLoading(false);
+            });
+    };
+
+    const setRegraStyle = (regra) => {
+        if (regrasSenha[regra] === true) {
+            return { color: 'green', fontWeight: 'bold' };
+        }
+        return { color: 'black', fontWeight: 'normal' };
     }
 
-    api
-      .get(`/resetPassword/validate`, { params: { token } })
-      .then(() => setValidToken(true))
-      .catch(() => {
-        toasterMsg('error', 'Link inválido ou expirado.');
-        navigate('/');
-      });
-  }, [token, navigate]);
+    useEffect(() => {
+        const newRegrasSenha = {
+            minLength: novaSenha.length >= 8,
+            upperCase: /[A-Z]/.test(novaSenha),
+            lowerCase: /[a-z]/.test(novaSenha),
+            number: /\d/.test(novaSenha),
+            specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(novaSenha),
+            senhasIguais: novaSenha === confirmarSenha
+        };
 
-  const handleAlterarSenha = () => {
-    if (novaSenha !== confirmarSenha) {
-      toasterMsg('error', 'As senhas não coincidem.');
-      return;
+        setRegrasSenha(newRegrasSenha);
+    }, [novaSenha]);
+
+    useEffect(() => {
+        if (!token) {
+            toasterMsg('error', 'Token ausente.');
+            navigate('/');
+            return;
+        }
+
+        api
+            .get(`/resetPassword/validate`, { params: { token } })
+            .then(() => setValidToken(true))
+            .catch(() => {
+                toasterMsg('error', 'Link inválido ou expirado.');
+                navigate('/');
+            });
+    }, [token, navigate]);
+
+    if (!validToken) {
+        return null;
     }
-    api
-      .post('/resetPassword/reset-password', { token, novaSenha }, {
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(() => {
-        toasterMsg('success', 'Senha alterada com sucesso!');
-        navigate('/');
-      })
-      .catch(err => {
-        const msg = err.response?.data?.error || 'Erro ao alterar senha';
-        toasterMsg('error', msg);
-      });
-  };
-
-  if (!validToken) {
-    return null;
-  }
 
     return (
         <Box
@@ -73,19 +109,18 @@ export const RecuperarSenha = () => {
             <Box
                 sx={{
                     width: "1400px",
-                    height: "600px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                 }}
             >
                 <DefaultLoginCard
+                    withButton={true}
+                    isProcessing={isLoading}
+                    onClickButton={handleAlterarSenha}
+                    disabledCondition={!regrasSenha.minLength || !regrasSenha.senhasIguais}
                     typeButton="contained"
-                    withButton={false}
-                    sx={{
-                        width: "400px",
-                        height: "500px",
-                    }}
+                    buttonLabel="Alterar Senha"
                 >
                     <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                         <Typography
@@ -110,7 +145,7 @@ export const RecuperarSenha = () => {
                                 marginTop: "0rem",
                             }}
                         >
-                            Essa ação irá alterar a senha vinculada ao email informado.
+                            Essa ação irá alterar a senha vinculada ao email informado.<br />Por favor insira a nova senha abaixo:
                         </Typography>
                         <TextField
                             value={novaSenha}
@@ -124,15 +159,34 @@ export const RecuperarSenha = () => {
                             }}
                             sx={{
                                 width: "100%",
-                                marginTop: "1rem",
+                                marginTop: "0.5rem",
                                 '& .MuiInputBase-root': {
                                     borderRadius: '8px',
                                 },
                             }}
                         />
+                        <Box>
+                            <Typography>A senha deve seguir as seguintes regras:</Typography>
+                            <ul>
+                                <li style={setRegraStyle("minLength")}> Conter ao menos 8 caracteres</li>
+                                <li style={setRegraStyle("upperCase")}> 1 letra maiúscula </li>
+                                <li style={setRegraStyle("lowerCase")}> 1 letra minúscula </li>
+                                <li style={setRegraStyle("number")}> 1 número </li>
+                                <li style={setRegraStyle("specialChar")}> 1 caractére especial (!, @, #, $) </li>
+                            </ul>
+                        </Box>
                         <TextField
-                             value={confirmarSenha}
-                            onChange={e => setConfirmarSenha(e.target.value)}
+                            value={confirmarSenha}
+                            onChange={e => {
+                                setConfirmarSenha(e.target.value);
+                                if (e.target.value !== novaSenha && e.target.value.length > 0) {
+                                    setRegrasSenha(prev => ({ ...prev, senhasIguais: false }));
+                                } else {
+                                    setRegrasSenha(prev => ({ ...prev, senhasIguais: true }));
+                                }
+                            }}
+                            error={!regrasSenha.senhasIguais && confirmarSenha.length > 0}
+                            helperText={!regrasSenha.senhasIguais && confirmarSenha.length > 0 ? "As senhas não coincidem" : ""}
                             label="Confirmar Senha"
                             type="password"
                             variant="outlined"
@@ -142,30 +196,12 @@ export const RecuperarSenha = () => {
                             }}
                             sx={{
                                 width: "100%",
-                                marginBottom: "2rem",
+                                marginBottom: "1rem",
                                 '& .MuiInputBase-root': {
                                     borderRadius: '8px',
                                 },
                             }}
                         />
-                        <Button
-                            variant="contained"
-                            onClick={handleAlterarSenha}
-                            sx={{
-                                backgroundColor: "#0D3C53",
-                                color: "#FFFFFF",
-                                textTransform: "none",
-                                fontFamily: "'Inter', sans-serif",
-                                fontWeight: "600",
-                                fontSize: "16px",
-                                borderRadius: "8px",
-                                '&:hover': {
-                                    backgroundColor: "#093962",
-                                },
-                            }}
-                        >
-                            Alterar
-                        </Button>
                         <Link
                             onClick={() => navigate('/')}
                             sx={{
@@ -219,7 +255,7 @@ export const RecuperarSenha = () => {
                     Sistema de Gerenciamento Financeiro
                 </Typography>
             </Box>
-        <ToastContainer />
+            <ToastContainer />
         </Box>
     );
 };
