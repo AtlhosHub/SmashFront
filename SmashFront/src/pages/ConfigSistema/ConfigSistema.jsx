@@ -41,7 +41,7 @@ export const ConfigSistema = () => {
 
         const treatedHour = treatHourResponse(horarios);
         const treatedValue = treatValueResponse(valor);
-
+        
         setDados(prev => ({
             ...prev,
             horarioAulas: {

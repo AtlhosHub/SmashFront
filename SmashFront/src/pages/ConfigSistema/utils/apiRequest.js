@@ -48,7 +48,7 @@ export const removerHorario = ({ id }) => {
 export const listarValorMensalidade = () => {
     let requestResponse;
     requestResponse =
-        api.get("/valor-mensalidade", {
+        api.get("/valor-mensalidade/atual", {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
@@ -64,7 +64,9 @@ export const listarValorMensalidade = () => {
 export const alterarValorMensalidade = ({ mensalidade }) => {
     let requestResponse
     requestResponse =
-        api.put(`/valor-mensalidade/${mensalidade.id}`, mensalidade, {
+        api.post(`/valor-mensalidade`, {
+            valor: mensalidade.data,
+        }, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`

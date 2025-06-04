@@ -14,15 +14,13 @@ export const treatHourResponse = (hours) => {
     return treatedHourList;
 }
 
-export const treatValueResponse = (values) => {
-    let treatedValuesList = [];
-    
-    values.map((value) => {
-        treatedValuesList.push({
-            id: value.id,
-            data: value.valor
-        })
-    })
+export const treatValueResponse = (value) => {
+    let treatedValuesList = {};
 
-    return treatedValuesList;
+    treatedValuesList = {
+        id: value.id,
+        data: value.valor
+    };
+
+    return [treatedValuesList];
 }
