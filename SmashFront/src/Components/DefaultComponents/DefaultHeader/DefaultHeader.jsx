@@ -76,7 +76,7 @@ export const DefaultHeader = () => {
                   lineHeight: "0px",
                 }}
               >
-                SMASH
+                CT Vila Formosa
               </Typography>
               <Box sx={{
                 display: "flex",

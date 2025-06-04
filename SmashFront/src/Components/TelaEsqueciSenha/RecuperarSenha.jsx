@@ -206,7 +206,7 @@ export const RecuperarSenha = () => {
                         lineHeight: "70px",
                     }}
                 >
-                    SMASH
+                    CT Vila Formosa
                 </Typography>
                 <Typography
                     sx={{

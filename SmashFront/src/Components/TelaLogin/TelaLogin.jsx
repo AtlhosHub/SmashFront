@@ -105,7 +105,7 @@ export const TelaLogin = () => {
                     pb: "1rem",
                 }}>
                     <Typography sx={{ fontSize: "80px", fontFamily: "'Mohave', sans-serif ", fontWeight: "700", lineHeight: "70px" }}>
-                        SMASH
+                        CT Vila Formosa
                     </Typography>
                     <Typography sx={{ fontSize: "25px", fontFamily: "'Poppins', sans-serif ", fontWeight: "400", lineHeight: "30px" }}>
                         Sistema de Gerenciamento Financeiro
