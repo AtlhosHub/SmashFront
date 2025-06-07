@@ -53,7 +53,7 @@ export const CadastrarInteressado = () => {
       nome: userInfo.nome,
       email: userInfo.email,
       dataInteresse: userInfo.dataInteresse
-        ? dayjs(userInfo.dataInteresse).toISOString()
+        ? dayjs(userInfo.dataInteresse).format('YYYY-MM-DDTHH:mm')
         : null,
       celular: userInfo.celular,
       nomeSocial: userInfo.nomeSocial,
