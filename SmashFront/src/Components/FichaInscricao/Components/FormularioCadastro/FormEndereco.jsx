@@ -137,7 +137,7 @@ export const FormEndereco = ({
         setEnderecoConcluido(camposPreenchidos);
     }, [userInfo, cepValido]);
 
-        useEffect(() => {
+    useEffect(() => {
         const { logradouro, bairro, cidade, estado } = userInfo.endereco;
         if (logradouro && bairro && cidade && estado) {
             setNumLogDisabled(false);
@@ -215,15 +215,19 @@ export const FormEndereco = ({
                             required
                             disabled={operacao === "visualizacao" || numLogDisabled}
                             value={userInfo.endereco.numLogradouro}
-                            onChange={(e) =>
-                                setUserInfo({
-                                    ...userInfo,
-                                    endereco: {
-                                        ...userInfo.endereco,
-                                        numLogradouro: e.target.value,
-                                    },
-                                })
-                            }
+                            onChange={(e) => {
+                                const regex = /^[A-Za-z0-9]*$/;
+                                const valor = e.target.value
+                                if (regex.test(valor)) {
+                                    setUserInfo({
+                                        ...userInfo,
+                                        endereco: {
+                                            ...userInfo.endereco,
+                                            numLogradouro: valor,
+                                        },
+                                    })
+                                }
+                            }}
                             variant="outlined"
                             size="small"
                             sx={{

@@ -25,7 +25,7 @@ export const Dashboard = () => {
         document.body.style.backgroundColor = "#F3F9F9";
 
         return () => {
-            document.body.style.backgroundColor = "white"; // volta pro padrão
+            document.body.style.backgroundColor = "white";
         };
     }, []);
 

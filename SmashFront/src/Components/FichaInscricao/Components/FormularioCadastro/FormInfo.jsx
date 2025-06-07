@@ -12,7 +12,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HelpIcon from "@mui/icons-material/Help";
 import dayjs from "dayjs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
 import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
 import { formatarTelefone } from "../../utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
@@ -36,6 +36,7 @@ export const FormInfo = ({
     const navigate = useNavigate();
 
     const [botaoLiberado, setBotaoLiberado] = useState(false);
+    const errorDate = useRef(false);
     const dataPreenchida = useRef(false);
 
     const nomeSocialText =
@@ -106,9 +107,11 @@ export const FormInfo = ({
 
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         const emailValido = regexEmail.test(userInfo.email);
-
         const emailNecessario = maiorIdade ? emailValido : true;
-        const condicionalLiberacao = camposPreenchidos && emailNecessario && (!isDeficiente ? true : !!userInfo.deficiencia === true);
+
+        const nomeMaiorQueTres = userInfo?.nome?.length >= 3;
+
+        const condicionalLiberacao = camposPreenchidos && emailNecessario && (!isDeficiente ? true : !!userInfo.deficiencia === true) && !errorDate.current && nomeMaiorQueTres;
 
         setBotaoLiberado(condicionalLiberacao);
         setInfoConcluido(condicionalLiberacao);
@@ -153,9 +156,12 @@ export const FormInfo = ({
                         <TextField
                             disabled={operacao === "visualizacao"}
                             value={userInfo.nome || undefined}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, nome: e.target.value })
-                            }
+                            onChange={(e) => {
+                                const regex = /^[A-Za-zÀ-ÿ\s]*$/;
+                                if (regex.test(e.target.value)) {
+                                    setUserInfo({ ...userInfo, nome: e.target.value });
+                                }
+                            }}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -200,9 +206,12 @@ export const FormInfo = ({
                         <TextField
                             disabled={operacao === "visualizacao"}
                             value={userInfo.nomeSocial || undefined}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, nomeSocial: e.target.value })
-                            }
+                            onChange={(e) => {
+                                const regex = /^[A-Za-zÀ-ÿ\s]*$/;
+                                if (regex.test(e.target.value)) {
+                                    setUserInfo({ ...userInfo, nomeSocial: e.target.value })
+                                }
+                            }}
                             variant="outlined"
                             size="small"
                             sx={{
@@ -231,10 +240,14 @@ export const FormInfo = ({
                                         : null
                                     }
                                     format="DD/MM/YYYY"
-                                    maxDate={dayjs()}
+                                    maxDate={dayjs().subtract(1, 'day')}
+                                    minDate={dayjs("1940-01-01")}
                                     onChange={(newValue) => {
                                         checkDateFilled(newValue, setMaiorIdade, dataPreenchida) && isMaiorDeIdade(newValue);
                                         setUserInfo({ ...userInfo, dataNascimento: dayjs(newValue).format("YYYY-MM-DD") });
+                                    }}
+                                    onError={(reason) => {
+                                        errorDate.current = !!reason;
                                     }}
                                     slotProps={{
                                         textField: { size: "small", placeholder: "DD/MM/AAAA" },
@@ -692,9 +705,12 @@ export const FormInfo = ({
                                 size="small"
                                 placeholder="Especifique"
                                 value={userInfo.deficiencia || undefined}
-                                onChange={(e) =>
-                                    setUserInfo({ ...userInfo, deficiencia: e.target.value })
-                                }
+                                onChange={(e) => {
+                                    const regex = /^[A-Za-zÀ-ÿ\s]*$/;
+                                    if (regex.test(e.target.value)) {
+                                        setUserInfo({ ...userInfo, deficiencia: e.target.value })
+                                    }
+                                }}
                             />
                         )}
                     </RadioGroup>
