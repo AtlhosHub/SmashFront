@@ -62,8 +62,13 @@ export const FormInfo = ({
         setInfoConcluido(camposObrigatorios && emailValido);
     }, [userInfo]);
 
-    const handleDataContato = (v) => setUserInfo({ ...userInfo, dataInteresse: v });
+    const handleDataContato = (v) => {
+        setUserInfo({
+            ...userInfo,
+            dataInteresse: v ? v.format('YYYY-MM-DDTHH:mm') : null
+        });
 
+    };
     const handleDataNascimento = (v) => setUserInfo({ ...userInfo, dataNascimento: v });
 
     const handleClick = () => {
@@ -259,6 +264,7 @@ export const FormInfo = ({
                                     minutes: renderTimeViewClock,
                                     seconds: renderTimeViewClock,
                                 }}
+                                maxDateTime={dayjs()}
                                 slotProps={{
                                     textField: {
                                         size: 'small',
