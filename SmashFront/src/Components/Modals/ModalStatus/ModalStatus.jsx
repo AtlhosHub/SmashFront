@@ -69,17 +69,11 @@ export const ModalStatus = ({
                 s => s.label === statusInfoModal.status?.toUpperCase()
             );
             setStatusPagamento(statusSelecionado || null);
-
-            // Preenche a forma de pagamento
             const formaSelecionada = formaPagArray.find(
                 f => f.label === statusInfoModal.formaPagamento?.toUpperCase()
             );
             setFormaPagamento(formaSelecionada || null);
-
-            // Preenche data de pagamento
             setDataPagamento(statusInfoModal.dataPagamento ? dayjs(statusInfoModal.dataPagamento) : null);
-
-            // Preenche valor pago formatado
             if (statusInfoModal.valor) {
                 const valorFormatado = (statusInfoModal.valor).toLocaleString("pt-BR", {
                     style: "currency",
@@ -90,6 +84,21 @@ export const ModalStatus = ({
                 setValorPago("");
             }
         }
+         setStatusInfo({
+            alunoId: statusInfoModal.idAluno,
+            status: statusInfoModal.status || null,
+            dataPagamento: statusInfoModal.dataPagamento
+                ? dayjs(statusInfoModal.dataPagamento).format('YYYY-MM-DDTHH:mm:ss')
+                : null,
+            valorPago: statusInfoModal.valor
+                ? Number(
+                    String(statusInfoModal.valor)
+                        .replace(/[^\d,]/g, '')
+                        .replace(',', '.')
+                )
+                : null,
+            formaPagamento: statusInfoModal.formaPagamento || null,
+        });
     }, [isModalOpen, statusInfoModal]);
 
     useEffect(() => {
@@ -248,6 +257,7 @@ export const ModalStatus = ({
                             }}
                             ampm={false}
                             format="DD/MM/YYYY HH:mm"
+                            maxDateTime={dayjs()}
                             viewRenderers={{
                                 hours: renderTimeViewClock,
                                 minutes: renderTimeViewClock,
