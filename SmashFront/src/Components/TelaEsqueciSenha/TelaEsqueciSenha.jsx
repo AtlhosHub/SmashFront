@@ -135,7 +135,7 @@ export const TelaEsqueciSenha = () => {
                             Enviar Link
                         </Button>
                         <Link
-                            onClick={() => navigate('/telaInicial')}
+                            onClick={() => navigate('/')}
                             sx={{
                                 textAlign: "center",
                                 color: "#0D3C53",

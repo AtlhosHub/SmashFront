@@ -178,7 +178,8 @@ export const TelaLogin = () => {
                                         fontFamily: "'Popins', sans-serif",
                                         '&:hover': {
                                             textDecoration: 'underline',
-                                        },
+                                            cursor: 'pointer',
+                                        },                               
                                     }}
                                     onClick={() => navigate('/esqueciSenha')}
                                 >
