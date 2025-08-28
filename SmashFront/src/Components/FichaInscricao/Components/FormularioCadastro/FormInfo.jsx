@@ -1,22 +1,10 @@
-import {
-    Box,
-    FormControl,
-    FormControlLabel,
-    Radio,
-    RadioGroup,
-    TextField,
-    Tooltip,
-    Typography,
-} from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import HelpIcon from "@mui/icons-material/Help";
 import dayjs from "dayjs";
-import { useEffect, useImperativeHandle, useRef, useState } from "react";
-import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
+import { useEffect, useRef, useState } from "react";
 import { formatarTelefone } from "../../utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
 import { checkDateFilled } from "../../utils/checkDateFilled";
+import { FormBuilder } from "../../../FormBuilder";
+import { TOOLTIP_MESSAGES } from "../../../../constants/tooltips";
 
 export const FormInfo = ({
     userInfo,
@@ -36,27 +24,17 @@ export const FormInfo = ({
     const navigate = useNavigate();
 
     const [botaoLiberado, setBotaoLiberado] = useState(false);
+
     const errorDate = useRef(false);
     const dataPreenchida = useRef(false);
 
-    const nomeSocialText =
-        "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal.";
-    const statusPresText =
-        "Use este campo para indicar se o aluno(a) ainda está frequentando as aulas, ou se parou de participar.";
-    const atestadoText =
-        "Use este campo para indicar se o aluno(a) entregou o atestado de capacitação para a prática de esportes.";
-    const deficienciaText =
-        "Use este campo para indicar se o aluno(a) tem alguma deficiência física, sensorial, intelectual ou condição como autismo, TDAH, entre outras.";
-
     const isVisualizacao = operacao === "visualizacao";
     const isCadastro = operacao === "cadastro";
-
     const labelBotao = isVisualizacao
         ? "Editar"
         : isCadastro
             ? "Próximo"
             : "Próximo"
-        ;
 
     const formatCPF = (value) => {
         if (!value) return "";
@@ -121,630 +99,206 @@ export const FormInfo = ({
         if (!isDeficiente) setUserInfo({ ...userInfo, deficiencia: null })
     }, [isDeficiente])
 
+    const formConfig = {
+        campos: [
+            {
+                key: "nome",
+                label: "Nome do Aluno",
+                required: operacao !== "visualizacao",
+                placeholder: "Digite seu nome",
+                disabled: operacao === "visualizacao",
+                value: userInfo.nome,
+                onChange: (e) => {
+                    const regex = /^[A-Za-zÀ-ÿ\s]*$/;
+                    if (regex.test(e.target.value)) {
+                        setUserInfo({ ...userInfo, nome: e.target.value });
+                    }
+                }
+            },
+            {
+                key: "nomeSocial",
+                label: "Nome Social",
+                toolTip: TOOLTIP_MESSAGES.nomeSocial,
+                disabled: operacao === "visualizacao",
+                value: userInfo.nomeSocial,
+                onChange: (e) => {
+                    const regex = /^[A-Za-zÀ-ÿ\s]*$/;
+                    if (regex.test(e.target.value)) {
+                        setUserInfo({ ...userInfo, nomeSocial: e.target.value });
+                    }
+                }
+            },
+            {
+                key: "dataNascimento",
+                label: "Data de Nascimento",
+                required: operacao !== "visualizacao",
+                type: "date",
+                disabled: operacao === "visualizacao",
+                value: userInfo.dataNascimento
+                    ? dayjs(userInfo.dataNascimento)
+                    : null
+                ,
+                onChange: (newValue) => {
+                    checkDateFilled(newValue, setMaiorIdade, dataPreenchida) && isMaiorDeIdade(newValue);
+                    setUserInfo({ ...userInfo, dataNascimento: dayjs(newValue).format("YYYY-MM-DD") });
+                },
+                onError: (reason) => { errorDate.current = !!reason; }
+            },
+            {
+                key: "genero",
+                label: "Gênero",
+                disabled: operacao === "visualizacao",
+                value: userInfo.genero,
+                onChange: (e) => setUserInfo({ ...userInfo, genero: e.target.value })
+            },
+            {
+                key: "email",
+                label: "Email",
+                required: maiorIdade && operacao !== "visualizacao",
+                type: "email",
+                disabled: operacao === "visualizacao",
+                value: userInfo.email,
+                onChange: (e) => setUserInfo({ ...userInfo, email: e.target.value })
+            },
+            {
+                key: "nacionalidade",
+                label: "Nacionalidade",
+                disabled: operacao === "visualizacao",
+                value: userInfo.nacionalidade,
+                onChange: (e) => setUserInfo({ ...userInfo, nacionalidade: e.target.value })
+            },
+            {
+                key: "naturalidade",
+                label: "Naturalidade",
+                disabled: operacao === "visualizacao",
+                value: userInfo.naturalidade,
+                onChange: (e) => setUserInfo({ ...userInfo, naturalidade: e.target.value })
+            },
+            {
+                key: "telefone",
+                label: "Telefone",
+                type: "tel",
+                disabled: operacao === "visualizacao",
+                value: formatarTelefone(userInfo.telefone),
+                onChange: (e) => setUserInfo({ ...userInfo, telefone: e.target.value }),
+                placeholder: operacao === "cadastro" ? "(00) 00000-0000" : ""
+            },
+            {
+                key: "celular",
+                label: "Celular",
+                type: "tel",
+                disabled: operacao === "visualizacao",
+                value: formatarTelefone(userInfo.celular),
+                onChange: (e) => setUserInfo({ ...userInfo, celular: e.target.value }),
+                placeholder: operacao === "cadastro" ? "(00) 00000-0000" : ""
+            },
+            {
+                key: "cpf",
+                label: "CPF",
+                required: operacao !== "visualizacao",
+                disabled: operacao === "visualizacao",
+                value: cpfUser,
+                onKeyDown: (e) => {
+                    const allowedKeys = ["Backspace", "ArrowLeft", "ArrowRight", "Tab", "Delete"];
+                    const isNumber = /^[0-9]$/.test(e.key);
+                    if (!isNumber && !allowedKeys.includes(e.key)) {
+                        e.preventDefault();
+                    }
+                },
+                onChange: (e) => {
+                    const raw = e.target.value.replace(/\D/g, "");
+                    setCpfUser(formatCPF(raw));
+                    setUserInfo({ ...userInfo, cpf: raw });
+                },
+                inputProps: {
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
+                    maxLength: 14
+                }
+            },
+            {
+                key: "rg",
+                label: "RG",
+                required: operacao !== "visualizacao",
+                disabled: operacao === "visualizacao",
+                value: userInfo.rg,
+                onChange: (e) => setUserInfo({ ...userInfo, rg: e.target.value })
+            },
+            {
+                key: "profissao",
+                label: "Profissão",
+                disabled: operacao === "visualizacao",
+                value: userInfo.profissao,
+                onChange: (e) => setUserInfo({ ...userInfo, profissao: e.target.value })
+            }
+        ],
+        radios: [
+            {
+                key: "ativo",
+                radioTitle: "Status de Presença",
+                toolTip: TOOLTIP_MESSAGES.statusPres,
+                value: String(userInfo.ativo),
+                onChange: (e) => setUserInfo({ ...userInfo, ativo: e.target.value }),
+                options: [
+                    { value: "true", label: "Ativo", disabled: operacao === "visualizacao" },
+                    { value: "false", label: "Inativo", disabled: operacao === "visualizacao" }
+                ]
+            },
+            {
+                key: "temAtestado",
+                radioTitle: "Atestados",
+                toolTip: TOOLTIP_MESSAGES.atestado,
+                value: String(userInfo.temAtestado),
+                onChange: (e) => setUserInfo({ ...userInfo, temAtestado: e.target.value }),
+                options: [
+                    { value: "true", label: "Sim", disabled: operacao === "visualizacao" },
+                    { value: "false", label: "Não", disabled: operacao === "visualizacao" }
+                ]
+            },
+            {
+                key: "deficiencia",
+                radioTitle: "Possui Deficiência e/ou Neurodivergência?",
+                toolTip: TOOLTIP_MESSAGES.deficiencia,
+                value: String(isDeficiente),
+                onChange: (e) => setIsDeficiente(e.target.value === "true"),
+                options: [
+                    { value: "true", label: "Sim", disabled: operacao === "visualizacao" },
+                    { value: "false", label: "Não", disabled: operacao === "visualizacao" }
+                ],
+                textField: {
+                    show: isDeficiente,
+                    disabled: operacao === "visualizacao",
+                    placeholder: "Especifique",
+                    value: userInfo.deficiencia,
+                    onChange: (e) => {
+                        const regex = /^[A-Za-zÀ-ÿ\s]*$/;
+                        if (regex.test(e.target.value)) {
+                            setUserInfo({ ...userInfo, deficiencia: e.target.value });
+                        }
+                    }
+                }
+            }
+        ]
+    };
+
     return (
-        <FormControl
-            sx={{
-                paddingBlock: "30px",
-                pr: "30px",
-                display: "flex",
-                flex: 1,
-                flexDirection: "column",
+        <FormBuilder
+            campos={formConfig.campos}
+            radios={formConfig.radios}
+            cancelButton={{
+                label: operacao === "visualizacao" ? "Excluir" : "Cancelar",
+                onClick: operacao === "visualizacao"
+                    ? () => setIsModalDeleteOpen(true)
+                    : () => navigate("/alunos"),
+                color: operacao === "visualizacao" ? "red" : ""
             }}
-        >
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "20px",
-                    width: "100%",
-                    color: "black",
-                }}
-            >
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "10px",
-                        flex: 1.3,
-                        height: "fit-content",
-                    }}
-                >
-                    <Box>
-                        <label>
-                            Nome do Aluno <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
-                        </label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={userInfo.nome || undefined}
-                            onChange={(e) => {
-                                const regex = /^[A-Za-zÀ-ÿ\s]*$/;
-                                if (regex.test(e.target.value)) {
-                                    setUserInfo({ ...userInfo, nome: e.target.value });
-                                }
-                            }}
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-
-                    <Box>
-                        <label
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "5px",
-                            }}
-                        >
-                            Nome Social
-                            <Tooltip
-                                title={
-                                    <Typography sx={{ fontSize: "14px" }}>
-                                        {nomeSocialText}
-                                    </Typography>
-                                }
-                                placement="right"
-                                arrow
-                            >
-                                <HelpIcon
-                                    sx={{
-                                        marginTop: "1px",
-                                        color: "#286DA8",
-                                        fontSize: "18px",
-                                    }}
-                                />
-                            </Tooltip>
-                        </label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={userInfo.nomeSocial || undefined}
-                            onChange={(e) => {
-                                const regex = /^[A-Za-zÀ-ÿ\s]*$/;
-                                if (regex.test(e.target.value)) {
-                                    setUserInfo({ ...userInfo, nomeSocial: e.target.value })
-                                }
-                            }}
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-
-                    <Box display={"flex"} gap={2}>
-                        <Box sx={{ width: "100%" }}>
-                            <label>
-                                Data de Nascimento <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
-                            </label>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    size="small"
-                                    disabled={operacao === "visualizacao"}
-                                    value={userInfo.dataNascimento
-                                        ? dayjs(userInfo.dataNascimento)
-                                        : null
-                                    }
-                                    format="DD/MM/YYYY"
-                                    maxDate={dayjs().subtract(1, 'day')}
-                                    minDate={dayjs("1940-01-01")}
-                                    onChange={(newValue) => {
-                                        checkDateFilled(newValue, setMaiorIdade, dataPreenchida) && isMaiorDeIdade(newValue);
-                                        setUserInfo({ ...userInfo, dataNascimento: dayjs(newValue).format("YYYY-MM-DD") });
-                                    }}
-                                    onError={(reason) => {
-                                        errorDate.current = !!reason;
-                                    }}
-                                    slotProps={{
-                                        textField: { size: "small", placeholder: "DD/MM/AAAA" },
-                                    }}
-                                    sx={{
-                                        "& .MuiInputBase-root": {
-                                            borderRadius: "8px"
-                                        },
-                                        '& .MuiInputBase-input.Mui-disabled': {
-                                            WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                        },
-                                        width: "100%",
-                                    }}
-                                />
-                            </LocalizationProvider>
-                        </Box>
-
-                        <Box sx={{ width: "100%" }}>
-                            <label>Gênero</label>
-                            <TextField
-                                disabled={operacao === "visualizacao"}
-                                value={userInfo.genero || undefined}
-                                onChange={(e) =>
-                                    setUserInfo({ ...userInfo, genero: e.target.value })
-                                }
-                                variant="outlined"
-                                size="small"
-                                sx={{
-                                    "& .MuiInputBase-root": {
-                                        borderRadius: "8px"
-                                    },
-                                    '& .MuiInputBase-input.Mui-disabled': {
-                                        WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                    },
-                                    width: "100%",
-                                }}
-                            />
-                        </Box>
-                    </Box>
-                    <Box>
-                        <label>
-                            Email {maiorIdade && <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>}
-                        </label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={userInfo.email || undefined}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, email: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            type="email"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-
-                </Box>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "10px",
-                        flex: 1,
-                        height: "fit-content",
-                    }}
-                >
-                    <Box>
-                        <label>Nacionalidade</label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={userInfo.nacionalidade || undefined}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, nacionalidade: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>Naturalidade</label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={userInfo.naturalidade || undefined}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, naturalidade: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>Telefone</label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={formatarTelefone(userInfo.telefone)}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, telefone: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            type="tel"
-                            placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>Celular</label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={formatarTelefone(userInfo.celular)}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, celular: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            type="tel"
-                            placeholder={operacao === "cadastro" ? "(00) 00000-0000" : ""}
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "10px",
-                        flex: 1,
-                        height: "fit-content",
-                    }}
-                >
-                    <Box>
-                        <label>
-                            CPF <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
-                        </label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={cpfUser}
-                            onKeyDown={(e) => {
-                                const allowedKeys = ["Backspace", "ArrowLeft", "ArrowRight", "Tab", "Delete"];
-                                const isNumber = /^[0-9]$/.test(e.key);
-
-                                if (!isNumber && !allowedKeys.includes(e.key)) {
-                                    e.preventDefault();
-                                }
-                            }}
-                            onChange={(e) => {
-                                const raw = e.target.value.replace(/\D/g, "");
-                                setCpfUser(formatCPF(raw));
-                                setUserInfo({ ...userInfo, cpf: raw });
-                            }}
-                            inputProps={{
-                                inputMode: "numeric",
-                                pattern: "[0-9]*",
-                                maxLength: 14,
-                            }}
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>
-                            RG <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
-                        </label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={userInfo.rg || undefined}
-                            onChange={(e) => setUserInfo({ ...userInfo, rg: e.target.value })}
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>Profissão</label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            value={userInfo.profissao || undefined}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, profissao: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                </Box>
-            </Box>
-            <Box sx={{ marginTop: "10px", display: "flex", gap: "50px" }}>
-                <Box sx={{ color: "black" }}>
-                    <label
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                        }}
-                    >
-                        Status de Presença <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
-                        <Tooltip
-                            title={
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    {statusPresText}
-                                </Typography>
-                            }
-                            placement="right"
-                            arrow
-                        >
-                            <HelpIcon
-                                sx={{
-                                    marginTop: "1px",
-                                    color: "#286DA8",
-                                    fontSize: "18px",
-                                }}
-                            />
-                        </Tooltip>
-                    </label>
-                    <RadioGroup
-                        row
-                        defaultValue={true}
-                        value={String(userInfo.ativo)}
-                        onChange={(e) =>
-                            setUserInfo({ ...userInfo, ativo: e.target.value })
-                        }
-                    >
-                        <FormControlLabel
-                            value="true"
-                            control={
-                                <Radio
-                                    disabled={operacao === "visualizacao"}
-                                    sx={{
-                                        "&.Mui-disabled.Mui-checked": {
-                                            color: "#00000080",
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Ativo"
-                        />
-                        <FormControlLabel
-                            value="false"
-                            control={
-                                <Radio
-                                    disabled={operacao === "visualizacao"}
-                                    sx={{
-                                        "&.Mui-disabled.Mui-checked": {
-                                            color: "#00000080",
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Inativo"
-                        />
-                    </RadioGroup>
-                </Box>
-                <Box sx={{ color: "black" }}>
-                    <label
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                        }}
-                    >
-                        Atestados
-                        <Tooltip
-                            title={
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    {atestadoText}
-                                </Typography>
-                            }
-                            placement="right"
-                            arrow
-                        >
-                            <HelpIcon
-                                sx={{
-                                    marginTop: "1px",
-                                    color: "#286DA8",
-                                    fontSize: "18px",
-                                }}
-                            />
-                        </Tooltip>
-                    </label>
-                    <RadioGroup
-                        row
-                        defaultValue="true"
-                        value={String(userInfo.temAtestado)}
-                        onChange={(e) =>
-                            setUserInfo({ ...userInfo, temAtestado: e.target.value })
-                        }
-                    >
-                        <FormControlLabel
-                            value="true"
-                            control={
-                                <Radio
-                                    disabled={operacao === "visualizacao"}
-                                    sx={{
-                                        "&.Mui-disabled.Mui-checked": {
-                                            color: "#00000080",
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Sim"
-                        />
-                        <FormControlLabel
-                            value="false"
-                            control={
-                                <Radio
-                                    disabled={operacao === "visualizacao"}
-                                    sx={{
-                                        "&.Mui-disabled.Mui-checked": {
-                                            color: "#00000080",
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Não"
-                        />
-                    </RadioGroup>
-                </Box>
-                <Box sx={{ color: "black" }}>
-                    <label
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                        }}
-                    >
-                        <span>
-                            Possui Deficiência e/ou Neurodivergência{" "}
-                            <span style={{ color: "red", display: operacao === "visualizacao" ? "none" : "inline" }}>*</span>
-                        </span>
-                        <Tooltip
-                            title={
-                                <Typography sx={{ fontSize: "14px" }}>
-                                    {deficienciaText}
-                                </Typography>
-                            }
-                            placement="right"
-                            arrow
-                        >
-                            <HelpIcon
-                                sx={{
-                                    marginTop: "1px",
-                                    color: "#286DA8",
-                                    fontSize: "18px",
-                                }}
-                            />
-                        </Tooltip>
-                    </label>
-                    <RadioGroup
-                        row
-                        defaultValue={false}
-                        value={isDeficiente}
-                        onChange={(e) => setIsDeficiente(e.target.value === "true")}
-                    >
-                        <FormControlLabel
-                            value={true}
-                            control={
-                                <Radio
-                                    disabled={operacao === "visualizacao"}
-                                    sx={{
-                                        "&.Mui-disabled.Mui-checked": {
-                                            color: "#00000080",
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Sim"
-                        />
-                        <FormControlLabel
-                            value={false}
-                            control={
-                                <Radio
-                                    disabled={operacao === "visualizacao"}
-                                    sx={{
-                                        "&.Mui-disabled.Mui-checked": {
-                                            color: "#00000080",
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Não"
-                        />
-                        {isDeficiente && (
-                            <TextField
-                                disabled={operacao === "visualizacao"}
-                                size="small"
-                                placeholder="Especifique"
-                                value={userInfo.deficiencia || undefined}
-                                onChange={(e) => {
-                                    const regex = /^[A-Za-zÀ-ÿ\s]*$/;
-                                    if (regex.test(e.target.value)) {
-                                        setUserInfo({ ...userInfo, deficiencia: e.target.value })
-                                    }
-                                }}
-                            />
-                        )}
-                    </RadioGroup>
-                </Box>
-            </Box>
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
-                    justifyContent: "end",
-                    alignItems: "end",
-                    flex: 1,
-                }}
-            >
-                <DefaultButton
-                    variant="outlined"
-                    label={operacao === "visualizacao"
-                        ? "Excluir"
-                        : "Cancelar"
-                    }
-                    onClick={operacao === "visualizacao"
-                        ? () => setIsModalDeleteOpen(true)
-                        : () => navigate("/alunos")
-                    }
-                    color={operacao === "visualizacao" ? "red" : ""}
-                />
-                <DefaultButton
-                    variant="contained"
-                    label={labelBotao}
-                    disabled={!botaoLiberado}
-                    onClick={handleClick}
-                />
-            </Box>
-        </FormControl>
+            confirmButton={{
+                label: labelBotao,
+                onClick: handleClick,
+                disabled: !botaoLiberado
+            }}
+            columnsWidth={[1, 1, 1]}
+            operacao={operacao}
+        />
     );
 };
