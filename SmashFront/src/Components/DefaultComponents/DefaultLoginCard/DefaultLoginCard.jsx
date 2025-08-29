@@ -1,5 +1,5 @@
 import { Box, CircularProgress } from "@mui/material"
-import { DefaultButton } from "../DefaultButton/DefaultButton"
+import { DefaultButton } from "../DefaultButton"
 
 export const DefaultLoginCard = ({ children, typeButton, withButton, onClickButton, buttonLabel, isProcessing }) => {
     return (

@@ -7,7 +7,7 @@ import { api } from "../../provider/apiProvider"
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { toasterMsg } from "../../utils/toasterService";
-import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 export const CadastroUsuarios = () => {

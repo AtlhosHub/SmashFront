@@ -1,7 +1,6 @@
-import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader"
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
-import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
-import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
+import { DefaultButton } from "../DefaultComponents/DefaultButton"
+import { DefaultTable } from "../DefaultComponents/DefaultTable";
 import { ToastContainer } from "react-toastify"
 import { api } from "../../provider/apiProvider"
 import {
@@ -15,12 +14,12 @@ import {
   Search
 } from "@mui/icons-material"
 import { useLocation, useNavigate } from "react-router-dom";
-import ActionMenu from "../iconButton/iconButton";
+import ActionMenu from "../DefaultComponents/IconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { dateFormater } from "../../utils/dateFormaterService";
-import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
 import { toasterMsg } from "../../utils/toasterService";
 
 export const ListaEspera = () => {

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material"
-import { DefaultBreadcrumb } from "../../Components/DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
-import { Kpi } from "../../Components/DefaultComponents/KPI/KPI"
+import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
+import { Kpi } from "../DefaultComponents/KPI/KPI"
 import people from "../../assets/Users.png"
 import discount from "../../assets/Discount.png"
 import { Grafico } from "./Grafico/Grafico"

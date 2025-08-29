@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
-import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader"
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
-import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton"
-import { DefaultTable } from "../DefaultComponents/DefaultTable/DefaultTable";
+import { DefaultButton } from "../DefaultComponents/DefaultButton"
+import { DefaultTable } from "../DefaultComponents/DefaultTable";
 import { ToastContainer } from "react-toastify"
 import {
     Box,
@@ -16,11 +15,11 @@ import {
 import { api } from "../../provider/apiProvider"
 import { useLocation, useNavigate } from "react-router-dom";
 import { toasterMsg } from "../../utils/toasterService";
-import ActionMenu from "../iconButton/iconButton";
+import ActionMenu from "../DefaultComponents/IconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
 
 export const ControleUsuarios = () => {
     const navigate = useNavigate();

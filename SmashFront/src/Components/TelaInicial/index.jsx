@@ -1,5 +1,3 @@
-import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
-import React from 'react';
 import { DefaultCardMenu } from '../DefaultComponents/DefaultCardMenu/DefaultCardMenu';
 import mensalidadeIcon from '../../assets/mensalidade.svg';
 import registrationIcon from '../../assets/registration.svg';
@@ -7,11 +5,7 @@ import waitingListIcon from '../../assets/waitinglist.svg';
 import settingsIcon from '../../assets/settings.svg';
 import dashIcon from '../../assets/chart.svg';
 import team from '../../assets/Team Management.svg';
-import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Box } from "@mui/material";
-
 
 export const TelaInicial = () => {
     const cards = [

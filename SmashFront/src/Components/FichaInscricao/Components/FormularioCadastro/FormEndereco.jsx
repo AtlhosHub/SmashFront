@@ -1,5 +1,5 @@
 import { Box, FormControl, TextField } from "@mui/material";
-import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
+import { DefaultButton } from "../../../DefaultComponents/DefaultButton";
 import { useEffect, useRef, useState } from "react";
 import { toasterMsg } from "../../../../utils/toasterService";
 import { ToastContainer } from "react-toastify";

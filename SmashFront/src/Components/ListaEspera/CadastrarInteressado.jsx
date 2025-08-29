@@ -1,15 +1,13 @@
 import { Box } from "@mui/material";
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
-import { DefaultHeader } from "../DefaultComponents/DefaultHeader/DefaultHeader";
 import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
 import { useEffect, useState } from "react";
 import { FormInfo } from "../ListaEspera/FormPerfilInteressado";
-import { tokenValidationFunction } from "../../utils/tokenValidationFunction";
 import { api } from "../../provider/apiProvider"
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { toasterMsg } from "../../utils/toasterService";
-import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import dayjs from "dayjs";
 

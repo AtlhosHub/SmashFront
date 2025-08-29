@@ -11,11 +11,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HelpIcon from "@mui/icons-material/Help";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { DefaultButton } from "../../../src/Components/DefaultComponents/DefaultButton/DefaultButton";
+import { DefaultButton } from "../DefaultComponents/DefaultButton";
 import { formatarTelefone } from "../../Components/FichaInscricao/utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../provider/apiProvider";
-
 
 export const FormInfo = ({
     userInfo,

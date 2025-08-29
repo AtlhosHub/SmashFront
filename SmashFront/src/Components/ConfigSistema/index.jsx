@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import {
     Box, Typography, Switch
 } from '@mui/material';
-import { DefaultBreadcrumb } from '../../Components/DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
-import { DefaultButton } from '../../Components/DefaultComponents/DefaultButton/DefaultButton';
+import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
+import { DefaultButton } from '../DefaultComponents/DefaultButton';
 import { toasterMsg } from '../../utils/toasterService';
 import { ToastContainer } from 'react-toastify';
 import { SecaoConfig } from './SecaoConfig';

@@ -13,30 +13,30 @@ export const TelaEsqueciSenha = () => {
     const navigate = useNavigate();
 
     const handleRecuperarSenha = () => {
-     if (!email.trim()) {
-    toasterMsg('error', 'Por favor, preencha o campo de e-mail.');
-    return;
-    }
-    api.post('/resetPassword/request-reset', { email }, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-       .then(res => {
-        if (res.status === 204) {
-        toasterMsg('error', 'E-mail não está cadastrado.');
-        } else {
-        toasterMsg('success', 'E-mail enviado com sucesso!');
+        if (!email.trim()) {
+            toasterMsg('error', 'Por favor, preencha o campo de e-mail.');
+            return;
         }
+        api.post('/resetPassword/request-reset', { email }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
-      .catch((error) => {
-        if (error.response?.status === 500) {
-          toasterMsg('error', 'Erro ao enviar e-mail, por favor contacte os administradores.');
-        } else {
-          toasterMsg('error', error.response?.data?.error || 'Erro ao enviar e-mail');
-        }
-      });
-  };
+            .then(res => {
+                if (res.status === 204) {
+                    toasterMsg('error', 'E-mail não está cadastrado.');
+                } else {
+                    toasterMsg('success', 'E-mail enviado com sucesso!');
+                }
+            })
+            .catch((error) => {
+                if (error.response?.status === 500) {
+                    toasterMsg('error', 'Erro ao enviar e-mail, por favor contacte os administradores.');
+                } else {
+                    toasterMsg('error', error.response?.data?.error || 'Erro ao enviar e-mail');
+                }
+            });
+    };
 
     return (
         <Box
@@ -95,27 +95,27 @@ export const TelaEsqueciSenha = () => {
                         >
                             Informe seu email e enviaremos um link para a recuperação da sua senha.
                         </Typography>
-                         <Box>
-                        <label>
-                            Email <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <TextField
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            variant="outlined"
-                            size="small"
-                            InputLabelProps={{ shrink: true }}
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px"
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
+                        <Box>
+                            <label>
+                                Email <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <TextField
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                variant="outlined"
+                                size="small"
+                                InputLabelProps={{ shrink: true }}
+                                sx={{
+                                    "& .MuiInputBase-root": {
+                                        borderRadius: "8px"
+                                    },
+                                    '& .MuiInputBase-input.Mui-disabled': {
+                                        WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    },
+                                    width: "100%",
+                                }}
+                            />
+                        </Box>
                         <Button
                             variant="contained"
                             onClick={handleRecuperarSenha}
@@ -187,7 +187,7 @@ export const TelaEsqueciSenha = () => {
                     Sistema de Gerenciamento Financeiro
                 </Typography>
             </Box>
-           <ToastContainer />
+            <ToastContainer />
         </Box>
     );
 };

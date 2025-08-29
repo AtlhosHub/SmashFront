@@ -1,5 +1,5 @@
-import { DefaultButton } from "../../DefaultComponents/DefaultButton/DefaultButton"
-import { DefaultModal } from "../../DefaultComponents/DefaultModal/DefaultModal"
+import { DefaultButton } from "../../DefaultButton"
+import { DefaultModal } from "../../DefaultModal"
 import { Box } from "@mui/material"
 
 export const ModalDelete = ({

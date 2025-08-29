@@ -1,12 +1,12 @@
-import { use, useEffect, useState } from "react";
-import { DefaultButton } from "../../DefaultComponents/DefaultButton/DefaultButton"
-import { DefaultModal } from "../../DefaultComponents/DefaultModal/DefaultModal"
+import { useEffect, useState } from "react";
+import { DefaultButton } from "../../DefaultButton"
+import { DefaultModal } from "../../DefaultModal"
 import { Autocomplete, Box, TextField, Typography } from "@mui/material"
-import { DatePicker, DateTimePicker, LocalizationProvider, renderTimeViewClock } from "@mui/x-date-pickers";
+import { DateTimePicker, LocalizationProvider, renderTimeViewClock } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
-import { api } from "../../../provider/apiProvider";
-import { toasterMsg } from "../../../utils/toasterService";
+import { api } from "../../../../provider/apiProvider";
+import { toasterMsg } from "../../../../utils/toasterService";
 
 export const ModalStatus = ({
     isModalOpen,
@@ -84,7 +84,7 @@ export const ModalStatus = ({
                 setValorPago("");
             }
         }
-         setStatusInfo({
+        setStatusInfo({
             alunoId: statusInfoModal.idAluno,
             status: statusInfoModal.status || null,
             dataPagamento: statusInfoModal.dataPagamento

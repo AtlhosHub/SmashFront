@@ -10,7 +10,7 @@ import {
 import HelpIcon from "@mui/icons-material/Help";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
+import { DefaultButton } from "../../../DefaultComponents/DefaultButton";
 import { formatarTelefone } from "../../../FichaInscricao/utils/validacaoForm";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";

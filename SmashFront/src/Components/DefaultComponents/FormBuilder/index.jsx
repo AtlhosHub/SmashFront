@@ -1,60 +1,11 @@
-// const campos = [
-//     {
-//         required: operacao === "visualizacao",
-//         label: "Nome",
-//         placeholder: "Digite seu nome",
-//         disabled: operacao === "visualizacao",
-//         value: userInfo.nome,
-//         onChange: (e) => {
-//             const regex = /^[A-Za-zÀ-ÿ\s]*$/;
-//             if (regex.test(e.target.value)) {
-//                 setUserInfo({ ...userInfo, nome: e.target.value });
-//             }
-//         },
-//         toolTip: "Nome social é o nome em que o(a) aluno(a) prefere ser chamado, diferente do seu nome legal"
-//     }
-// ]
-
-// const radios = [
-//     {
-//         radioTitle: "Possui Deficiência e/ou Neurodivergência?",
-//         toolTip: "Deficiência é uma condição física, mental, intelectual ou sensorial de longo prazo que, em interação com diversas barreiras, pode dificultar a participação plena e efetiva na sociedade em igualdade de condições com as demais pessoas. Neurodivergência é um termo usado para descrever variações neurológicas naturais no cérebro humano, como o autismo, TDAH, dislexia, entre outras. Essas variações podem influenciar a forma como uma pessoa pensa, aprende e interage com o mundo ao seu redor.",
-//         radioValue: isDeficiente,
-//         defaultValue: false,
-//         firstValue: {
-//             value: "false",
-//             label: "Não",
-//             disabled: operacao === "visualizacao"
-//         },
-//         secondValue: {
-//             value: "true",
-//             label: "Sim",
-//             disabled: operacao === "visualizacao"
-//         },
-//         onChange: (e) => {
-//             setUserInfo({ ...userInfo, temAtestado: e.target.value })
-//         },
-//         textField: {
-//             label: "Banana",
-//             disabled: operacao === "visualizacao",
-//             value: userInfo.deficiencia || undefined,
-//             onChange: (e) => {
-//                 const regex = /^[A-Za-zÀ-ÿ\s]*$/;
-//                 if (regex.test(e.target.value)) {
-//                     setUserInfo({ ...userInfo, deficiencia: e.target.value })
-//                 }
-//             }
-//         }
-//     }
-// ]
-
 import { Box, Tooltip, Typography, TextField, RadioGroup, FormControlLabel, Radio, FormControl } from "@mui/material";
-import HelpIcon from "@mui/icons-material/Help";
-import { DefaultButton } from "../DefaultComponents/DefaultButton/DefaultButton";
-import { useEffect, useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import HelpIcon from "@mui/icons-material/Help";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+
+import { DefaultButton } from "../DefaultButton";
 
 export const FormBuilder = ({
     campos,

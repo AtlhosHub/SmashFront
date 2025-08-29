@@ -8,7 +8,7 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import { DefaultButton } from "../../../DefaultComponents/DefaultButton/DefaultButton";
+import { DefaultButton } from "../../../DefaultComponents/DefaultButton";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import HelpIcon from "@mui/icons-material/Help";

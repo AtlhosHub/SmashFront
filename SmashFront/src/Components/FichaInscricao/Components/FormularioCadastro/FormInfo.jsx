@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { formatarTelefone } from "../../utils/validacaoForm";
 import { useNavigate } from "react-router-dom";
 import { checkDateFilled } from "../../utils/checkDateFilled";
-import { FormBuilder } from "../../../FormBuilder";
+import { FormBuilder } from "../../../DefaultComponents/FormBuilder";
 import { TOOLTIP_MESSAGES } from "../../../../constants/tooltips";
 
 export const FormInfo = ({

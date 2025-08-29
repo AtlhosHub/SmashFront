@@ -1,18 +1,18 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom';
-import { ListaAlunos } from './Components/ListaAlunos/ListaAlunos';
-import { TelaInicial } from './Components/TelaInicial/TelaInicial';
-import { TelaLogin } from './Components/TelaLogin/TelaLogin';
-import { FichaInscricao } from './Components/FichaInscricao/FichaInscricao';
-import { ListaEspera } from './Components/ListaEspera/ListaEspera';
-import { ControleUsuarios } from './Components/ControleUsuarios/ControleUsuarios';
+import { ListaAlunos } from './Components/ListaAlunos';
+import { TelaInicial } from './Components/TelaInicial';
+import { TelaLogin } from './Components/TelaLogin';
+import { FichaInscricao } from './Components/FichaInscricao';
+import { ListaEspera } from './Components/ListaEspera';
+import { ControleUsuarios } from './Components/ControleUsuarios';
 import { CadastroUsuarios } from './Components/ControleUsuarios/CadastroUsuarios';
-import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha/TelaEsqueciSenha';
+import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha';
 import { RecuperarSenha } from './Components/TelaEsqueciSenha/RecuperarSenha';
-import { Dashboard } from './pages/Dashboard/Dashboard';
+import { Dashboard } from './Components/Dashboard';
 import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
 import { CadastrarInteressado } from './Components/ListaEspera/CadastrarInteressado';
-import { ConfigSistema } from './pages/ConfigSistema/ConfigSistema';
+import { ConfigSistema } from './Components/ConfigSistema';
 
 function App() {
   return (

@@ -8,52 +8,52 @@ import { toasterMsg } from "../../utils/toasterService";
 import { ToastContainer } from "react-toastify"
 
 export const RecuperarSenha = () => {
-  const [novaSenha, setNovaSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [validToken, setValidToken] = useState(false);
-  const navigate = useNavigate();
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
-  const token = params.get('token');
+    const [novaSenha, setNovaSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+    const [validToken, setValidToken] = useState(false);
+    const navigate = useNavigate();
+    const { search } = useLocation();
+    const params = new URLSearchParams(search);
+    const token = params.get('token');
 
-  useEffect(() => {
-    if (!token) {
-      toasterMsg('error', 'Token ausente.');
-      navigate('/');
-      return;
+    useEffect(() => {
+        if (!token) {
+            toasterMsg('error', 'Token ausente.');
+            navigate('/');
+            return;
+        }
+
+        api
+            .get(`/resetPassword/validate`, { params: { token } })
+            .then(() => setValidToken(true))
+            .catch(() => {
+                toasterMsg('error', 'Link inválido ou expirado.');
+                navigate('/');
+            });
+    }, [token, navigate]);
+
+    const handleAlterarSenha = () => {
+        if (novaSenha !== confirmarSenha) {
+            toasterMsg('error', 'As senhas não coincidem.');
+            return;
+        }
+        api
+            .post('/resetPassword/reset-password', { token, novaSenha }, {
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(() => {
+                toasterMsg('success', 'Senha alterada com sucesso!');
+                navigate('/');
+            })
+            .catch(err => {
+                const msg = err.response?.data?.error || 'Erro ao alterar senha';
+                toasterMsg('error', msg);
+            });
+    };
+
+    if (!validToken) {
+        return null;
     }
-
-    api
-      .get(`/resetPassword/validate`, { params: { token } })
-      .then(() => setValidToken(true))
-      .catch(() => {
-        toasterMsg('error', 'Link inválido ou expirado.');
-        navigate('/');
-      });
-  }, [token, navigate]);
-
-  const handleAlterarSenha = () => {
-    if (novaSenha !== confirmarSenha) {
-      toasterMsg('error', 'As senhas não coincidem.');
-      return;
-    }
-    api
-      .post('/resetPassword/reset-password', { token, novaSenha }, {
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(() => {
-        toasterMsg('success', 'Senha alterada com sucesso!');
-        navigate('/');
-      })
-      .catch(err => {
-        const msg = err.response?.data?.error || 'Erro ao alterar senha';
-        toasterMsg('error', msg);
-      });
-  };
-
-  if (!validToken) {
-    return null;
-  }
 
     return (
         <Box
@@ -131,7 +131,7 @@ export const RecuperarSenha = () => {
                             }}
                         />
                         <TextField
-                             value={confirmarSenha}
+                            value={confirmarSenha}
                             onChange={e => setConfirmarSenha(e.target.value)}
                             label="Confirmar Senha"
                             type="password"
@@ -219,7 +219,7 @@ export const RecuperarSenha = () => {
                     Sistema de Gerenciamento Financeiro
                 </Typography>
             </Box>
-        <ToastContainer />
+            <ToastContainer />
         </Box>
     );
 };

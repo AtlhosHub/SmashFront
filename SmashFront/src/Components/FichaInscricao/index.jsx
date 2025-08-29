@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import { HistPagamento } from "./Components/HistPag/HistPagamento";
 import { toasterMsg } from "../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
-import { ModalDelete } from "../Modals/ModalDelete/ModalDelete";
+import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
 import { defaultUser } from "./utils/defaultUser";
 import { setTabName } from "./utils/setTabName";
 
