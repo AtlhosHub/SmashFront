@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
 import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormInfo } from "./Components/FormularioCadastro/FormInfo";
 import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
 import { api } from "../../provider/apiProvider"
@@ -16,31 +16,28 @@ import { HistPagamento } from "./Components/HistPag/HistPagamento";
 import { toasterMsg } from "../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
 import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
-import { defaultUser } from "./utils/defaultUser";
 import { setTabName } from "./utils/setTabName";
+import { useFichaInscricao } from "./Components/FichaInscricaoContext";
 
 export const FichaInscricao = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [userInfo, setUserInfo] = useState({
-        ...defaultUser,
-        usuarioInclusao: { id: sessionStorage.getItem("idUsuario") }
-    });
-
-    const [tabAtiva, setTabAtiva] = useState("info");
-    const [operacao, setOperacao] = useState(location.state?.operacao || "cadastro");
-
-    const [infoConcluido, setInfoConcluido] = useState(false);
-    const [enderecoConcluido, setEnderecoConcluido] = useState(false);
-    const [respConcluido, setRespConcluido] = useState(false);
-    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-
-    const [maiorIdade, setMaiorIdade] = useState(true);
-    const [isDeficiente, setIsDeficiente] = useState(false)
-    const [cpfValidoAluno, setCpfValidoAluno] = useState(false);
-    const [cpfValidoResp, setCpfValidoResp] = useState(false);
-    const [cepValido, setCepValido] = useState(false);
+    const {
+        userInfo,
+        operacao,
+        infoConcluido,
+        enderecoConcluido,
+        respConcluido,
+        maiorIdade,
+        tabAtiva,
+        setTabAtiva,
+        isModalDeleteOpen,
+        setIsModalDeleteOpen,
+        setOperacao,
+        setUserInfo,
+        setMaiorIdade
+    } = useFichaInscricao();
 
     const rotas = [
         {
@@ -207,53 +204,17 @@ export const FichaInscricao = () => {
                         etapas={etapasMenu}
                     />
                     {tabAtiva === "info" &&
-                        <FormInfo
-                            userInfo={userInfo}
-                            maiorIdade={maiorIdade}
-                            cpfValido={cpfValidoAluno}
-                            isDeficiente={isDeficiente}
-                            setMaiorIdade={setMaiorIdade}
-                            setUserInfo={setUserInfo}
-                            setTabAtiva={setTabAtiva}
-                            setInfoConcluido={setInfoConcluido}
-                            setIsDeficiente={setIsDeficiente}
-                            setCpfValido={setCpfValidoAluno}
-                            operacao={operacao}
-                            setOperacao={setOperacao}
-                            setIsModalDeleteOpen={setIsModalDeleteOpen}
-                        />
+                        <FormInfo />
                     }
                     {tabAtiva === "ende" &&
                         <FormEndereco
-                            userInfo={userInfo}
-                            maiorIdade={maiorIdade}
-                            cepValido={cepValido}
-                            setUserInfo={setUserInfo}
-                            setEnderecoConcluido={setEnderecoConcluido}
-                            setTabAtiva={setTabAtiva}
-                            setCepValido={setCepValido}
-                            handleConfirmar={cadastrarAluno}
-                            operacao={operacao}
-                            setOperacao={setOperacao}
                             handleSalvar={editarAluno}
-                            setIsModalDeleteOpen={setIsModalDeleteOpen}
                         />
                     }
                     {tabAtiva === "resp" &&
                         <FormResponsavel
-                            userInfo={userInfo}
-                            cpfValido={cpfValidoResp}
-                            infoConcluido={infoConcluido}
-                            enderecoConcluido={enderecoConcluido}
-                            setTabAtiva={setTabAtiva}
-                            setUserInfo={setUserInfo}
-                            setRespConcluido={setRespConcluido}
-                            setCpfValido={setCpfValidoResp}
                             handleConfirmar={cadastrarAluno}
-                            operacao={operacao}
-                            setOperacao={setOperacao}
                             handleSalvar={editarAluno}
-                            setIsModalDeleteOpen={setIsModalDeleteOpen}
                         />
                     }
                     {tabAtiva === "paga" &&

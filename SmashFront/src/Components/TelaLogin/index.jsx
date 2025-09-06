@@ -68,7 +68,7 @@ export const TelaLogin = () => {
                 }
             })
             .catch(error => {
-                if (error.response.status === 401) {
+                if (error.response?.status === 401) {
                     toasterMsg("error", `${error.response.data.message}.`)
                     setErroLogin(true);
                 } else {

@@ -97,7 +97,8 @@ export const FormBuilder = ({
                                                     borderRadius: "8px"
                                                 },
                                                 '& .MuiInputBase-input.Mui-disabled': {
-                                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)",
+                                                    backgroundColor: "#00000015",
                                                 },
                                                 width: "100%",
                                             }}
@@ -115,7 +116,8 @@ export const FormBuilder = ({
                                                 borderRadius: "8px"
                                             },
                                             '& .MuiInputBase-input.Mui-disabled': {
-                                                WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                                WebkitTextFillColor: "rgba(0, 0, 0, 0.60)",
+                                                backgroundColor: "#00000015",
                                             },
                                             width: "100%",
                                         }}
@@ -161,7 +163,7 @@ export const FormBuilder = ({
                         <RadioGroup
                             row
                             defaultValue={radio.defaultValue}
-                            value={radio.radioValue}
+                            value={radio.value}
                             onChange={radio.onChange}
                         >
                             {radio.options && radio.options.map((option, oidx) => (
@@ -174,6 +176,7 @@ export const FormBuilder = ({
                                             sx={{
                                                 "&.Mui-disabled.Mui-checked": {
                                                     color: "#00000080",
+                                                    backgroundColor: "#00000015",
                                                 },
                                             }}
                                         />
@@ -181,11 +184,17 @@ export const FormBuilder = ({
                                     label={option.label}
                                 />
                             ))}
-                            {radio?.textField && radio?.textField?.show && (
+                            {radio?.textField?.show && (
                                 <TextField
                                     disabled={radio?.textField?.disabled}
                                     size="small"
                                     placeholder={radio?.textField?.label || "Especifique"}
+                                    sx={{
+                                        "&.MuiInputBase-input.Mui-disabled": {
+                                            color: "#00000080",
+                                            backgroundColor: "#00000015",
+                                        },
+                                    }}
                                     value={radio?.textField?.value}
                                     onChange={radio?.textField?.onChange}
                                 />

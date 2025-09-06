@@ -1,57 +1,56 @@
-import { Box, FormControl, TextField } from "@mui/material";
-import { DefaultButton } from "../../../DefaultComponents/DefaultButton";
 import { useEffect, useRef, useState } from "react";
 import { toasterMsg } from "../../../../utils/toasterService";
 import { ToastContainer } from "react-toastify";
+import { useFormEnderecoConfig } from "../../hooks/useFormEnderecoConfig";
+import { useFichaInscricao } from "../FichaInscricaoContext";
+import { FormBuilder } from "../../../DefaultComponents/FormBuilder";
 
 export const FormEndereco = ({
-    userInfo,
-    maiorIdade,
-    cepValido,
-    setUserInfo,
-    setEnderecoConcluido,
-    setTabAtiva,
-    setCepValido,
-    handleConfirmar,
-    operacao,
-    setOperacao,
-    setIsModalDeleteOpen,
     handleSalvar
 }) => {
+    const {
+        userInfo,
+        maiorIdade,
+        cepValido,
+        setUserInfo,
+        setEnderecoConcluido,
+        setTabAtiva,
+        setCepValido,
+        handleConfirmar,
+        operacao,
+        setOperacao,
+        setIsModalDeleteOpen,
+    } = useFichaInscricao();
+
     const [botaoLiberado, setBotaoLiberado] = useState(false);
     const [numLogDisabled, setNumLogDisabled] = useState(true);
     const messagemErroCEP = useRef();
 
-    const isVisualizacao = operacao === "visualizacao";
-    const isCadastro = operacao === "cadastro";
-    const isMaiorIdade = maiorIdade;
+    const labels = {
+        visualizacao: "Editar",
+        cadastro: maiorIdade
+            ? "Concluir"
+            : "Próximo",
+        edicao: maiorIdade
+            ? "Concluir"
+            : "Próximo",
+    };
 
-    const labelBotao = isVisualizacao
-        ? "Editar"
-        : isCadastro
-            ? isMaiorIdade
-                ? "Concluir"
-                : "Próximo"
-            : isMaiorIdade
-                ? "Salvar"
-                : "Próximo"
-        ;
+    const labelBotao = labels[operacao] ?? "Próximo";
 
     const handleClick = () => {
-        if (isVisualizacao) {
-            setOperacao("edicao");
-        } else if (isCadastro) {
-            if (isMaiorIdade) {
-                handleConfirmar();
-            } else {
+        switch (operacao) {
+            case "visualizacao":
+                setOperacao("edicao");
+                break;
+            case "cadastro":
+                if(maiorIdade) {handleConfirmar(); break}
                 setTabAtiva("resp");
-            }
-        } else {
-            if (isMaiorIdade) {
-                handleSalvar();
-            } else {
+                break;
+            case "edicao":
+                if(maiorIdade) {handleSalvar(); break}
                 setTabAtiva("resp");
-            }
+                break;
         }
     };
 
@@ -144,242 +143,39 @@ export const FormEndereco = ({
         } else {
             setNumLogDisabled(true);
         }
-    }, [
-        userInfo.endereco.logradouro,
-        userInfo.endereco.bairro,
-        userInfo.endereco.cidade,
-        userInfo.endereco.estado
-    ]);
+    }, [userInfo.endereco]);
+
+    const formConfig = useFormEnderecoConfig({
+        userInfo,
+        setUserInfo,
+        operacao,
+        numLogDisabled,
+        handleCepChange,
+        formatarCep,
+        messagemErroCEP
+    });
 
     return (
-        <FormControl
-            sx={{
-                paddingBlock: "30px",
-                pr: "30px",
-                display: "flex",
-                flex: 1,
-                flexDirection: "column",
-            }}
-        >
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "20px",
-                    width: "100%",
-                    color: "black",
+        <>
+            <FormBuilder
+                campos={formConfig.campos}
+                radios={formConfig.radios}
+                cancelButton={{
+                    label: operacao === "visualizacao" ? "Excluir" : "Voltar",
+                    onClick: operacao === "visualizacao"
+                        ? () => setIsModalDeleteOpen(true)
+                        : () => setTabAtiva("info"),
+                    color: operacao === "visualizacao" ? "red" : ""
                 }}
-            >
-                <Box
-                    sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                        flexDirection: "row",
-                        columnGap: "15px",
-                        rowGap: "10px",
-                        flex: 1.3,
-                        height: "fit-content",
-                    }}
-                >
-                    <Box>
-                        <label>
-                            CEP <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <TextField
-                            disabled={operacao === "visualizacao"}
-                            required
-                            value={formatarCep(userInfo.endereco.cep)}
-                            onChange={(e) => {
-                                handleCepChange(e);
-                            }}
-                            maxLength={9}
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
-                                },
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)",
-                                },
-                                width: "100%",
-                            }}
-                        />
-                        <span>{messagemErroCEP.current}</span>
-                    </Box>
-                    <Box>
-                        <label>
-                            Número <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <TextField
-                            required
-                            disabled={operacao === "visualizacao" || numLogDisabled}
-                            value={userInfo.endereco.numLogradouro}
-                            onChange={(e) => {
-                                const regex = /^[A-Za-z0-9]*$/;
-                                const valor = e.target.value
-                                if (regex.test(valor)) {
-                                    setUserInfo({
-                                        ...userInfo,
-                                        endereco: {
-                                            ...userInfo.endereco,
-                                            numLogradouro: valor,
-                                        },
-                                    })
-                                }
-                            }}
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
-                                },
-                                ...(operacao != "visualizacao" && {
-                                    "& .MuiInputBase-root.Mui-disabled": {
-                                        backgroundColor: "#00000015",
-                                    }
-                                }),
-                                '& .MuiInputBase-input.Mui-disabled': {
-                                    "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
-                                },
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>Rua</label>
-                        <TextField
-                            required
-                            disabled
-                            value={userInfo.endereco.logradouro}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, rua: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
-                                },
-                                ...(operacao != "visualizacao" && {
-                                    "& .MuiInputBase-root.Mui-disabled": {
-                                        backgroundColor: "#00000015",
-                                    }
-                                }),
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>Bairro</label>
-                        <TextField
-                            disabled
-                            value={userInfo.endereco.bairro}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, bairro: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
-                                },
-                                ...(operacao != "visualizacao" && {
-                                    "& .MuiInputBase-root.Mui-disabled": {
-                                        backgroundColor: "#00000015",
-                                    }
-                                }),
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>Estado</label>
-                        <TextField
-                            disabled
-                            value={userInfo.endereco.estado}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, estado: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
-                                },
-                                ...(operacao != "visualizacao" && {
-                                    "& .MuiInputBase-root.Mui-disabled": {
-                                        backgroundColor: "#00000015",
-                                    }
-                                }),
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <label>Cidade</label>
-                        <TextField
-                            disabled
-                            value={userInfo.endereco.cidade}
-                            onChange={(e) =>
-                                setUserInfo({ ...userInfo, cidade: e.target.value })
-                            }
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    borderRadius: "8px",
-                                },
-                                ...(operacao != "visualizacao" && {
-                                    "& .MuiInputBase-root.Mui-disabled": {
-                                        backgroundColor: "#00000015",
-                                    }
-                                }),
-                                width: "100%",
-                            }}
-                        />
-                    </Box>
-                </Box>
-            </Box>
-            <Box
-                sx={{
-                    marginTop: "auto",
-                    display: "flex",
-                    gap: "10px",
+                confirmButton={{
+                    label: labelBotao,
+                    onClick: handleClick,
+                    disabled: !botaoLiberado
                 }}
-            >
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "10px",
-                        justifyContent: "end",
-                        alignItems: "end",
-                        flex: 1,
-                    }}
-                >
-                    <DefaultButton
-                        variant="outlined"
-                        label={operacao === "visualizacao"
-                            ? "Excluir"
-                            : "Voltar"
-                        }
-                        onClick={() => {
-                            operacao === "visualizacao"
-                                ? setIsModalDeleteOpen(true)
-                                : setTabAtiva("info");
-                        }}
-                        color={operacao === "visualizacao" ? "red" : ""}
-                    />
-                    <DefaultButton
-                        variant="contained"
-                        label={labelBotao}
-                        disabled={!botaoLiberado}
-                        onClick={handleClick}
-                    />
-                </Box>
-            </Box>
+                columnsWidth={[1, 1]}
+                operacao={operacao}
+            />
             <ToastContainer />
-        </FormControl>
+        </>
     );
 };

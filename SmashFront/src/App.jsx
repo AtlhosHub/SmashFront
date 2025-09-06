@@ -13,6 +13,7 @@ import { Dashboard } from './Components/Dashboard';
 import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
 import { CadastrarInteressado } from './Components/ListaEspera/CadastrarInteressado';
 import { ConfigSistema } from './Components/ConfigSistema';
+import { FichaInscricaoProvider } from './Components/FichaInscricao/Components/FichaInscricaoContext';
 
 function App() {
   return (
@@ -26,12 +27,19 @@ function App() {
         <Route path="/listaEspera" element={<ListaEspera />} />
         <Route path="/controleUsuarios" element={<ControleUsuarios />} />
         <Route path="/cadastroUsuarios" element={<CadastroUsuarios />} />
-        <Route path="/fichaInscricao" element={<FichaInscricao />} />
+        <Route
+          path="/fichaInscricao"
+          element={
+            <FichaInscricaoProvider>
+              <FichaInscricao />
+            </FichaInscricaoProvider>
+          }
+        />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/cadastrarListaEspera" element={<CadastrarInteressado />} />
         <Route path="/config" element={<ConfigSistema />} />
-      </Route>
-    </Routes>
+      </Route >
+    </Routes >
   )
 }
 
