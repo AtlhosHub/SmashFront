@@ -2,7 +2,7 @@ import { api } from "../provider/apiProvider";
 
 export const tokenValidationFunction = async () => {
     try {
-        const { status } = await api.get("/usuarios/vazio", {
+        const { status } = await api.get("/usuarios/token-validation", {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
             }

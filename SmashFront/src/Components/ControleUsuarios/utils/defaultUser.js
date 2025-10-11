@@ -21,9 +21,7 @@ export const defaultUser = {
         numLogradouro: null,
         bairro: null,
         cidade: null,
-        cep: {
-            value: null
-        }
+        cep: null
     },
     responsaveis: [
         {

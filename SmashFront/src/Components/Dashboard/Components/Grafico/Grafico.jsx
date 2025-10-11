@@ -12,7 +12,7 @@ import {
 import { meses } from "../Aniversariantes/enum";
 
 export const Grafico = ({ dadosDash }) => {
-    const data = dadosDash.map(row => {
+    const data = dadosDash?.map(row => {
         const mesIndex = (row.mes.meses || row.mes) - 1;
         const mesNome = meses[mesIndex];
         const mesPascal = mesNome.charAt(0).toUpperCase() + mesNome.slice(1).toLowerCase();
@@ -74,7 +74,7 @@ export const Grafico = ({ dadosDash }) => {
                     </Box>
                 </Box>
             </Box>
-            {dadosDash.length > 0 ?
+            {dadosDash?.length > 0 ?
                 <ResponsiveContainer width="100%" height={302}>
                     <BarChart data={data}>
                         <XAxis dataKey="mes" />

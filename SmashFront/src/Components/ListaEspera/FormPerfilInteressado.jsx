@@ -35,7 +35,7 @@ export const FormInfo = ({
 
     useEffect(() => {
         api
-            .get("/horario-pref", {
+            .get("/horario-preferencia", {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${sessionStorage.getItem("authToken")}`

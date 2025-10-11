@@ -3,7 +3,7 @@ import { api } from "../../../provider/apiProvider"
 export const listarHorarios = () => {
     let requestResponse;
     requestResponse =
-        api.get("/horario-pref", {
+        api.get("/horario-preferencia", {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
@@ -17,16 +17,18 @@ export const listarHorarios = () => {
 }
 
 export const adicionarAlterarHorario = ({ horario }) => {
-    console.log("request", horario)
-    let requestResponse
-    requestResponse =
-        api.post("/horario-pref/adicionar-ou-atualizar", [horario], {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-            }
-        })
-            .then((response) => { return response })
+    const payload = {
+        horarioAulaFim: horario.horarioAulaFim,
+        horarioAulaInicio: horario.horarioAulaInicio,
+        dataInclusao: null
+    }
+    let requestResponse = api.post("/horario-preferencia", payload, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+        }
+    })
+        .then((response) => { return response })
 
     return requestResponse;
 }
@@ -34,7 +36,7 @@ export const adicionarAlterarHorario = ({ horario }) => {
 export const removerHorario = ({ id }) => {
     let requestResponse;
     requestResponse =
-        api.delete(`/horario-pref/${id}`, {
+        api.delete(`/horario-preferencia/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
@@ -48,7 +50,7 @@ export const removerHorario = ({ id }) => {
 export const listarValorMensalidade = () => {
     let requestResponse;
     requestResponse =
-        api.get("/valor-mensalidade/atual", {
+        api.get("/mensalidades/valor-atual", {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem("authToken")}`

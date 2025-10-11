@@ -17,7 +17,6 @@ import {
 } from "@mui/icons-material"
 import { useLocation, useNavigate } from "react-router-dom";
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
-import { dateFormater } from "../../utils/dateFormaterService";
 import { toasterMsg } from "../../utils/toasterService";
 import ActionMenu from "../DefaultComponents/IconButton";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -26,6 +25,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
 import dayjs from "dayjs";
 import { ModalStatus } from "../DefaultComponents/Modals/ModalStatus";
+import { getAlunos } from "./utils/apiRequest";
+import { formatResponse } from "./utils/formatResponse";
+import { getHeadCells } from "./constants/headerCells";
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -34,6 +36,14 @@ export const ListaAlunos = () => {
     const timeoutRef = useRef(null);
     const searchValueRef = useRef(null);
     const idToDelete = useRef(undefined);
+
+    const [pageableDate, setPageableDate] = useState({
+        offset: 0,
+        limit: 5,
+        totalItens: 0
+    })
+
+    const [isFirstLoad, setIsFirstLoad] = useState(false);
 
     const [rowData, setRowData] = useState([])
     const [searchValue, setSearchValue] = useState("");
@@ -56,28 +66,6 @@ export const ListaAlunos = () => {
         formaPagamento: null,
         valor: null,
     });
-
-    const headCells = [
-        {
-            name: "nome",
-            description: "Nome do Aluno",
-            cellWidth: "20%"
-        },
-        {
-            name: "dataEnvio",
-            description: "Data de Envio"
-        },
-        {
-            name: "formaPagamento",
-            description: "Forma de Pagamento",
-            align: "center"
-        },
-        {
-            name: "valor",
-            description: "Valor Pago",
-            align: "center"
-        }
-    ]
 
     const rotas = [
         {
@@ -113,7 +101,9 @@ export const ListaAlunos = () => {
             status: statusPagamento?.label,
             ativo: statusPresenca?.value,
             dataEnvioFrom: selectedMonthRange.start,
-            dataEnvioTo: selectedMonthRange.end
+            dataEnvioTo: selectedMonthRange.end,
+            offset: pageableDate.offset,
+            limit: pageableDate.limit
         }
 
         fetchAlunos(objFilter);
@@ -138,33 +128,29 @@ export const ListaAlunos = () => {
         }, 1000);
     }
 
-    const fetchAlunos = (objFilter) => {
-        api.post("/alunos/comprovantes", objFilter, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-            }
-        })
-            .then((res) => {
-                const formattedData = res.data.map((aluno) => ({
-                    ...aluno,
-                    dataEnvioOriginal: aluno.dataEnvio,
-                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
-                    valor: aluno.valor != null
-                        ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-                        : null,
-                    valorColor: aluno.desconto ? '#286DA8' : 'inherit'
-                }));
+    const fetchAlunos = async (objFilter) => {
+        if (isFirstLoad && pageableDate.offset == pageableDate.totalItens) return;
 
-                setRowData(formattedData);
+        try {
+            const { offset, total, content } = await getAlunos(objFilter);
+
+            const formattedData = formatResponse(content);
+
+            setRowData(formattedData);
+            setPageableDate({
+                ...pageableDate,
+                offset: offset + 5,
+                totalItens: total
             })
-            .catch((error) => {
-                if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao listar alunos, por favor contacte os admnistradores.");
-                } else {
-                    toasterMsg("error", error.response.data);
-                }
-            })
+        } catch (error) {
+            if (error.message.status === 500) {
+                toasterMsg("error", "Erro ao listar alunos, por favor contacte os admnistradores.");
+            } else {
+                toasterMsg("error", error.response.data);
+            }
+        } finally {
+            setIsFirstLoad(true);
+        }
     }
 
     useEffect(() => {
@@ -200,9 +186,7 @@ export const ListaAlunos = () => {
                 <Box className="action-area">
                     <TextField
                         value={searchValue}
-                        onChange={(e) => {
-                            handleInputChange(e);
-                        }}
+                        onChange={(e) => handleInputChange(e)}
                         label="Nome do Aluno"
                         variant="outlined"
                         size="small"
@@ -261,7 +245,7 @@ export const ListaAlunos = () => {
                 </Box>
                 <Box>
                     <DefaultTable
-                        headCells={headCells}
+                        headCells={getHeadCells()}
                         rowData={rowData.map(row => ({
                             ...row, valor: row.desconto ? (
                                 <Tooltip title="Pago com desconto" arrow placement="top">

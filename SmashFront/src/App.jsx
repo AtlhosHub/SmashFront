@@ -6,7 +6,7 @@ import { TelaLogin } from './Components/TelaLogin';
 import { FichaInscricao } from './Components/FichaInscricao';
 import { ListaEspera } from './Components/ListaEspera';
 import { ControleUsuarios } from './Components/ControleUsuarios';
-import { CadastroUsuarios } from './Components/ControleUsuarios/CadastroUsuarios';
+import { CadastroUsuarios } from './Components/ControleUsuarios/Components/CadastroUsuarios';
 import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha';
 import { RecuperarSenha } from './Components/TelaEsqueciSenha/RecuperarSenha';
 import { Dashboard } from './Components/Dashboard';
@@ -14,33 +14,41 @@ import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/Defa
 import { CadastrarInteressado } from './Components/ListaEspera/CadastrarInteressado';
 import { ConfigSistema } from './Components/ConfigSistema';
 import { FichaInscricaoProvider } from './Components/FichaInscricao/Components/FichaInscricaoContext';
+import { CadastroUsuarioProvider } from './Components/ControleUsuarios/Components/CadastroUsuarioContext';
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<TelaLogin />} />
-      <Route path="/esqueciSenha" element={<TelaEsqueciSenha />} />
-      <Route path="/recuperarSenha" element={<RecuperarSenha />} />
-      <Route element={<DefaultHeader />}>
-        <Route path="/telaInicial" element={<TelaInicial />} />
-        <Route path="/alunos" element={<ListaAlunos />} />
-        <Route path="/listaEspera" element={<ListaEspera />} />
-        <Route path="/controleUsuarios" element={<ControleUsuarios />} />
-        <Route path="/cadastroUsuarios" element={<CadastroUsuarios />} />
-        <Route
-          path="/fichaInscricao"
-          element={
-            <FichaInscricaoProvider>
-              <FichaInscricao />
-            </FichaInscricaoProvider>
-          }
-        />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/cadastrarListaEspera" element={<CadastrarInteressado />} />
-        <Route path="/config" element={<ConfigSistema />} />
-      </Route >
-    </Routes >
-  )
+    return (
+        <Routes>
+            <Route path="/" element={<TelaLogin />} />
+            <Route path="/esqueciSenha" element={<TelaEsqueciSenha />} />
+            <Route path="/recuperarSenha" element={<RecuperarSenha />} />
+            <Route element={<DefaultHeader />}>
+                <Route path="/telaInicial" element={<TelaInicial />} />
+                <Route path="/alunos" element={<ListaAlunos />} />
+                <Route path="/listaEspera" element={<ListaEspera />} />
+                <Route path="/controleUsuarios" element={<ControleUsuarios />} />
+                <Route
+                    path="/cadastroUsuarios"
+                    element={
+                        <CadastroUsuarioProvider>
+                            <CadastroUsuarios />
+                        </CadastroUsuarioProvider>
+                    }
+                />
+                <Route
+                    path="/fichaInscricao"
+                    element={
+                        <FichaInscricaoProvider>
+                            <FichaInscricao />
+                        </FichaInscricaoProvider>
+                    }
+                />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/cadastrarListaEspera" element={<CadastrarInteressado />} />
+                <Route path="/config" element={<ConfigSistema />} />
+            </Route >
+        </Routes >
+    )
 }
 
 export default App

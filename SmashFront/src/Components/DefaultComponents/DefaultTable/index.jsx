@@ -37,7 +37,7 @@ export const DefaultTable = ({
                             }
                             <TableCell
                                 sx={{
-                                    display: !!rowData[0]?.acoes ? "table-cell" : "none",
+                                    display: rowData[0]?.acoes ? "table-cell" : "none",
                                 }}
                             >
                                 &nbsp;
@@ -105,7 +105,7 @@ export const DefaultTable = ({
                                 }
                                 <TableCell
                                     sx={{
-                                        display: !!row.acoes ? "table-cell" : "none",
+                                        display: row.acoes ? "table-cell" : "none",
                                         justifyContent: "center"
                                     }}
                                 >

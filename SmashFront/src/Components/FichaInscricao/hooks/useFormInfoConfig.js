@@ -28,6 +28,7 @@ export const useFormInfoConfig = ({
                 placeholder: "Digite seu nome",
                 disabled: operacao === "visualizacao",
                 value: userInfo.nome,
+                type: "text",
                 onChange: (e) => {
                     const regex = /^[A-Za-zÀ-ÿ\s]*$/;
                     if (regex.test(e.target.value)) {
@@ -41,6 +42,7 @@ export const useFormInfoConfig = ({
                 toolTip: TOOLTIP_MESSAGES.nomeSocial,
                 disabled: operacao === "visualizacao",
                 value: userInfo.nomeSocial,
+                type: "text",
                 onChange: (e) => {
                     const regex = /^[A-Za-zÀ-ÿ\s]*$/;
                     if (regex.test(e.target.value)) {
@@ -69,15 +71,16 @@ export const useFormInfoConfig = ({
                 label: "Gênero",
                 disabled: operacao === "visualizacao",
                 value: userInfo.genero,
+                type: "text",
                 onChange: (e) => setUserInfo({ ...userInfo, genero: e.target.value })
             },
             {
                 key: "email",
                 label: "Email",
                 required: maiorIdade && operacao !== "visualizacao",
-                type: "email",
                 disabled: operacao === "visualizacao",
                 value: userInfo.email,
+                type: "text",
                 onChange: (e) => setUserInfo({ ...userInfo, email: e.target.value })
             },
             {
@@ -85,6 +88,7 @@ export const useFormInfoConfig = ({
                 label: "Nacionalidade",
                 disabled: operacao === "visualizacao",
                 value: userInfo.nacionalidade,
+                type: "text",
                 onChange: (e) => setUserInfo({ ...userInfo, nacionalidade: e.target.value })
             },
             {
@@ -92,23 +96,24 @@ export const useFormInfoConfig = ({
                 label: "Naturalidade",
                 disabled: operacao === "visualizacao",
                 value: userInfo.naturalidade,
+                type: "text",
                 onChange: (e) => setUserInfo({ ...userInfo, naturalidade: e.target.value })
             },
             {
                 key: "telefone",
                 label: "Telefone",
-                type: "tel",
                 disabled: operacao === "visualizacao",
                 value: formatarTelefone(userInfo.telefone),
+                type: "text",
                 onChange: (e) => setUserInfo({ ...userInfo, telefone: e.target.value }),
                 placeholder: operacao === "cadastro" ? "(00) 00000-0000" : ""
             },
             {
                 key: "celular",
                 label: "Celular",
-                type: "tel",
                 disabled: operacao === "visualizacao",
                 value: formatarTelefone(userInfo.celular),
+                type: "text",
                 onChange: (e) => setUserInfo({ ...userInfo, celular: e.target.value }),
                 placeholder: operacao === "cadastro" ? "(00) 00000-0000" : ""
             },
@@ -125,6 +130,7 @@ export const useFormInfoConfig = ({
                         e.preventDefault();
                     }
                 },
+                type: "text",
                 onChange: (e) => {
                     const raw = e.target.value.replace(/\D/g, "");
                     setCpfUser(formatCPF(raw));
@@ -142,6 +148,7 @@ export const useFormInfoConfig = ({
                 required: operacao !== "visualizacao",
                 disabled: operacao === "visualizacao",
                 value: userInfo.rg,
+                type: "text",
                 onChange: (e) => setUserInfo({ ...userInfo, rg: e.target.value })
             },
             {
@@ -149,6 +156,7 @@ export const useFormInfoConfig = ({
                 label: "Profissão",
                 disabled: operacao === "visualizacao",
                 value: userInfo.profissao,
+                type: "text",
                 onChange: (e) => setUserInfo({ ...userInfo, profissao: e.target.value })
             }
         ],

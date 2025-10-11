@@ -64,7 +64,6 @@ export const ConfigSistema = () => {
             for (const secao of Object.keys(diff)) {
                 for (const item of diff[secao].novos) {
                     if (secao === "horarioAulas") {
-                        console.log("item", item)
                         promises.push(adicionarAlterarHorario({horario: item}));
                     }
                 }

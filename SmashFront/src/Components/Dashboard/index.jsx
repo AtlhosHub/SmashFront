@@ -1,33 +1,81 @@
-import { Box } from "@mui/material"
+import { useNavigate } from "react-router-dom"
+import {
+    useEffect,
+    useState
+} from "react"
+
 import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
+import { Aniversariantes } from "./Components/Aniversariantes/Aniversariantes"
 import { Kpi } from "../DefaultComponents/KPI/KPI"
-import people from "../../assets/Users.png"
 import discount from "../../assets/Discount.png"
-import { Grafico } from "./Grafico/Grafico"
-import { Aniversariantes } from "./Aniversariantes/Aniversariantes"
-import { useEffect, useState } from "react"
-import { api } from "../../provider/apiProvider"
+import people from "../../assets/Users.png"
+import { Grafico } from "./Components/Grafico/Grafico"
+import { Box } from "@mui/material"
+
+import {
+    getAlunosAniversariantes,
+    getConteudoGrafico,
+    getNumAlunos,
+    getNumDesconto
+} from "./utils/apiRequest"
+import { getBreadcrumbRoutes } from "./utils/breadCrumbRoutes"
+import "./style.css";
 
 export const Dashboard = () => {
-    const rotas = [
-        {
-            route: "/dashboard",
-            description: "Dashboard"
-        }
-    ]
+    const navigate = useNavigate;
 
+    const [qtdPagamentosComDesconto, setQtdPagamentosComDesconto] = useState("0")
     const [aniversariantes, setAniversariantes] = useState([])
     const [qtdAlunosAtivos, setQtdAlunosAtivos] = useState("0")
-    const [qtdPagamentosComDesconto, setQtdPagamentosComDesconto] = useState("0")
     const [dadosDash, setDadosDash] = useState([])
 
-    useEffect(() => {
-        document.body.style.backgroundColor = "#F3F9F9";
+    const listarAniversariantes = () => {
+        try {
+            const alunosAniversariantes = getAlunosAniversariantes();
+            setAniversariantes(alunosAniversariantes)
+        } catch (error) {
+            if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                sessionStorage.clear();
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        }
+    }
 
-        return () => {
-            document.body.style.backgroundColor = "white";
-        };
-    }, []);
+    const listarQtdAlunosAtivos = () => {
+        try {
+            const numAlunos = getNumAlunos();
+            setQtdAlunosAtivos(numAlunos);
+        } catch (error) {
+            if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                sessionStorage.clear();
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        }
+    }
+
+    const listarPagamentosComDesconto = () => {
+        try {
+            const numDesconto = getNumDesconto();
+            setQtdPagamentosComDesconto(numDesconto);
+        } catch (error) {
+            if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                sessionStorage.clear();
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        }
+    }
+
+    const listarDadosDashboard = () => {
+        try {
+            const dadosGrafico = getConteudoGrafico();
+            setDadosDash(dadosGrafico);
+        } catch (error) {
+            if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+                sessionStorage.clear();
+                navigate("/", { state: { tokenLogout: true } });
+            }
+        }
+    }
 
     useEffect(() => {
         listarAniversariantes();
@@ -36,83 +84,6 @@ export const Dashboard = () => {
         listarDadosDashboard();
     }, [])
 
-    const listarAniversariantes = () => {
-        api.get("/alunos/aniversariantes", {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-            }
-        })
-            .then((response) => {
-                setAniversariantes(response.data)
-            })
-            .catch((error) => {
-                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
-                    sessionStorage.clear();
-                    navigate("/", { state: { tokenLogout: true } });
-                }
-                console.error("Erro ao buscar dados:", error)
-            });
-    }
-
-    const listarQtdAlunosAtivos = () => {
-        api.get("/alunos/ativos", {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-            }
-        })
-            .then((response) => {
-                setQtdAlunosAtivos(response.data)
-            })
-            .catch((error) => {
-                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
-                    sessionStorage.clear();
-                    navigate("/", { state: { tokenLogout: true } });
-                }
-                console.error("Erro ao buscar dados:", error)
-            });
-    }
-
-    const listarPagamentosComDesconto = () => {
-        api.get("/mensalidades/qtd-descontos", {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-            }
-        })
-            .then((response) => {
-                setQtdPagamentosComDesconto(response.data);
-            })
-            .catch((error) => {
-                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
-                    sessionStorage.clear();
-                    navigate("/", { state: { tokenLogout: true } });
-                }
-                console.error("Erro ao buscar dados:", error)
-            });
-    }
-
-    const listarDadosDashboard = () => {
-        api.get("/mensalidades/grafico", {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
-            }
-        })
-            .then((response) => {
-                setDadosDash(response.data);
-                console.log(response.data)
-            })
-            .catch((error) => {
-                if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
-                    sessionStorage.clear();
-                    navigate("/", { state: { tokenLogout: true } });
-                }
-                console.error("Erro ao buscar dados:", error)
-            });
-    }
-
     return (
         <Box fontFamily={"Poppins, sans-serif"}
             sx={{
@@ -120,7 +91,7 @@ export const Dashboard = () => {
                 gridTemplateRows: "auto 1fr",
             }}
         >
-            <DefaultBreadcrumb rotas={rotas} altura={70} />
+            <DefaultBreadcrumb rotas={getBreadcrumbRoutes()} altura={70} />
             <Box
                 sx={{
                     display: "flex",
@@ -146,14 +117,14 @@ export const Dashboard = () => {
                     >
                         <Kpi
                             title="total de alunos ativos"
-                            content={qtdAlunosAtivos}
+                            content={qtdAlunosAtivos ?? 0}
                             startIcon={
                                 <img src={people} />
                             }
                         />
                         <Kpi
                             title="pagamentos com desconto (ano)"
-                            content={qtdPagamentosComDesconto}
+                            content={qtdPagamentosComDesconto ?? 0}
                             startIcon={
                                 <img
                                     src={discount}
@@ -161,7 +132,7 @@ export const Dashboard = () => {
                             }
                         />
                     </Box>
-                    <Grafico 
+                    <Grafico
                         dadosDash={dadosDash}
                     />
                 </Box>

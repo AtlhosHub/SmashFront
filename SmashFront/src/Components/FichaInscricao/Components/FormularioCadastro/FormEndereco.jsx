@@ -6,7 +6,8 @@ import { useFichaInscricao } from "../FichaInscricaoContext";
 import { FormBuilder } from "../../../DefaultComponents/FormBuilder";
 
 export const FormEndereco = ({
-    handleSalvar
+    handleSalvar,
+    handleConfirmar
 }) => {
     const {
         userInfo,
@@ -16,7 +17,6 @@ export const FormEndereco = ({
         setEnderecoConcluido,
         setTabAtiva,
         setCepValido,
-        handleConfirmar,
         operacao,
         setOperacao,
         setIsModalDeleteOpen,
@@ -44,18 +44,18 @@ export const FormEndereco = ({
                 setOperacao("edicao");
                 break;
             case "cadastro":
-                if(maiorIdade) {handleConfirmar(); break}
+                if (maiorIdade) { handleConfirmar(); break }
                 setTabAtiva("resp");
                 break;
             case "edicao":
-                if(maiorIdade) {handleSalvar(); break}
+                if (maiorIdade) { handleSalvar(); break }
                 setTabAtiva("resp");
                 break;
         }
     };
 
     const formatarCep = (valor) => {
-        if (!valor) return;
+        if (!valor) return "";
         const apenasNumeros = valor.replace(/\D/g, "").slice(0, 8);
 
         if (apenasNumeros.length <= 5) {
@@ -66,14 +66,18 @@ export const FormEndereco = ({
     };
 
     const handleCepChange = async (e) => {
-        const valorFormatado = formatarCep(e?.target?.value || "");
-        const cepNumerico = valorFormatado?.replace(/\D/g, "");
+        const cepNumerico = e?.target?.value?.replace(/\D/g, "") ?? "";
 
-        if (!cepNumerico) {
+        setUserInfo(prev => ({
+            ...prev,
+            endereco: { ...prev.endereco, cep: { value: cepNumerico } },
+        }));
+
+        if (cepNumerico.length === 0) {
             setUserInfo((prev) => ({
                 ...prev,
                 endereco: {
-                    cep: "",
+                    ...prev.endereco,
                     logradouro: "",
                     bairro: "",
                     cidade: "",
@@ -85,22 +89,12 @@ export const FormEndereco = ({
             return;
         }
 
-        setUserInfo((prev) => ({
-            ...prev,
-            endereco: {
-                ...prev.endereco,
-                cep: valorFormatado,
-            },
-        }));
-
         if (
             cepNumerico?.length === 8 &&
-            cepNumerico !== (userInfo.endereco.cep || "").replace(/\D/g, "")
+            cepNumerico !== (userInfo.endereco.cep.value || "").replace(/\D/g, "")
         ) {
             try {
-                const response = await fetch(
-                    `https://viacep.com.br/ws/${cepNumerico}/json/`
-                );
+                const response = await fetch(`https://viacep.com.br/ws/${cepNumerico}/json/`);
                 const data = await response.json();
 
                 if (!data.erro) {
@@ -108,7 +102,6 @@ export const FormEndereco = ({
                         ...prev,
                         endereco: {
                             ...prev.endereco,
-                            cep: data.cep,
                             logradouro: data.logradouro,
                             bairro: data.bairro,
                             cidade: data.localidade,

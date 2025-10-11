@@ -209,6 +209,7 @@ export const FichaInscricao = () => {
                     {tabAtiva === "ende" &&
                         <FormEndereco
                             handleSalvar={editarAluno}
+                            handleConfirmar={cadastrarAluno}
                         />
                     }
                     {tabAtiva === "resp" &&

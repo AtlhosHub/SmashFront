@@ -1,7 +1,16 @@
 import { TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
-export default function ControleInputHora({ index, tipo, hora, setHora, maxValue, minValue, setErrosHorarios, erroAtual }) {
+export default function ControleInputHora({
+    index,
+    tipo,
+    hora,
+    setHora,
+    maxValue,
+    minValue,
+    setErrosHorarios,
+    erroAtual
+}) {
     const validarHora = (novaHora) => {
         if (!novaHora || !novaHora.isValid?.()) return false;
 

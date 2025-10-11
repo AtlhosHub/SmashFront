@@ -15,7 +15,8 @@ export const useFormEnderecoConfig = ({
                 label: "CEP",
                 required: true,
                 disabled: operacao === "visualizacao",
-                value: formatarCep(userInfo.endereco.cep),
+                value: formatarCep(userInfo.endereco.cep.value),
+                type: "text",
                 onChange: (e) => handleCepChange(e),
                 inputProps: { maxLength: 9 },
                 errorMessage: messagemErroCEP.current
@@ -26,6 +27,7 @@ export const useFormEnderecoConfig = ({
                 required: true,
                 disabled: true,
                 value: userInfo.endereco.logradouro,
+                type: "text",
                 onChange: (e) =>
                     setUserInfo({ ...userInfo, endereco: { ...userInfo.endereco, logradouro: e.target.value } })
             },
@@ -35,6 +37,7 @@ export const useFormEnderecoConfig = ({
                 required: true,
                 disabled: operacao === "visualizacao",
                 value: userInfo.endereco.numLogradouro,
+                type: "text",
                 onChange: (e) => {
                     const regex = /^[A-Za-z0-9]*$/;
                     const valor = e.target.value;
@@ -54,6 +57,7 @@ export const useFormEnderecoConfig = ({
                 label: "Bairro",
                 disabled: true,
                 value: userInfo.endereco.bairro,
+                type: "text",
                 onChange: (e) =>
                     setUserInfo({ ...userInfo, endereco: { ...userInfo.endereco, bairro: e.target.value } })
             },
@@ -62,6 +66,7 @@ export const useFormEnderecoConfig = ({
                 label: "Estado",
                 disabled: true,
                 value: userInfo.endereco.estado,
+                type: "text",
                 onChange: (e) =>
                     setUserInfo({ ...userInfo, endereco: { ...userInfo.endereco, estado: e.target.value } })
             },
@@ -70,6 +75,7 @@ export const useFormEnderecoConfig = ({
                 label: "Cidade",
                 disabled: true,
                 value: userInfo.endereco.cidade,
+                type: "text",
                 onChange: (e) =>
                     setUserInfo({ ...userInfo, endereco: { ...userInfo.endereco, cidade: e.target.value } })
             },

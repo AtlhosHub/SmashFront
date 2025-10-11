@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography, TextField, RadioGroup, FormControlLabel, Radio, FormControl } from "@mui/material";
+import { Box, Tooltip, Typography, TextField, RadioGroup, FormControlLabel, Radio, FormControl, InputAdornment, IconButton } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HelpIcon from "@mui/icons-material/Help";
@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { DefaultButton } from "../DefaultButton";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export const FormBuilder = ({
     campos,
@@ -15,6 +16,17 @@ export const FormBuilder = ({
     cancelButton
 }) => {
     const [linhas, setLinhas] = useState([]);
+    const [senha, setSenha] = useState("");
+    const [confirmarSenha, setConfirmarSenha] = useState("");
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
+    const [erroConfirmarSenha, setErroConfirmarSenha] = useState(false);
+
+    useEffect(() => {
+        setErroConfirmarSenha(
+            confirmarSenha.length > 0 && senha !== confirmarSenha
+        );
+    }, [senha, confirmarSenha]);
 
     useEffect(() => {
         const linhasTemp = [];
@@ -78,7 +90,7 @@ export const FormBuilder = ({
                                         </Tooltip>
                                     ) : null}
                                 </label>
-                                {campo?.type && campo.type === "date" ? (
+                                {campo?.type === "date" && (
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             size="small"
@@ -104,7 +116,8 @@ export const FormBuilder = ({
                                             }}
                                         />
                                     </LocalizationProvider>
-                                ) : (
+                                )}
+                                {campo?.type === "text" && (
                                     <TextField
                                         disabled={campo.disabled}
                                         value={campo.value}
@@ -120,6 +133,64 @@ export const FormBuilder = ({
                                                 backgroundColor: "#00000015",
                                             },
                                             width: "100%",
+                                        }}
+                                    />
+                                )}
+                                {campo?.type === "password" && (
+                                    <TextField
+                                        error={campo.name === "confirmarSenha" && erroConfirmarSenha}
+                                        helperText={
+                                            campo.name === "confirmarSenha" && erroConfirmarSenha
+                                                ? "As senhas não conferem"
+                                                : ""
+                                        }
+                                        value={campo.name === "senha" ? senha : confirmarSenha}
+                                        onChange={(e) => {
+                                            if (campo.name === "senha") {
+                                                setSenha(e.target.value);
+                                            } else {
+                                                setConfirmarSenha(e.target.value);
+                                            }
+                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        type={
+                                            campo.name === "senha"
+                                                ? mostrarSenha
+                                                    ? "text"
+                                                    : "password"
+                                                : mostrarConfirmarSenha
+                                                    ? "text"
+                                                    : "password"
+                                        }
+                                        sx={{
+                                            "& .MuiInputBase-root": { borderRadius: "8px" },
+                                            "& .MuiInputBase-input.Mui-disabled": {
+                                                WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                            },
+                                            width: "100%"
+                                        }}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            campo.name === "senha"
+                                                                ? setMostrarSenha(!mostrarSenha)
+                                                                : setMostrarConfirmarSenha(!mostrarConfirmarSenha)
+                                                        }
+                                                        edge="end"
+                                                        sx={{
+                                                            color: "#093962",
+                                                            "&:hover": { color: "#093962" }
+                                                        }}
+                                                    >
+                                                        {campo.name === "senha"
+                                                            ? (mostrarSenha ? <VisibilityOff /> : <Visibility />)
+                                                            : (mostrarConfirmarSenha ? <VisibilityOff /> : <Visibility />)}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
                                         }}
                                     />
                                 )}

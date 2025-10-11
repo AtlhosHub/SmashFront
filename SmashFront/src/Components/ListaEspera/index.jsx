@@ -131,10 +131,6 @@ export const ListaEspera = () => {
       })
   }
 
-  useEffect(() => {
-    console.log("Row data updated:", rowData);
-  }, [rowData])
-
   return (
     <>
       <Box>

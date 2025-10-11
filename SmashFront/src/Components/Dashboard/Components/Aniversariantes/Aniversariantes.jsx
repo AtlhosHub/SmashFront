@@ -1,11 +1,17 @@
-import { Box } from "@mui/material"
-import CakeIcon from '@mui/icons-material/Cake';
+import {
+    useEffect,
+    useState
+} from "react";
 import dayjs from "dayjs";
-import "./Aniversariantes.css"
-import { meses } from "./enum";
-import { useEffect, useState } from "react";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+import { Box } from "@mui/material";
+import CakeIcon from '@mui/icons-material/Cake';
+
+import { meses } from "./enum";
+import "./Aniversariantes.css";
+
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
@@ -16,10 +22,10 @@ export const Aniversariantes = ({ alunos }) => {
     const formatarResposta = () => {
         const respostaObj = {};
 
-        alunos.forEach(({ nome, dataNascimento }) => {
+        alunos?.forEach(({ nome, dataNascimento }) => {
             const date = new Date(dataNascimento);
             const dia = String(date.getUTCDate()).padStart(2, '0');
-            const mes = date.getUTCMonth(); // 0 a 11
+            const mes = date.getUTCMonth();
             const nomeMes = meses[mes];
             const mesStr = String(mes + 1).padStart(2, '0');
 
@@ -39,7 +45,6 @@ export const Aniversariantes = ({ alunos }) => {
             });
         });
 
-        // Converte para array e ordena meses corretamente
         const resultado = Object.entries(respostaObj).sort(
             ([mesA], [mesB]) => meses.indexOf(mesA) - meses.indexOf(mesB)
         );
