@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { defaultUser } from "../utils/defaultUser";
+import { createContext, useContext, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { defaultUser } from '../utils/defaultUser';
 
 const CadastroUsuarioContext = createContext();
 
@@ -9,13 +9,13 @@ export const CadastroUsuarioProvider = ({ children }) => {
 
     const [userInfo, setUserInfo] = useState({
         ...defaultUser,
-        usuarioInclusao: { id: sessionStorage.getItem("idUsuario") }
+        usuarioInclusao: { id: sessionStorage.getItem('idUsuario') }
     });
 
-    const [tabAtiva, setTabAtiva] = useState("info");
-    const [operacao, setOperacao] = useState(location.state?.operacao || "cadastro");
-    const [senha, setSenha] = useState("");
-    const [confirmarSenha, setConfirmarSenha] = useState("");
+    const [tabAtiva, setTabAtiva] = useState('info');
+    const [operacao, setOperacao] = useState(location.state?.operacao || 'cadastro');
+    const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
 
     const [infoConcluido, setInfoConcluido] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -57,9 +57,9 @@ export const CadastroUsuarioProvider = ({ children }) => {
         >
             {children}
         </CadastroUsuarioContext.Provider>
-    )
-}
+    );
+};
 
 export const useCadastroUsuario = () => {
     return useContext(CadastroUsuarioContext);
-}
+};

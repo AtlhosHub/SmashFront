@@ -1,33 +1,33 @@
-import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
-import { DefaultButton } from "../DefaultComponents/DefaultButton"
-import { DefaultTable } from "../DefaultComponents/DefaultTable";
-import DefaultFilter from "../DefaultComponents/DefaultFilter/DefaultFilter"
-import { ToastContainer } from "react-toastify"
-import { api } from "../../provider/apiProvider"
+import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
+import { DefaultButton } from '../DefaultComponents/DefaultButton';
+import { DefaultTable } from '../DefaultComponents/DefaultTable';
+import DefaultFilter from '../DefaultComponents/DefaultFilter/DefaultFilter';
+import { ToastContainer } from 'react-toastify';
+import { api } from '../../provider/apiProvider';
 import {
     Box,
     InputAdornment,
     TextField,
     Tooltip
-} from "@mui/material"
-import { useEffect, useRef, useState } from "react"
+} from '@mui/material';
+import { useEffect, useRef, useState, React } from 'react';
 import {
     Add,
     Search
-} from "@mui/icons-material"
-import { useLocation, useNavigate } from "react-router-dom";
+} from '@mui/icons-material';
+import { useLocation, useNavigate } from 'react-router-dom';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
-import { toasterMsg } from "../../utils/toasterService";
-import ActionMenu from "../DefaultComponents/IconButton";
+import { toasterMsg } from '../../utils/toasterService';
+import ActionMenu from '../DefaultComponents/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
-import dayjs from "dayjs";
-import { ModalStatus } from "../DefaultComponents/Modals/ModalStatus";
-import { getAlunos } from "./utils/apiRequest";
-import { formatResponse } from "./utils/formatResponse";
-import { getHeadCells } from "./constants/headerCells";
+import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
+import dayjs from 'dayjs';
+import { ModalStatus } from '../DefaultComponents/Modals/ModalStatus';
+import { getAlunos } from './utils/apiRequest';
+import { formatResponse } from './utils/formatResponse';
+import { getHeadCells } from './constants/headerCells';
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -41,12 +41,12 @@ export const ListaAlunos = () => {
         offset: 0,
         limit: 5,
         totalItens: 0
-    })
+    });
 
     const [isFirstLoad, setIsFirstLoad] = useState(false);
 
-    const [rowData, setRowData] = useState([])
-    const [searchValue, setSearchValue] = useState("");
+    const [rowData, setRowData] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [statusPresenca, setStatusPresenca] = useState(null);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -69,50 +69,50 @@ export const ListaAlunos = () => {
 
     const rotas = [
         {
-            route: "/listaAlunos",
-            description: "Mensalidades"
+            route: '/listaAlunos',
+            description: 'Mensalidades'
         }
-    ]
+    ];
 
     const handleDeletarAluno = (idAluno) => {
         api.delete(`/alunos/${idAluno}`, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then(() => {
-                toasterMsg("success", "Aluno excluído com sucesso!")
+                toasterMsg('success', 'Aluno excluído com sucesso!');
                 setIsModalDeleteOpen(false);
                 handleApplyFilter();
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao deletar aluno, por favor contacte os admnistradores.");
+                    toasterMsg('error', 'Erro ao deletar aluno, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.response.data);
+                    toasterMsg('error', error.response.data);
                 }
-            })
-    }
+            });
+    };
 
     const handleApplyFilter = () => {
         const objFilter = {
-            nome: searchValueRef.current != "" ? searchValueRef.current : null,
+            nome: searchValueRef.current != '' ? searchValueRef.current : null,
             status: statusPagamento?.label,
             ativo: statusPresenca?.value,
             dataEnvioFrom: selectedMonthRange.start,
             dataEnvioTo: selectedMonthRange.end,
             offset: pageableDate.offset,
             limit: pageableDate.limit
-        }
+        };
 
         fetchAlunos(objFilter);
-    }
+    };
 
     const handleClearFilter = () => {
         setStatusPagamento(null);
         setStatusPresenca(null);
-    }
+    };
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -126,7 +126,7 @@ export const ListaAlunos = () => {
         timeoutRef.current = setTimeout(() => {
             handleApplyFilter();
         }, 1000);
-    }
+    };
 
     const fetchAlunos = async (objFilter) => {
         if (isFirstLoad && pageableDate.offset == pageableDate.totalItens) return;
@@ -141,17 +141,17 @@ export const ListaAlunos = () => {
                 ...pageableDate,
                 offset: offset + 5,
                 totalItens: total
-            })
+            });
         } catch (error) {
             if (error.message.status === 500) {
-                toasterMsg("error", "Erro ao listar alunos, por favor contacte os admnistradores.");
+                toasterMsg('error', 'Erro ao listar alunos, por favor contacte os admnistradores.');
             } else {
-                toasterMsg("error", error.response.data);
+                toasterMsg('error', error.response.data);
             }
         } finally {
             setIsFirstLoad(true);
         }
-    }
+    };
 
     useEffect(() => {
         const flags = [
@@ -159,7 +159,7 @@ export const ListaAlunos = () => {
             { key: 'userDeleted', type: 'success', msg: 'Aluno deletado com sucesso!' },
         ];
 
-        let newState = { ...location.state };
+        const newState = { ...location.state };
 
         flags.forEach(({ key, type, msg }) => {
             if (location.state?.[key]) {
@@ -171,14 +171,14 @@ export const ListaAlunos = () => {
         if (JSON.stringify(newState) !== JSON.stringify(location.state)) {
             window.history.replaceState(newState, document.title);
         }
-    }, [location])
+    }, [location]);
 
     useEffect(() => {
-        handleApplyFilter()
-    }, [])
+        handleApplyFilter();
+    }, []);
 
     return (
-        <>
+        <React.Fragment>
             <Box>
                 <DefaultBreadcrumb rotas={rotas} />
             </Box>
@@ -216,7 +216,7 @@ export const ListaAlunos = () => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <Search sx={{ color: "black" }} />
+                                    <Search sx={{ color: 'black' }} />
                                 </InputAdornment>
                             ),
                         }}
@@ -235,9 +235,9 @@ export const ListaAlunos = () => {
                     <DefaultButton
                         variant="contained"
                         label="Novo Cadastro"
-                        onClick={() => navigate("/fichaInscricao", {
+                        onClick={() => navigate('/fichaInscricao', {
                             state: {
-                                operacao: "cadastro",
+                                operacao: 'cadastro',
                             }
                         })}
                         endIcon={<Add />}
@@ -263,12 +263,12 @@ export const ListaAlunos = () => {
                                     label: 'Visualizar',
                                     icon: <VisibilityIcon fontSize="small" />,
                                     onClickFunc: () => {
-                                        navigate("/fichaInscricao", {
+                                        navigate('/fichaInscricao', {
                                             state: {
                                                 idAluno: row.id,
-                                                operacao: "visualizacao"
+                                                operacao: 'visualizacao'
                                             }
-                                        })
+                                        });
                                     }
                                 },
                                 {
@@ -285,21 +285,21 @@ export const ListaAlunos = () => {
                                             dataPagamento: row.dataEnvioOriginal,
                                             formaPagamento: row.formaPagamento,
                                             valor: row.valor,
-                                        })
+                                        });
                                     },
                                     disabled: row.automatico === true,
-                                    disabledLabel: "Não é possível alterar o status de Pagamentos Automáticos",
+                                    disabledLabel: 'Não é possível alterar o status de Pagamentos Automáticos',
                                 },
                                 {
                                     label: 'Editar',
                                     icon: <EditIcon fontSize="small" />,
                                     onClickFunc: () => {
-                                        navigate("/fichaInscricao", {
+                                        navigate('/fichaInscricao', {
                                             state: {
                                                 idAluno: row.id,
-                                                operacao: "edicao"
+                                                operacao: 'edicao'
                                             }
-                                        })
+                                        });
                                     }
                                 },
                                 {
@@ -330,6 +330,6 @@ export const ListaAlunos = () => {
                 handleApplyFilter={handleApplyFilter}
             />
             <ToastContainer />
-        </>
-    )
-}
+        </React.Fragment>
+    );
+};

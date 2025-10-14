@@ -1,13 +1,23 @@
-import { useEffect, useState } from 'react';
-import {
-    Box, Typography, Switch
-} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+
 import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
 import { DefaultButton } from '../DefaultComponents/DefaultButton';
+import { SecaoConfig } from './Components/SecaoConfig';
+import {
+    Box,
+    Typography,
+    Switch
+} from '@mui/material';
+
 import { toasterMsg } from '../../utils/toasterService';
-import { ToastContainer } from 'react-toastify';
-import { SecaoConfig } from './SecaoConfig';
-import { adicionarAlterarHorario, alterarValorMensalidade, listarHorarios, listarValorMensalidade, removerHorario, } from './utils/apiRequest';
+import { 
+    adicionarAlterarHorario,
+    alterarValorMensalidade,
+    listarHorarios,
+    listarValorMensalidade,
+    removerHorario,
+} from './utils/apiRequest';
 import { treatHourResponse, treatValueResponse } from './utils/treatResponse';
 import { diffConfig } from './utils/diffConfig';
 
@@ -33,7 +43,7 @@ export const ConfigSistema = () => {
     });
     const [dadosTemporarios, setDadosTemporarios] = useState([]);
 
-    const rotas = [{ route: "/listaEspera", description: "Lista de Espera" }];
+    const rotas = [{ route: '/listaEspera', description: 'Lista de Espera' }];
 
     const fetchDadosConfig = async () => {
         const horarios = (await listarHorarios()).data;
@@ -52,8 +62,8 @@ export const ConfigSistema = () => {
                 ...prev.valorMensalidade,
                 data: treatedValue
             }
-        }))
-    }
+        }));
+    };
 
     const handleSaveConfig = async () => {
         const diff = diffConfig(dados, dadosTemporarios);
@@ -63,19 +73,19 @@ export const ConfigSistema = () => {
 
             for (const secao of Object.keys(diff)) {
                 for (const item of diff[secao].novos) {
-                    if (secao === "horarioAulas") {
+                    if (secao === 'horarioAulas') {
                         promises.push(adicionarAlterarHorario({horario: item}));
                     }
                 }
                 for (const item of diff[secao].alterados) {
-                    if (secao === "horarioAulas") {
+                    if (secao === 'horarioAulas') {
                         promises.push(adicionarAlterarHorario({horario: item}));
-                    } else if (secao === "valorMensalidade") {
+                    } else if (secao === 'valorMensalidade') {
                         promises.push(alterarValorMensalidade({mensalidade: item}));
                     }
                 }
                 for (const item of diff[secao].removidos) {
-                    if (secao === "horarioAulas") {
+                    if (secao === 'horarioAulas') {
                         promises.push(removerHorario({id: item.id}));
                     }
                 }
@@ -83,36 +93,36 @@ export const ConfigSistema = () => {
 
             Promise.all(promises)
                 .then(() => {
-                    toasterMsg("success", "Configurações salvas com sucesso!");
+                    toasterMsg('success', 'Configurações salvas com sucesso!');
                     setModoEdicao(false);
                     fetchDadosConfig();
                 })
                 .catch((error) => {
-                    toasterMsg("error", error.response.data.message || "Erro ao salvar configurações");
-                })
+                    toasterMsg('error', error.response.data.message || 'Erro ao salvar configurações');
+                });
 
         } catch (error) {
-            toasterMsg("error", error?.data || "Erro inesperado");
+            toasterMsg('error', error?.data || 'Erro inesperado');
         }
     };
 
     const handleCancel = () => {
-        setDadosTemporarios(structuredClone(dados))
-        setModoEdicao(false)
-    }
+        setDadosTemporarios(structuredClone(dados));
+        setModoEdicao(false);
+    };
 
     useEffect(() => {
-        fetchDadosConfig()
+        fetchDadosConfig();
     }, []);
 
     useEffect(() => {
-        setDadosTemporarios(structuredClone(dados))
-    }, [dados])
+        setDadosTemporarios(structuredClone(dados));
+    }, [dados]);
 
     return (
         <Box>
             <DefaultBreadcrumb rotas={rotas} />
-            <Box sx={{ pt: "2rem", px: "4rem" }}>
+            <Box sx={{ pt: '2rem', px: '4rem' }}>
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                     <Box display="flex" alignItems="center" gap={2}>
                         <Typography>Visualização</Typography>
@@ -144,4 +154,4 @@ export const ConfigSistema = () => {
             <ToastContainer />
         </Box>
     );
-}
+};

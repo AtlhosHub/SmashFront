@@ -1,8 +1,8 @@
 export const getBreadcrumbRoutes = () => {
     return [
         {
-            route: "/dashboard",
-            description: "Dashboard"
+            route: '/dashboard',
+            description: 'Dashboard'
         }
-    ]
-}
+    ];
+};

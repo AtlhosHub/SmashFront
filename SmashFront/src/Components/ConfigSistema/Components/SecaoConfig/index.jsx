@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import {
 	Box,
 	Typography,
@@ -10,9 +12,7 @@ import {
 import { Add, Delete, ExpandLess, ExpandMore } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import ControleInputHora from './muitolegal';
-import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import ControleInputHora from '../ControleInputHora';
 
 export const SecaoConfig = ({
 	secao,
@@ -56,29 +56,29 @@ export const SecaoConfig = ({
 
 	const atualizarHora = (index, campo, valor) => {
 		const novoArray = dadosTemporarios[secao].data.map((item, i) =>
-			i === index ? { ...item, [campo]: dayjs(valor).format("HH:mm") } : item
+			i === index ? { ...item, [campo]: dayjs(valor).format('HH:mm') } : item
 		);
 		atualizarSecao(novoArray);
 	};
 
 	const atualizarValor = (campo, valor) => {
-		const valorNumerico = parseFloat(String(valor).replace(",", "."));
+		const valorNumerico = parseFloat(String(valor).replace(',', '.'));
 
 		const novoArray = Array.isArray(dadosTemporarios[secao].data)
 			? dadosTemporarios[secao].data.map((item, i) =>
-				i === 0 ? { ...item, [campo]: isNaN(valorNumerico) ? "" : valorNumerico } : item
+				i === 0 ? { ...item, [campo]: isNaN(valorNumerico) ? '' : valorNumerico } : item
 			)
-			: [{ [campo]: isNaN(valorNumerico) ? "" : valorNumerico }];
+			: [{ [campo]: isNaN(valorNumerico) ? '' : valorNumerico }];
 
 		atualizarSecao(novoArray);
 	};
 
 	const handleHoraChange = (index, campo, novaHora) => {
 		atualizarHora(index, campo, novaHora);
-	}
+	};
 
 	useEffect(() => {
-		if (secao === "horarioAulas") {
+		if (secao === 'horarioAulas') {
 			setErrosHorarios((prev) =>
 				dadosTemporarios[secao].data.map((item) => {
 					const inicio = item.horarioAulaInicio;
@@ -87,8 +87,8 @@ export const SecaoConfig = ({
 					let erroFim = !fim;
 
 					if (inicio && fim) {
-						const dInicio = dayjs(inicio, "HH:mm");
-						const dFim = dayjs(fim, "HH:mm");
+						const dInicio = dayjs(inicio, 'HH:mm');
+						const dFim = dayjs(fim, 'HH:mm');
 						if (!dInicio.isBefore(dFim)) {
 							erroInicio = true;
 							erroFim = true;
@@ -107,7 +107,7 @@ export const SecaoConfig = ({
 		let temCampoVazio = false;
 		const dataArray = Array.isArray(dadosTemporarios[secao]?.data) ? dadosTemporarios[secao].data : [];
 
-		if (secao === "horarioAulas") {
+		if (secao === 'horarioAulas') {
 			temCampoVazio = dataArray.some(
 				(item) => !item.horarioAulaInicio || !item.horarioAulaFim
 			);
@@ -188,25 +188,25 @@ export const SecaoConfig = ({
 							<TextField
 								fullWidth
 								type="number"
-								value={config?.data?.[0]?.data ?? ""}
+								value={config?.data?.[0]?.data ?? ''}
 								disabled={!modoEdicao}
-								inputProps={{ inputMode: "decimal" }}
+								inputProps={{ inputMode: 'decimal' }}
 								sx={{
-									"& input[type=number]::-webkit-inner-spin-button": {
-										display: "none",
+									'& input[type=number]::-webkit-inner-spin-button': {
+										display: 'none',
 									},
-									"& input[type=number]::-webkit-outer-spin-button": {
-										display: "none",
+									'& input[type=number]::-webkit-outer-spin-button': {
+										display: 'none',
 									},
 								}}
-								onChange={(e) => atualizarValor("data", e.target.value)}
+								onChange={(e) => atualizarValor('data', e.target.value)}
 							/>
 						) : (
-							<Typography>{Number(config?.data[0]?.data).toLocaleString('pt-BR', { style: "currency", currency: "BRL" })}</Typography>
+							<Typography>{Number(config?.data[0]?.data).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Typography>
 						))
 					}
 				</Box>
 			</Collapse>
 		</Paper>
 	);
-}
+};

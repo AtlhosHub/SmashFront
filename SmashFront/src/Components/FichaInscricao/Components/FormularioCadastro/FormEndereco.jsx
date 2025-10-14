@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { toasterMsg } from "../../../../utils/toasterService";
-import { ToastContainer } from "react-toastify";
-import { useFormEnderecoConfig } from "../../hooks/useFormEnderecoConfig";
-import { useFichaInscricao } from "../FichaInscricaoContext";
-import { FormBuilder } from "../../../DefaultComponents/FormBuilder";
+import { useEffect, useRef, useState, React } from 'react';
+import { toasterMsg } from '../../../../utils/toasterService';
+import { ToastContainer } from 'react-toastify';
+import { useFormEnderecoConfig } from '../../hooks/useFormEnderecoConfig';
+import { useFichaInscricao } from '../FichaInscricaoContext';
+import { FormBuilder } from '../../../DefaultComponents/FormBuilder';
 
 export const FormEndereco = ({
     handleSalvar,
@@ -27,46 +27,46 @@ export const FormEndereco = ({
     const messagemErroCEP = useRef();
 
     const labels = {
-        visualizacao: "Editar",
+        visualizacao: 'Editar',
         cadastro: maiorIdade
-            ? "Concluir"
-            : "Próximo",
+            ? 'Concluir'
+            : 'Próximo',
         edicao: maiorIdade
-            ? "Concluir"
-            : "Próximo",
+            ? 'Concluir'
+            : 'Próximo',
     };
 
-    const labelBotao = labels[operacao] ?? "Próximo";
+    const labelBotao = labels[operacao] ?? 'Próximo';
 
     const handleClick = () => {
         switch (operacao) {
-            case "visualizacao":
-                setOperacao("edicao");
+            case 'visualizacao':
+                setOperacao('edicao');
                 break;
-            case "cadastro":
-                if (maiorIdade) { handleConfirmar(); break }
-                setTabAtiva("resp");
+            case 'cadastro':
+                if (maiorIdade) { handleConfirmar(); break; }
+                setTabAtiva('resp');
                 break;
-            case "edicao":
-                if (maiorIdade) { handleSalvar(); break }
-                setTabAtiva("resp");
+            case 'edicao':
+                if (maiorIdade) { handleSalvar(); break; }
+                setTabAtiva('resp');
                 break;
         }
     };
 
     const formatarCep = (valor) => {
-        if (!valor) return "";
-        const apenasNumeros = valor.replace(/\D/g, "").slice(0, 8);
+        if (!valor) return '';
+        const apenasNumeros = valor.replace(/\D/g, '').slice(0, 8);
 
         if (apenasNumeros.length <= 5) {
             return apenasNumeros;
         }
 
-        return apenasNumeros.slice(0, 5) + "-" + apenasNumeros.slice(5);
+        return apenasNumeros.slice(0, 5) + '-' + apenasNumeros.slice(5);
     };
 
     const handleCepChange = async (e) => {
-        const cepNumerico = e?.target?.value?.replace(/\D/g, "") ?? "";
+        const cepNumerico = e?.target?.value?.replace(/\D/g, '') ?? '';
 
         setUserInfo(prev => ({
             ...prev,
@@ -78,11 +78,11 @@ export const FormEndereco = ({
                 ...prev,
                 endereco: {
                     ...prev.endereco,
-                    logradouro: "",
-                    bairro: "",
-                    cidade: "",
-                    estado: "",
-                    numLogradouro: "",
+                    logradouro: '',
+                    bairro: '',
+                    cidade: '',
+                    estado: '',
+                    numLogradouro: '',
                 },
             }));
             setCepValido(false);
@@ -91,7 +91,7 @@ export const FormEndereco = ({
 
         if (
             cepNumerico?.length === 8 &&
-            cepNumerico !== (userInfo.endereco.cep.value || "").replace(/\D/g, "")
+            cepNumerico !== (userInfo.endereco.cep.value || '').replace(/\D/g, '')
         ) {
             try {
                 const response = await fetch(`https://viacep.com.br/ws/${cepNumerico}/json/`);
@@ -111,11 +111,11 @@ export const FormEndereco = ({
                     }));
                     setCepValido(true);
                 } else {
-                    toasterMsg("error", "CEP não encontrado!");
+                    toasterMsg('error', 'CEP não encontrado!');
                     setCepValido(false);
                 }
             } catch (error) {
-                console.error("Erro ao buscar CEP:", error);
+                console.error('Erro ao buscar CEP:', error);
             }
         } else if (cepNumerico?.length !== 8) {
             setCepValido(false);
@@ -123,7 +123,7 @@ export const FormEndereco = ({
     };
 
     useEffect(() => {
-        const camposPreenchidos = (operacao === "cadastro" ? cepValido : true) && userInfo.endereco.numLogradouro;
+        const camposPreenchidos = (operacao === 'cadastro' ? cepValido : true) && userInfo.endereco.numLogradouro;
 
         setBotaoLiberado(camposPreenchidos);
         setEnderecoConcluido(camposPreenchidos);
@@ -149,16 +149,16 @@ export const FormEndereco = ({
     });
 
     return (
-        <>
+        <React.Fragment>
             <FormBuilder
                 campos={formConfig.campos}
                 radios={formConfig.radios}
                 cancelButton={{
-                    label: operacao === "visualizacao" ? "Excluir" : "Voltar",
-                    onClick: operacao === "visualizacao"
+                    label: operacao === 'visualizacao' ? 'Excluir' : 'Voltar',
+                    onClick: operacao === 'visualizacao'
                         ? () => setIsModalDeleteOpen(true)
-                        : () => setTabAtiva("info"),
-                    color: operacao === "visualizacao" ? "red" : ""
+                        : () => setTabAtiva('info'),
+                    color: operacao === 'visualizacao' ? 'red' : ''
                 }}
                 confirmButton={{
                     label: labelBotao,
@@ -169,6 +169,6 @@ export const FormEndereco = ({
                 operacao={operacao}
             />
             <ToastContainer />
-        </>
+        </React.Fragment>
     );
 };

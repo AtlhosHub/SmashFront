@@ -1,48 +1,48 @@
-import { Logout, Person } from "@mui/icons-material";
-import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
-import { getUserInicial, getUserName } from "../../FichaInscricao/utils/getUserData";
-import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { validateToken } from "../../../utils/validateToken";
+import { Logout, Person } from '@mui/icons-material';
+import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
+import { getUserInicial, getUserName } from '../../FichaInscricao/utils/getUserData';
+import { useEffect, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { validateToken } from '../../../utils/validateToken';
 
 export const DefaultHeader = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const sairSessao = () => {
     sessionStorage.clear();
-    navigate("/");
-  }
+    navigate('/');
+  };
 
   const definirTitulo = () => {
     switch (pathname) {
-      case "/telaInicial":
-        return "Tela Inicial"
-      case "/dashboard":
-        return "Dashboard"
-      case "/alunos":
-        return "Mensalidades"
-      case "/listaEspera":
-        return "Lista de Espera"
-      case "/controleUsuarios":
-        return "Controle de Usuários"
-      case "/cadastroUsuarios":
-        return "Cadastro de Usuários"
-      case "/fichaInscricao":
-        return "Ficha de Inscrição"
-      case "/cadastrarListaEspera":
-        return "Adicionar Perfil do Interessado"
+      case '/telaInicial':
+        return 'Tela Inicial';
+      case '/dashboard':
+        return 'Dashboard';
+      case '/alunos':
+        return 'Mensalidades';
+      case '/listaEspera':
+        return 'Lista de Espera';
+      case '/controleUsuarios':
+        return 'Controle de Usuários';
+      case '/cadastroUsuarios':
+        return 'Cadastro de Usuários';
+      case '/fichaInscricao':
+        return 'Ficha de Inscrição';
+      case '/cadastrarListaEspera':
+        return 'Adicionar Perfil do Interessado';
       default:
-        return "Configurações do Sistema"
+        return 'Configurações do Sistema';
     }
   };
 
   useEffect(() => {
     validateToken(navigate);
-  }, [pathname])
+  }, [pathname]);
 
   return (
     <Box sx={{ flex: 1 }}>
@@ -50,57 +50,57 @@ export const DefaultHeader = () => {
         <AppBar
           position="static"
           sx={{
-            backgroundColor: "#286DA8 !important",
-            position: "relative"
+            backgroundColor: '#286DA8 !important',
+            position: 'relative'
           }}
         >
           <Toolbar>
             <Box
               sx={{
                 flexGrow: 1,
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                marginTop: "10px",
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginTop: '10px',
               }}
             >
               <Typography
                 className="header-title"
                 variant="h6"
                 sx={{
-                  fontFamily: "'Mohave', sans-serif ",
-                  color: "#F3F9F9",
-                  fontSize: "40px",
-                  textTransform: "uppercase",
-                  fontWeight: "700",
-                  lineHeight: "0px",
+                  fontFamily: '\'Mohave\', sans-serif ',
+                  color: '#F3F9F9',
+                  fontSize: '40px',
+                  textTransform: 'uppercase',
+                  fontWeight: '700',
+                  lineHeight: '0px',
                 }}
               >
                 CT Vila Formosa
               </Typography>
               <Box sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                marginBottom: "5px",
-                fontFamily: "'Poppins', sans-serif",
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '5px',
+                fontFamily: '\'Poppins\', sans-serif',
               }}>
-                <span style={{ fontSize: "26px", lineHeight: 0 }}>
+                <span style={{ fontSize: '26px', lineHeight: 0 }}>
                   |
                 </span>
-                <span style={{ lineHeight: "10px" }}>
+                <span style={{ lineHeight: '10px' }}>
                   {definirTitulo()}
                 </span>
               </Box>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "'Poppins', sans-serif", fontSize: "16px", color: "#F3F9F9" }}>
-              <span><span style={{ fontWeight: 600 }}>Bem-vindo(a)</span>, {getUserName() || "carregando..."}</span>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px', fontFamily: '\'Poppins\', sans-serif', fontSize: '16px', color: '#F3F9F9' }}>
+              <span><span style={{ fontWeight: 600 }}>Bem-vindo(a)</span>, {getUserName() || 'carregando...'}</span>
               <Tooltip title="Opções">
                 <IconButton
                   onClick={(e) => setAnchorEl(e.currentTarget)}
                 >
-                  <Avatar sx={{ backgroundColor: "white" }}>
-                    {<span style={{ color: "black" }}>{getUserInicial()}</span> || <Person sx={{ color: "black", fontSize: "30px" }} />}
+                  <Avatar sx={{ backgroundColor: 'white' }}>
+                    {<span style={{ color: 'black' }}>{getUserInicial()}</span> || <Person sx={{ color: 'black', fontSize: '30px' }} />}
                   </Avatar>
                 </IconButton>
               </Tooltip>
@@ -141,12 +141,12 @@ export const DefaultHeader = () => {
         >
           <MenuItem
             onClick={() => {
-              navigate("/cadastroUsuarios", {
+              navigate('/cadastroUsuarios', {
                 state: {
-                  idUsuario: sessionStorage.getItem("idUsuario"),
-                  operacao: "visualizacao"
+                  idUsuario: sessionStorage.getItem('idUsuario'),
+                  operacao: 'visualizacao'
                 }
-              })
+              });
             }}
           >
             <ListItemIcon>
@@ -154,7 +154,7 @@ export const DefaultHeader = () => {
             </ListItemIcon>
             Perfil
           </MenuItem>
-          <Divider sx={{ my: "4px !important" }} />
+          <Divider sx={{ my: '4px !important' }} />
           <MenuItem onClick={sairSessao}>
             <ListItemIcon>
               <Logout fontSize="small" />

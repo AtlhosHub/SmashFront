@@ -1,10 +1,10 @@
-import { api } from "../provider/apiProvider";
+import { api } from '../provider/apiProvider';
 
 export const tokenValidationFunction = async () => {
     try {
-        const { status } = await api.get("/usuarios/token-validation", {
+        const { status } = await api.get('/usuarios/token-validation', {
             headers: {
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         });
         return status === 204;

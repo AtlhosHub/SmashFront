@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
-import { useFormResponsavelConfig } from "../../hooks/useFormResponsavelConfig";
-import { useFichaInscricao } from "../FichaInscricaoContext";
-import { FormBuilder } from "../../../DefaultComponents/FormBuilder";
-import { formatCPF } from "../../../../utils/validateCpf";
+import React, { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { useFormResponsavelConfig } from '../../hooks/useFormResponsavelConfig';
+import { useFichaInscricao } from '../FichaInscricaoContext';
+import { FormBuilder } from '../../../DefaultComponents/FormBuilder';
+import { formatCPF } from '../../../../utils/validateCpf';
 
 export const FormResponsavel = ({
     handleSalvar,
@@ -24,32 +24,32 @@ export const FormResponsavel = ({
     const [cpfUser, setCpfUser] = useState(formatCPF(userInfo.responsaveis[0].cpf));
 
     const labels = {
-        visualizacao: "Editar",
-        cadastro: "Concluir",
-        edicao: "Salvar"
+        visualizacao: 'Editar',
+        cadastro: 'Concluir',
+        edicao: 'Salvar'
     };
 
-    const labelBotao = labels[operacao] ?? "Salvar";
+    const labelBotao = labels[operacao] ?? 'Salvar';
 
     const handleClick = () => {
         switch (operacao) {
-            case "visualizacao":
-                setOperacao("edicao");
+            case 'visualizacao':
+                setOperacao('edicao');
                 break;
-            case "cadastro":
+            case 'cadastro':
                 handleConfirmar();
                 break;
-            case "edicao":
+            case 'edicao':
                 handleSalvar();
                 break;
             default:
                 handleSalvar();
         };
-    }
+    };
 
     useEffect(() => {
-        console.log(operacao)
-    }, [])
+        console.log(operacao);
+    }, []);
 
     useEffect(() => {
         const camposPreenchidos =
@@ -74,23 +74,23 @@ export const FormResponsavel = ({
         cpfUser,
         setCpfUser,
         formatCPF
-    })
+    });
 
     return (
-        <>
+        <React.Fragment>
             <FormBuilder
                 campos={formConfig.campos}
                 radios={formConfig.radios}
                 cancelButton={{
-                    label: operacao === "visualizacao"
-                        ? "Excluir"
-                        : "Voltar",
-                    onClick: operacao === "visualizacao"
+                    label: operacao === 'visualizacao'
+                        ? 'Excluir'
+                        : 'Voltar',
+                    onClick: operacao === 'visualizacao'
                         ? () => setIsModalDeleteOpen(true)
-                        : () => setTabAtiva("ende"),
-                    color: operacao === "visualizacao"
-                        ? "red"
-                        : ""
+                        : () => setTabAtiva('ende'),
+                    color: operacao === 'visualizacao'
+                        ? 'red'
+                        : ''
                 }}
                 confirmButton={{
                     label: labelBotao,
@@ -101,6 +101,6 @@ export const FormResponsavel = ({
                 operacao={operacao}
             />
             <ToastContainer />
-        </>
+        </React.Fragment>
     );
 };

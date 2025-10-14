@@ -1,5 +1,6 @@
-import { TimePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
+import React from 'react';
+import { TimePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 export default function ControleInputHora({
     index,
@@ -14,9 +15,9 @@ export default function ControleInputHora({
     const validarHora = (novaHora) => {
         if (!novaHora || !novaHora.isValid?.()) return false;
 
-        const horaAtual = dayjs(novaHora, "HH:mm");
-        const min = minValue ? dayjs(minValue, "HH:mm") : null;
-        const max = maxValue ? dayjs(maxValue, "HH:mm") : null;
+        const horaAtual = dayjs(novaHora, 'HH:mm');
+        const min = minValue ? dayjs(minValue, 'HH:mm') : null;
+        const max = maxValue ? dayjs(maxValue, 'HH:mm') : null;
 
         if (min && horaAtual.isBefore(min)) return false;
         if (max && horaAtual.isAfter(max)) return false;
@@ -28,9 +29,9 @@ export default function ControleInputHora({
         <TimePicker
             label="Escolha a Hora"
             ampm={false}
-            value={hora ? dayjs(hora, "HH:mm") : null}
-            maxTime={maxValue ? dayjs(maxValue, "HH:mm") : undefined}
-            minTime={minValue ? dayjs(minValue, "HH:mm") : undefined}
+            value={hora ? dayjs(hora, 'HH:mm') : null}
+            maxTime={maxValue ? dayjs(maxValue, 'HH:mm') : undefined}
+            minTime={minValue ? dayjs(minValue, 'HH:mm') : undefined}
             onChange={(novaHora) => {
                 setHora(novaHora);
 
@@ -49,7 +50,7 @@ export default function ControleInputHora({
                         endAdornment: null,
                     },
                     error: erroAtual,
-                    size: "small",
+                    size: 'small',
                 },
             }}
         />

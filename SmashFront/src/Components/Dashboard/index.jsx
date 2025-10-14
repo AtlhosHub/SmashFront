@@ -1,118 +1,115 @@
-import { useNavigate } from "react-router-dom"
-import {
-    useEffect,
-    useState
-} from "react"
+import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 
-import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
-import { Aniversariantes } from "./Components/Aniversariantes/Aniversariantes"
-import { Kpi } from "../DefaultComponents/KPI/KPI"
-import discount from "../../assets/Discount.png"
-import people from "../../assets/Users.png"
-import { Grafico } from "./Components/Grafico/Grafico"
-import { Box } from "@mui/material"
+import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
+import { Aniversariantes } from './Components/Aniversariantes';
+import { Kpi } from '../DefaultComponents/KPI/KPI';
+import discount from '../../assets/Discount.png';
+import people from '../../assets/Users.png';
+import { Grafico } from './Components/Grafico';
+import { Box } from '@mui/material';
 
 import {
     getAlunosAniversariantes,
     getConteudoGrafico,
     getNumAlunos,
     getNumDesconto
-} from "./utils/apiRequest"
-import { getBreadcrumbRoutes } from "./utils/breadCrumbRoutes"
-import "./style.css";
+} from './utils/apiRequest';
+import { getBreadcrumbRoutes } from './utils/breadCrumbRoutes';
+import './style.css';
 
 export const Dashboard = () => {
     const navigate = useNavigate;
 
-    const [qtdPagamentosComDesconto, setQtdPagamentosComDesconto] = useState("0")
-    const [aniversariantes, setAniversariantes] = useState([])
-    const [qtdAlunosAtivos, setQtdAlunosAtivos] = useState("0")
-    const [dadosDash, setDadosDash] = useState([])
+    const [qtdPagamentosComDesconto, setQtdPagamentosComDesconto] = useState('0');
+    const [aniversariantes, setAniversariantes] = useState([]);
+    const [qtdAlunosAtivos, setQtdAlunosAtivos] = useState('0');
+    const [dadosDash, setDadosDash] = useState([]);
 
     const listarAniversariantes = () => {
         try {
             const alunosAniversariantes = getAlunosAniversariantes();
-            setAniversariantes(alunosAniversariantes)
+            setAniversariantes(alunosAniversariantes);
         } catch (error) {
-            if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+            if (error.response.status === 401 || error.response.data.message === 'JWT strings must contain exactly 2 period characters. Found: 0') {
                 sessionStorage.clear();
-                navigate("/", { state: { tokenLogout: true } });
+                navigate('/', { state: { tokenLogout: true } });
             }
         }
-    }
+    };
 
     const listarQtdAlunosAtivos = () => {
         try {
             const numAlunos = getNumAlunos();
             setQtdAlunosAtivos(numAlunos);
         } catch (error) {
-            if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+            if (error.response.status === 401 || error.response.data.message === 'JWT strings must contain exactly 2 period characters. Found: 0') {
                 sessionStorage.clear();
-                navigate("/", { state: { tokenLogout: true } });
+                navigate('/', { state: { tokenLogout: true } });
             }
         }
-    }
+    };
 
     const listarPagamentosComDesconto = () => {
         try {
             const numDesconto = getNumDesconto();
             setQtdPagamentosComDesconto(numDesconto);
         } catch (error) {
-            if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+            if (error.response.status === 401 || error.response.data.message === 'JWT strings must contain exactly 2 period characters. Found: 0') {
                 sessionStorage.clear();
-                navigate("/", { state: { tokenLogout: true } });
+                navigate('/', { state: { tokenLogout: true } });
             }
         }
-    }
+    };
 
     const listarDadosDashboard = () => {
         try {
             const dadosGrafico = getConteudoGrafico();
             setDadosDash(dadosGrafico);
         } catch (error) {
-            if (error.response.status === 401 || error.response.data.message === "JWT strings must contain exactly 2 period characters. Found: 0") {
+            if (error.response.status === 401 || error.response.data.message === 'JWT strings must contain exactly 2 period characters. Found: 0') {
                 sessionStorage.clear();
-                navigate("/", { state: { tokenLogout: true } });
+                navigate('/', { state: { tokenLogout: true } });
             }
         }
-    }
+    };
 
     useEffect(() => {
         listarAniversariantes();
         listarQtdAlunosAtivos();
         listarPagamentosComDesconto();
         listarDadosDashboard();
-    }, [])
+    }, []);
 
     return (
-        <Box fontFamily={"Poppins, sans-serif"}
+        <Box fontFamily={'Poppins, sans-serif'}
             sx={{
-                display: "grid",
-                gridTemplateRows: "auto 1fr",
+                display: 'grid',
+                gridTemplateRows: 'auto 1fr',
             }}
         >
             <DefaultBreadcrumb rotas={getBreadcrumbRoutes()} altura={70} />
             <Box
                 sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    p: "30px",
-                    gap: "30px",
+                    display: 'flex',
+                    flexDirection: 'row',
+                    p: '30px',
+                    gap: '30px',
                 }}
             >
                 <Box
                     sx={{
-                        width: "100%",
-                        boxSizing: "border-box",
-                        gap: "30px",
-                        display: "flex",
-                        flexDirection: "column"
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        gap: '30px',
+                        display: 'flex',
+                        flexDirection: 'column'
                     }}
                 >
                     <Box
                         sx={{
-                            display: "flex",
-                            gap: "30px"
+                            display: 'flex',
+                            gap: '30px'
                         }}
                     >
                         <Kpi
@@ -138,7 +135,7 @@ export const Dashboard = () => {
                 </Box>
                 <Box
                     sx={{
-                        width: "60%",
+                        width: '60%',
                     }}
                 >
                     <Aniversariantes
@@ -147,5 +144,5 @@ export const Dashboard = () => {
                 </Box>
             </Box>
         </Box>
-    )
-}
+    );
+};

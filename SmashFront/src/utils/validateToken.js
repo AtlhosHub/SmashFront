@@ -1,8 +1,8 @@
-import { tokenValidationFunction } from "./tokenValidationFunction";
+import { tokenValidationFunction } from './tokenValidationFunction';
 
 export const validateToken = async (navigate) => {    
     const isValid = await tokenValidationFunction();
     if (!isValid) {
-        navigate("/", { state: { tokenLogout: true } });
+        navigate('/', { state: { tokenLogout: true } });
     }
 };

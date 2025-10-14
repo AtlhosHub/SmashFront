@@ -1,7 +1,7 @@
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Pagination } from "@mui/material"
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Pagination } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
-import "./DefaultTable.css"
-import { useState } from "react";
+import './DefaultTable.css';
+import { useState, React } from 'react';
 
 export const DefaultTable = ({
     headCells,
@@ -21,23 +21,23 @@ export const DefaultTable = ({
     );
 
     return (
-        <>
-            <TableContainer sx={{ width: "100%" }}>
+        <React.Fragment>
+            <TableContainer sx={{ width: '100%' }}>
                 <Table>
-                    <TableHead sx={{ backgroundColor: "white" }}>
+                    <TableHead sx={{ backgroundColor: 'white' }}>
                         <TableRow className="header-table-row">
                             {withStatus &&
-                                <TableCell sx={{ textAlign: "center", width: "10%" }}>Status</TableCell>
+                                <TableCell sx={{ textAlign: 'center', width: '10%' }}>Status</TableCell>
                             }
                             {headCells.map((cell, index) => (
                                 <TableCell key={`header-cell-${index}`} align={cell.align}>{cell.description}</TableCell>
                             ))}
                             {withPagStatus &&
-                                <TableCell sx={{ textAlign: "center" }}>Status de Comprovante</TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>Status de Comprovante</TableCell>
                             }
                             <TableCell
                                 sx={{
-                                    display: rowData[0]?.acoes ? "table-cell" : "none",
+                                    display: rowData[0]?.acoes ? 'table-cell' : 'none',
                                 }}
                             >
                                 &nbsp;
@@ -51,23 +51,23 @@ export const DefaultTable = ({
                                 className="body-table-row"
                                 sx={{
                                     backgroundColor: index % 2 !== 0
-                                        ? "#ebeff5"
-                                        : "white"
+                                        ? '#ebeff5'
+                                        : 'white'
                                 }}
-                                onClick={() => { onRowClick && onRowClick(row) }}
+                                onClick={() => { onRowClick && onRowClick(row); }}
                             >
                                 {withStatus &&
                                     <TableCell
                                         sx={{
-                                            textAlign: "center",
+                                            textAlign: 'center',
                                             '&:hover': {
-                                                textDecorationColor: "black"
+                                                textDecorationColor: 'black'
                                             }
                                         }}
                                     >
                                         {row?.ativo === true ?
-                                            <CircleIcon sx={{ color: "#286DA8" }} /> :
-                                            <CircleIcon sx={{ color: "#989898" }} />
+                                            <CircleIcon sx={{ color: '#286DA8' }} /> :
+                                            <CircleIcon sx={{ color: '#989898' }} />
                                         }
                                     </TableCell>
                                 }
@@ -75,12 +75,12 @@ export const DefaultTable = ({
                                     <TableCell
                                         key={`row-cell-${header.name}-${index}`}
                                         sx={{
-                                            ...(withStatus && header.name === "nomeAluno" && {
+                                            ...(withStatus && header.name === 'nomeAluno' && {
                                                 '&:hover': {
-                                                    cursor: "pointer",
+                                                    cursor: 'pointer',
                                                 }
                                             }),
-                                            width: header?.cellWidth ?? "auto"
+                                            width: header?.cellWidth ?? 'auto'
                                         }}
                                         align={header.align}
                                     >
@@ -88,16 +88,16 @@ export const DefaultTable = ({
                                     </TableCell>
                                 ))}
                                 {withPagStatus &&
-                                    <TableCell sx={{ textAlign: "center" }}>
+                                    <TableCell sx={{ textAlign: 'center' }}>
                                         <Box
                                             className="status-comprovante"
                                             sx={{
-                                                backgroundColor: row?.status === "PAGO"
-                                                    ? "#2E7D32"
-                                                    : row?.status === "PENDENTE"
-                                                        ? "#989898"
-                                                        : "#FF0000",
-                                                color: row?.status === "PENDENTE" ? "black" : "white",
+                                                backgroundColor: row?.status === 'PAGO'
+                                                    ? '#2E7D32'
+                                                    : row?.status === 'PENDENTE'
+                                                        ? '#989898'
+                                                        : '#FF0000',
+                                                color: row?.status === 'PENDENTE' ? 'black' : 'white',
                                             }}>
                                             {row?.status}
                                         </Box>
@@ -105,8 +105,8 @@ export const DefaultTable = ({
                                 }
                                 <TableCell
                                     sx={{
-                                        display: row.acoes ? "table-cell" : "none",
-                                        justifyContent: "center"
+                                        display: row.acoes ? 'table-cell' : 'none',
+                                        justifyContent: 'center'
                                     }}
                                 >
                                     {row.acoes}
@@ -126,6 +126,6 @@ export const DefaultTable = ({
                     />
                 </Box>
             }
-        </>
-    )
-}
+        </React.Fragment>
+    );
+};

@@ -1,23 +1,23 @@
-import { Box } from "@mui/material";
-import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
-import { MenuCadastro } from "../DefaultComponents/MenuCadastro/MenuCadastro";
-import { useEffect } from "react";
-import { FormInfo } from "./Components/FormularioCadastro/FormInfo";
-import { FormEndereco } from "./Components/FormularioCadastro/FormEndereco";
-import { api } from "../../provider/apiProvider"
-import { FormResponsavel } from "./Components/FormularioCadastro/FormResponsavel";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Box } from '@mui/material';
+import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
+import { MenuCadastro } from '../DefaultComponents/MenuCadastro/MenuCadastro';
+import { useEffect, React } from 'react';
+import { FormInfo } from './Components/FormularioCadastro/FormInfo';
+import { FormEndereco } from './Components/FormularioCadastro/FormEndereco';
+import { api } from '../../provider/apiProvider';
+import { FormResponsavel } from './Components/FormularioCadastro/FormResponsavel';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import HistoryIcon from '@mui/icons-material/History';
-import dayjs from "dayjs";
-import { HistPagamento } from "./Components/HistPag/HistPagamento";
-import { toasterMsg } from "../../utils/toasterService";
-import { ToastContainer } from "react-toastify";
-import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
-import { setTabName } from "./utils/setTabName";
-import { useFichaInscricao } from "./Components/FichaInscricaoContext";
+import dayjs from 'dayjs';
+import { HistPagamento } from './Components/HistPag/HistPagamento';
+import { toasterMsg } from '../../utils/toasterService';
+import { ToastContainer } from 'react-toastify';
+import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
+import { setTabName } from './utils/setTabName';
+import { useFichaInscricao } from './Components/FichaInscricaoContext';
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -41,45 +41,45 @@ export const FichaInscricao = () => {
 
     const rotas = [
         {
-            route: "/alunos",
-            description: "Mensalidades"
+            route: '/alunos',
+            description: 'Mensalidades'
         },
         {
-            route: "/fichaInscricao",
+            route: '/fichaInscricao',
             description: setTabName(operacao)
         }
-    ]
+    ];
 
     const etapasMenu = [
         {
-            id: "info",
-            nome: "Informações",
+            id: 'info',
+            nome: 'Informações',
             Icone: AccountCircleOutlinedIcon,
             visivel: true,
             concluido: infoConcluido,
             podeAtivar: () => true
         },
         {
-            id: "ende",
-            nome: "Endereço",
+            id: 'ende',
+            nome: 'Endereço',
             Icone: FmdGoodOutlinedIcon,
             visivel: true,
             concluido: enderecoConcluido,
             podeAtivar: () => infoConcluido
         },
         {
-            id: "resp",
-            nome: "Responsável",
+            id: 'resp',
+            nome: 'Responsável',
             Icone: FamilyRestroomIcon,
             visivel: !maiorIdade,
             concluido: respConcluido,
             podeAtivar: () => infoConcluido && enderecoConcluido
         },
         {
-            id: "paga",
-            nome: "Histórico de Pagamento",
+            id: 'paga',
+            nome: 'Histórico de Pagamento',
             Icone: HistoryIcon,
-            visivel: operacao === "visualizacao",
+            visivel: operacao === 'visualizacao',
             concluido: true,
             podeAtivar: () => true
         }
@@ -92,28 +92,28 @@ export const FichaInscricao = () => {
             dadosAluno.responsaveis = [];
         }
 
-        api.post("/alunos", dadosAluno, {
+        api.post('/alunos', dadosAluno, {
             headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then(() => {
-                navigate("/alunos", { state: { userCreated: true } })
+                navigate('/alunos', { state: { userCreated: true } });
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao cadastrar aluno, por favor contacte os admnistradores.");
+                    toasterMsg('error', 'Erro ao cadastrar aluno, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.response.data);
+                    toasterMsg('error', error.response.data);
                 }
             });
-    }
+    };
 
     const editarAluno = () => {
         const dadosAluno = {
             ...userInfo,
-            usuarioInclusao: { id: sessionStorage.getItem("idUsuario") }
+            usuarioInclusao: { id: sessionStorage.getItem('idUsuario') }
         };
 
         if (maiorIdade) {
@@ -122,103 +122,103 @@ export const FichaInscricao = () => {
 
         api.put(`/alunos/${userInfo.id}`, dadosAluno, {
             headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then(() => {
-                toasterMsg("success", "Aluno editado com sucesso!");
-                setOperacao("visualizacao")
+                toasterMsg('success', 'Aluno editado com sucesso!');
+                setOperacao('visualizacao');
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao editar aluno, por favor contacte os admnistradores.");
+                    toasterMsg('error', 'Erro ao editar aluno, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.response.data);
+                    toasterMsg('error', error.response.data);
                 }
-            })
-    }
+            });
+    };
 
     const deletarAluno = () => {
         api.delete(`/alunos/${userInfo.id}`, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then(() => {
-                navigate("/alunos", { state: { userDeleted: true } })
+                navigate('/alunos', { state: { userDeleted: true } });
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao deletar aluno, por favor contacte os admnistradores.");
+                    toasterMsg('error', 'Erro ao deletar aluno, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.response.data);
+                    toasterMsg('error', error.response.data);
                 }
-            })
-    }
+            });
+    };
 
     const listarDadosAluno = (id) => {
         api.get(`/alunos/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then((response) => {
-                const hoje = dayjs()
-                const nascimento = dayjs(response.data.dataNascimento)
+                const hoje = dayjs();
+                const nascimento = dayjs(response.data.dataNascimento);
 
-                setUserInfo(response.data)
+                setUserInfo(response.data);
                 setMaiorIdade(hoje.diff(nascimento, 'year') >= 18);
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao listar alunos, por favor contacte os admnistradores.");
+                    toasterMsg('error', 'Erro ao listar alunos, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.response.data);
+                    toasterMsg('error', error.response.data);
                 }
             })
             .finally(() => {
 
-            })
-    }
+            });
+    };
 
     useEffect(() => {
-        if (operacao !== "cadastro") listarDadosAluno(location.state?.idAluno)
+        if (operacao !== 'cadastro') listarDadosAluno(location.state?.idAluno);
     }, []);
 
     return (
-        <>
+        <React.Fragment>
             <Box sx={{
-                display: "grid",
-                gridTemplateRows: "auto 1fr",
-                height: "90.9vh"
+                display: 'grid',
+                gridTemplateRows: 'auto 1fr',
+                height: '90.9vh'
             }}>
                 <DefaultBreadcrumb rotas={rotas} />
-                <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', flexGrow: 1 }}>
                     <MenuCadastro
                         operacao={operacao}
                         tabAtiva={tabAtiva}
                         setTabAtiva={setTabAtiva}
                         etapas={etapasMenu}
                     />
-                    {tabAtiva === "info" &&
+                    {tabAtiva === 'info' &&
                         <FormInfo />
                     }
-                    {tabAtiva === "ende" &&
+                    {tabAtiva === 'ende' &&
                         <FormEndereco
                             handleSalvar={editarAluno}
                             handleConfirmar={cadastrarAluno}
                         />
                     }
-                    {tabAtiva === "resp" &&
+                    {tabAtiva === 'resp' &&
                         <FormResponsavel
                             handleConfirmar={cadastrarAluno}
                             handleSalvar={editarAluno}
                         />
                     }
-                    {tabAtiva === "paga" &&
+                    {tabAtiva === 'paga' &&
                         <HistPagamento
                             userInfo={userInfo}
                         />
@@ -227,11 +227,11 @@ export const FichaInscricao = () => {
             </Box >
             <ToastContainer />
             <ModalDelete
-                textoModal={"a Ficha de Inscrição do Aluno"}
+                textoModal={'a Ficha de Inscrição do Aluno'}
                 isModalOpen={isModalDeleteOpen}
                 setIsModalOpen={setIsModalDeleteOpen}
                 handleDelete={deletarAluno}
             />
-        </>
+        </React.Fragment>
     );
-}
+};

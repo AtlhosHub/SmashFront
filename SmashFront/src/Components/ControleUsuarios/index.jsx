@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react"
-import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
-import { DefaultButton } from "../DefaultComponents/DefaultButton"
-import { DefaultTable } from "../DefaultComponents/DefaultTable";
-import { ToastContainer } from "react-toastify"
+import React, { useEffect, useState } from 'react';
+import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
+import { DefaultButton } from '../DefaultComponents/DefaultButton';
+import { DefaultTable } from '../DefaultComponents/DefaultTable';
+import { ToastContainer } from 'react-toastify';
 import {
     Box,
     InputAdornment,
     TextField
-} from "@mui/material"
+} from '@mui/material';
 import {
     Add,
     Search
-} from "@mui/icons-material"
-import { api } from "../../provider/apiProvider"
-import { useLocation, useNavigate } from "react-router-dom";
-import { toasterMsg } from "../../utils/toasterService";
-import ActionMenu from "../DefaultComponents/IconButton";
+} from '@mui/icons-material';
+import { api } from '../../provider/apiProvider';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toasterMsg } from '../../utils/toasterService';
+import ActionMenu from '../DefaultComponents/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
+import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
 
 export const ControleUsuarios = () => {
     const navigate = useNavigate();
@@ -27,68 +27,68 @@ export const ControleUsuarios = () => {
 
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [rowToDelete, setRowToDelete] = useState(undefined);
-    const [searchValue, setSearchValue] = useState("");
-    const [rowData, setRowData] = useState([])
+    const [searchValue, setSearchValue] = useState('');
+    const [rowData, setRowData] = useState([]);
 
     const rotas = [
         {
-            route: "/controleUsuarios",
-            description: "Controle de Usuários"
+            route: '/controleUsuarios',
+            description: 'Controle de Usuários'
         }
-    ]
+    ];
 
     const headCells = [
         {
-            name: "nome",
-            description: "Nome do Usuário Administrador",
-            cellWidth: "100%"
+            name: 'nome',
+            description: 'Nome do Usuário Administrador',
+            cellWidth: '100%'
         }
-    ]
+    ];
 
     const listarUsuarios = () => {
-        api.get("/usuarios", {
+        api.get('/usuarios', {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then((response) => {
-                setRowData(response.data || [])
+                setRowData(response.data || []);
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao listar usuários, por favor contacte os admnistradores.")
+                    toasterMsg('error', 'Erro ao listar usuários, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.message.data)
+                    toasterMsg('error', error.message.data);
                 }
             });
-    }
+    };
 
     const handleDelete = (id) => {
         api.delete(`usuarios/${id}`, {
             headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then(() => {
-                toasterMsg("success", "Usuário deletado com sucesso!");
+                toasterMsg('success', 'Usuário deletado com sucesso!');
                 setIsModalDeleteOpen(false);
                 setRowToDelete(undefined);
                 listarUsuarios();
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao deletar usuário, por favor contacte os admnistradores.")
+                    toasterMsg('error', 'Erro ao deletar usuário, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.message.data)
+                    toasterMsg('error', error.message.data);
                 }
-            })
-    }
+            });
+    };
 
     useEffect(() => {
         listarUsuarios();
-    }, [])
+    }, []);
 
     useEffect(() => {
         const flags = [
@@ -96,7 +96,7 @@ export const ControleUsuarios = () => {
             { key: 'userDeleted', type: 'success', msg: 'Usuário deletado com sucesso!' },
         ];
 
-        let newState = { ...location.state };
+        const newState = { ...location.state };
 
         flags.forEach(({ key, type, msg }) => {
             if (location.state?.[key]) {
@@ -108,10 +108,10 @@ export const ControleUsuarios = () => {
         if (JSON.stringify(newState) !== JSON.stringify(location.state)) {
             window.history.replaceState(newState, document.title);
         }
-    }, [location])
+    }, [location]);
 
     return (
-        <>
+        <React.Fragment>
             <Box>
                 <DefaultBreadcrumb rotas={rotas} />
             </Box>
@@ -141,7 +141,7 @@ export const ControleUsuarios = () => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <Search sx={{ color: "black" }} />
+                                    <Search sx={{ color: 'black' }} />
                                 </InputAdornment>
                             )
                         }}
@@ -149,9 +149,9 @@ export const ControleUsuarios = () => {
                     <DefaultButton
                         variant="contained"
                         label="Novo Cadastro"
-                        onClick={() => navigate("/cadastroUsuarios", {
+                        onClick={() => navigate('/cadastroUsuarios', {
                             state: {
-                                operacao: "cadastro"
+                                operacao: 'cadastro'
                             }
                         })}
                         endIcon={<Add />}
@@ -167,24 +167,24 @@ export const ControleUsuarios = () => {
                                     label: 'Visualizar',
                                     icon: <VisibilityIcon fontSize="small" />,
                                     onClickFunc: () => {
-                                        navigate("/cadastroUsuarios", {
+                                        navigate('/cadastroUsuarios', {
                                             state: {
                                                 idUsuario: row.id,
-                                                operacao: "visualizacao"
+                                                operacao: 'visualizacao'
                                             }
-                                        })
+                                        });
                                     }
                                 },
                                 {
                                     label: 'Editar',
                                     icon: <EditIcon fontSize="small" />,
                                     onClickFunc: () => {
-                                        navigate("/cadastroUsuarios", {
+                                        navigate('/cadastroUsuarios', {
                                             state: {
                                                 idUsuario: row.id,
-                                                operacao: "edicao"
+                                                operacao: 'edicao'
                                             }
-                                        })
+                                        });
                                     }
                                 },
                                 {
@@ -194,7 +194,7 @@ export const ControleUsuarios = () => {
                                         setRowToDelete(row.id);
                                         setIsModalDeleteOpen(true);
                                     },
-                                     disabled: String(row.id) === String(sessionStorage.getItem("idUsuario")) 
+                                     disabled: String(row.id) === String(sessionStorage.getItem('idUsuario')) 
                                 }
                             ]}
                             />
@@ -208,6 +208,6 @@ export const ControleUsuarios = () => {
                 setIsModalOpen={setIsModalDeleteOpen}
                 handleDelete={() => handleDelete(rowToDelete)}
             />
-        </>
-    )
-}
+        </React.Fragment>
+    );
+};

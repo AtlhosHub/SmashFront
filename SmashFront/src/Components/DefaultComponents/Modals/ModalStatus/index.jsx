@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { DefaultButton } from "../../DefaultButton"
-import { DefaultModal } from "../../DefaultModal"
-import { Autocomplete, Box, TextField, Typography } from "@mui/material"
-import { DateTimePicker, LocalizationProvider, renderTimeViewClock } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import React, { useEffect, useState } from 'react';
+import { DefaultButton } from '../../DefaultButton';
+import { DefaultModal } from '../../DefaultModal';
+import { Autocomplete, Box, TextField, Typography } from '@mui/material';
+import { DateTimePicker, LocalizationProvider, renderTimeViewClock } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { api } from "../../../../provider/apiProvider";
-import { toasterMsg } from "../../../../utils/toasterService";
+import { api } from '../../../../provider/apiProvider';
+import { toasterMsg } from '../../../../utils/toasterService';
 
 export const ModalStatus = ({
     isModalOpen,
@@ -18,17 +18,17 @@ export const ModalStatus = ({
     const [statusPagamento, setStatusPagamento] = useState(null);
     const [formaPagamento, setFormaPagamento] = useState(null);
     const [dataPagamento, setDataPagamento] = useState(null);
-    const [valorPago, setValorPago] = useState("");
+    const [valorPago, setValorPago] = useState('');
 
     const statusPagArray = [
-        { label: "PAGO" },
-        { label: "PENDENTE" },
-        { label: "ATRASADO" }
+        { label: 'PAGO' },
+        { label: 'PENDENTE' },
+        { label: 'ATRASADO' }
     ];
 
     const formaPagArray = [
-        { label: "DINHEIRO" },
-        { label: "PIX" }
+        { label: 'DINHEIRO' },
+        { label: 'PIX' }
     ];
 
     const [statusInfo, setStatusInfo] = useState({
@@ -43,9 +43,9 @@ export const ModalStatus = ({
     const isSalvarHabilitado =
         !!statusPagamento &&
         (
-            statusPagamento.label !== "PAGO" ||
+            statusPagamento.label !== 'PAGO' ||
             (
-                statusPagamento.label === "PAGO" &&
+                statusPagamento.label === 'PAGO' &&
                 formaPagamento &&
                 valorPago &&
                 dataPagamento
@@ -53,11 +53,11 @@ export const ModalStatus = ({
         );
 
     const handleValorPago = (e) => {
-        let valor = e.target.value.replace(/\D/g, "");
-        let valorDecimal = (Number(valor) / 100).toFixed(2);
-        let valorFormatado = Number(valorDecimal).toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
+        const valor = e.target.value.replace(/\D/g, '');
+        const valorDecimal = (Number(valor) / 100).toFixed(2);
+        const valorFormatado = Number(valorDecimal).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
         });
         setValorPago(valorFormatado);
         setStatusInfo({ ...statusInfo, valorPago: valorDecimal });
@@ -75,13 +75,13 @@ export const ModalStatus = ({
             setFormaPagamento(formaSelecionada || null);
             setDataPagamento(statusInfoModal.dataPagamento ? dayjs(statusInfoModal.dataPagamento) : null);
             if (statusInfoModal.valor) {
-                const valorFormatado = (statusInfoModal.valor).toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
+                const valorFormatado = (statusInfoModal.valor).toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
                 });
                 setValorPago(valorFormatado);
             } else {
-                setValorPago("");
+                setValorPago('');
             }
         }
         setStatusInfo({
@@ -102,10 +102,10 @@ export const ModalStatus = ({
     }, [isModalOpen, statusInfoModal]);
 
     useEffect(() => {
-        if (statusPagamento?.label !== "PAGO") {
+        if (statusPagamento?.label !== 'PAGO') {
             setFormaPagamento(null);
             setDataPagamento(null);
-            setValorPago("");
+            setValorPago('');
             setStatusInfo((prev) => ({
                 ...prev,
                 formaPagamento: null,
@@ -120,35 +120,35 @@ export const ModalStatus = ({
         api.put(`/mensalidades/${statusInfoModal.idMensalidade}/pagar`, statusInfo, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then((res) => {
                 if (res.status === 200) {
                     handleApplyFilter();
-                    toasterMsg("success", "Status da mensalidade alterado com sucesso!");
+                    toasterMsg('success', 'Status da mensalidade alterado com sucesso!');
                 }
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao alterar status da mensalidade, por favor contacte os admnistradores.");
+                    toasterMsg('error', 'Erro ao alterar status da mensalidade, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.response.data);
+                    toasterMsg('error', error.response.data);
                 }
-            })
-    }
+            });
+    };
 
     return (
-        <DefaultModal modalTitle={"Alterar Status do Comprovante"} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
+        <DefaultModal modalTitle={'Alterar Status do Comprovante'} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
             <Box
                 sx={{
-                    border: "1px solid #286DA8",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    padding: "20px",
-                    borderRadius: "8px",
-                    mb: "20px",
+                    border: '1px solid #286DA8',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                    padding: '20px',
+                    borderRadius: '8px',
+                    mb: '20px',
                 }}
             >
                 <Typography >
@@ -184,7 +184,7 @@ export const ModalStatus = ({
                         options={statusPagArray}
                         renderInput={(params) => <TextField {...params} placeholder="Selecione o Status" />}
                         onChange={(_, newValue) => {
-                            setStatusPagamento(newValue)
+                            setStatusPagamento(newValue);
                             setStatusInfo({ ...statusInfo, status: newValue ? newValue.label : null });
                         }}
                     />
@@ -197,18 +197,18 @@ export const ModalStatus = ({
                         size="small"
                         value={formaPagamento}
                         options={formaPagArray}
-                        renderInput={(params) => <TextField {...params} placeholder={statusPagamento?.label === "PAGO" ? "Selecione a Forma de Pagamento" : ""} />}
+                        renderInput={(params) => <TextField {...params} placeholder={statusPagamento?.label === 'PAGO' ? 'Selecione a Forma de Pagamento' : ''} />}
                         onChange={(_, newValue) => {
                             setFormaPagamento(newValue),
                                 setStatusInfo({ ...statusInfo, formaPagamento: newValue ? newValue.label : null });
                         }}
-                        disabled={statusPagamento?.label !== "PAGO"}
+                        disabled={statusPagamento?.label !== 'PAGO'}
                         sx={{
-                            "& .MuiInputBase-root.Mui-disabled": {
-                                backgroundColor: "#00000015",
+                            '& .MuiInputBase-root.Mui-disabled': {
+                                backgroundColor: '#00000015',
                             },
                             '& .MuiInputBase-input.Mui-disabled': {
-                                "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                '-webkit-text-fill-color': 'rgba(0, 0, 0, 0.60)'
                             },
                         }}
                     />
@@ -221,22 +221,22 @@ export const ModalStatus = ({
                         size="small"
                         variant="outlined"
                         sx={{
-                            "& .MuiInputBase-root.Mui-disabled": {
-                                backgroundColor: "#00000015",
+                            '& .MuiInputBase-root.Mui-disabled': {
+                                backgroundColor: '#00000015',
                             },
                             '& .MuiInputBase-input.Mui-disabled': {
-                                "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                '-webkit-text-fill-color': 'rgba(0, 0, 0, 0.60)'
                             },
-                            width: "100%",
+                            width: '100%',
                         }}
                         value={valorPago}
                         onChange={handleValorPago}
                         onInput={e => {
-                            e.target.value = e.target.value.replace(/\D/g, "");
+                            e.target.value = e.target.value.replace(/\D/g, '');
                         }}
-                        placeholder={statusPagamento?.label === "PAGO" ? "R$ 200,00" : ""}
-                        inputProps={{ inputMode: "numeric" }}
-                        disabled={statusPagamento?.label !== "PAGO"}
+                        placeholder={statusPagamento?.label === 'PAGO' ? 'R$ 200,00' : ''}
+                        inputProps={{ inputMode: 'numeric' }}
+                        disabled={statusPagamento?.label !== 'PAGO'}
                     />
                 </Box>
                 <Box>
@@ -267,7 +267,7 @@ export const ModalStatus = ({
                                 textField: {
                                     size: 'small',
                                     fullWidth: true,
-                                    placeholder: statusPagamento?.label === "PAGO" ? "DD/MM/AAAA HH:mm" : null,
+                                    placeholder: statusPagamento?.label === 'PAGO' ? 'DD/MM/AAAA HH:mm' : null,
                                 },
                                 layout: {
                                     sx: {
@@ -300,7 +300,7 @@ export const ModalStatus = ({
                     </LocalizationProvider>
                 </Box>
             </Box>
-            <Box sx={{ display: "flex", gap: "10px", justifyContent: "end" }}>
+            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'end' }}>
                 <DefaultButton label="Cancelar" onClick={() => setIsModalOpen(false)} />
                 <DefaultButton
                     variant="contained"
@@ -313,5 +313,5 @@ export const ModalStatus = ({
                 />
             </Box>
         </DefaultModal>
-    )
-}
+    );
+};

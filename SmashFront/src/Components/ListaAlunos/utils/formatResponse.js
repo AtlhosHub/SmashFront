@@ -1,4 +1,4 @@
-import { dateFormater } from "../../../utils/dateFormaterService";
+import { dateFormater } from '../../../utils/dateFormaterService';
 
 export const formatResponse = (data) => {
     const formattedData = data.map((aluno) => ({
@@ -12,4 +12,4 @@ export const formatResponse = (data) => {
     }));
 
     return formattedData;
-}
+};

@@ -6,17 +6,17 @@ import {
     TextField,
     Tooltip,
     Typography,
-} from "@mui/material";
-import HelpIcon from "@mui/icons-material/Help";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DefaultButton } from "../../../DefaultComponents/DefaultButton";
-import { formatarTelefone } from "../../../FichaInscricao/utils/validacaoForm";
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import { ToastContainer } from "react-toastify";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import HelpIcon from '@mui/icons-material/Help';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DefaultButton } from '../../../DefaultComponents/DefaultButton';
+import { formatarTelefone } from '../../../FichaInscricao/utils/validacaoForm';
+import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import { ToastContainer } from 'react-toastify';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 export const FormInfoUsuario = ({
     userInfo,
@@ -30,16 +30,16 @@ export const FormInfoUsuario = ({
     const navigation = useNavigate();
 
     const nomeSocialText =
-        "Nome social é o nome em que a pessoa prefere ser chamada, diferente do seu nome legal.";
+        'Nome social é o nome em que a pessoa prefere ser chamada, diferente do seu nome legal.';
 
-    const [senha, setSenha] = useState("");
-    const [confirmarSenha, setConfirmarSenha] = useState("");
+    const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
     const [botaoLiberado, setBotaoLiberado] = useState(false);
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
     const [erroConfirmarSenha, setErroCofirmarSenha] = useState(false);
     const [idUsuario, setIdUsuario] = useState(null);
-    const idUsuarioLogado = sessionStorage.getItem("idUsuario");
+    const idUsuarioLogado = sessionStorage.getItem('idUsuario');
 
     useEffect(() => {
         const camposPreenchidos = userInfo.nome && userInfo.dataNascimento;
@@ -52,73 +52,73 @@ export const FormInfoUsuario = ({
     }, [userInfo, senha, confirmarSenha]);
 
     useEffect(() => {
-        setIdUsuario(userInfo.id)
-    }, [])
+        setIdUsuario(userInfo.id);
+    }, []);
 
     const validarSenha = () => {
         let senhaIgual = false;
 
-        if (operacao === "cadastro") {
+        if (operacao === 'cadastro') {
             if (!!confirmarSenha === true) {
                 senhaIgual = senha === confirmarSenha;
                 setErroCofirmarSenha(senha !== confirmarSenha);
             } else {
-                setErroCofirmarSenha(false)
+                setErroCofirmarSenha(false);
             }
         } else {
             senhaIgual = true;
         }
 
         return senhaIgual;
-    }
+    };
 
     const handleClick = () => {
-        if (operacao === "visualizacao") {
-            setOperacao("edicao");
-        } else if (operacao === "cadastro") {
-            handleCadastrar()
+        if (operacao === 'visualizacao') {
+            setOperacao('edicao');
+        } else if (operacao === 'cadastro') {
+            handleCadastrar();
         } else {
             handleSalvar();
         }
-    }
+    };
 
     const labelBotao =
-        operacao === "visualizacao"
-            ? "Editar"
-            : operacao === "edicao"
-                ? "Salvar"
-                : "Concluir";
+        operacao === 'visualizacao'
+            ? 'Editar'
+            : operacao === 'edicao'
+                ? 'Salvar'
+                : 'Concluir';
 
     return (
         <FormControl
             sx={{
-                display: "flex",
-                flexDirection: "column",
+                display: 'flex',
+                flexDirection: 'column',
                 flex: 1,
-                padding: "30px 20px 20px 0px",
+                padding: '30px 20px 20px 0px',
             }}
         >
             <Box
                 sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    color: "black",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    color: 'black',
                 }}
             >
                 <Box
                     sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 0.8fr 0.8fr",
-                        columnGap: "20px",
-                        rowGap: "10px",
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 0.8fr 0.8fr',
+                        columnGap: '20px',
+                        rowGap: '10px',
                     }}
                 >
                     <Box>
                         <label>
-                            Nome do Usuário <span style={{ color: "red" }}>*</span>
+                            Nome do Usuário <span style={{ color: 'red' }}>*</span>
                         </label>
                         <TextField
-                            disabled={operacao === "visualizacao"}
+                            disabled={operacao === 'visualizacao'}
                             value={userInfo.nome || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, nome: e.target.value })
@@ -126,19 +126,19 @@ export const FormInfoUsuario = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                '& .MuiInputBase-root': { borderRadius: '8px' },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                 },
-                                width: "100%",
+                                width: '100%',
                             }}
                         />
                     </Box>
 
-                    <Box sx={{ width: "100%" }}>
+                    <Box sx={{ width: '100%' }}>
                         <label>Gênero</label>
                         <TextField
-                            disabled={operacao === "visualizacao"}
+                            disabled={operacao === 'visualizacao'}
                             value={userInfo.genero || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, genero: e.target.value })
@@ -146,19 +146,19 @@ export const FormInfoUsuario = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                '& .MuiInputBase-root': { borderRadius: '8px' },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                 },
-                                width: "100%",
+                                width: '100%',
                             }}
                         />
                     </Box>
 
-                    <Box sx={{ width: "100%" }}>
+                    <Box sx={{ width: '100%' }}>
                         <label>Cargo</label>
                         <TextField
-                            disabled={operacao === "visualizacao"}
+                            disabled={operacao === 'visualizacao'}
                             value={userInfo.cargo || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, cargo: e.target.value })
@@ -166,11 +166,11 @@ export const FormInfoUsuario = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                '& .MuiInputBase-root': { borderRadius: '8px' },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                 },
-                                width: "100%",
+                                width: '100%',
                             }}
                         />
                     </Box>
@@ -178,15 +178,15 @@ export const FormInfoUsuario = ({
                     <Box>
                         <label
                             style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "5px",
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px',
                             }}
                         >
                             Nome Social
                             <Tooltip
                                 title={
-                                    <Typography sx={{ fontSize: "14px" }}>
+                                    <Typography sx={{ fontSize: '14px' }}>
                                         {nomeSocialText}
                                     </Typography>
                                 }
@@ -195,15 +195,15 @@ export const FormInfoUsuario = ({
                             >
                                 <HelpIcon
                                     sx={{
-                                        marginTop: "1px",
-                                        color: "#286DA8",
-                                        fontSize: "18px",
+                                        marginTop: '1px',
+                                        color: '#286DA8',
+                                        fontSize: '18px',
                                     }}
                                 />
                             </Tooltip>
                         </label>
                         <TextField
-                            disabled={operacao === "visualizacao"}
+                            disabled={operacao === 'visualizacao'}
                             value={userInfo.nomeSocial || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, nomeSocial: e.target.value })
@@ -211,23 +211,23 @@ export const FormInfoUsuario = ({
                             variant="outlined"
                             size="small"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                '& .MuiInputBase-root': { borderRadius: '8px' },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                 },
-                                width: "100%",
+                                width: '100%',
                             }}
                         />
                     </Box>
 
-                    <Box sx={{ width: "100%" }}>
+                    <Box sx={{ width: '100%' }}>
                         <label>
-                            Data de Nascimento <span style={{ color: "red" }}>*</span>
+                            Data de Nascimento <span style={{ color: 'red' }}>*</span>
                         </label>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 size="small"
-                                disabled={operacao === "visualizacao"}
+                                disabled={operacao === 'visualizacao'}
                                 value={
                                     userInfo.dataNascimento
                                         ? dayjs(userInfo.dataNascimento)
@@ -238,13 +238,13 @@ export const FormInfoUsuario = ({
                                     setUserInfo({ ...userInfo, dataNascimento: newValue });
                                 }}
                                 slotProps={{
-                                    textField: { size: "small", placeholder: "DD/MM/AAAA" },
+                                    textField: { size: 'small', placeholder: 'DD/MM/AAAA' },
                                 }}
                                 sx={{
-                                    width: "100%",
-                                    "& .MuiInputBase-root": { borderRadius: "8px" },
+                                    width: '100%',
+                                    '& .MuiInputBase-root': { borderRadius: '8px' },
                                     '& .MuiInputBase-input.Mui-disabled': {
-                                        WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                        WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                     },
                                 }}
                             />
@@ -253,7 +253,7 @@ export const FormInfoUsuario = ({
                     <Box>
                         <label>Celular</label>
                         <TextField
-                            disabled={operacao === "visualizacao"}
+                            disabled={operacao === 'visualizacao'}
                             value={formatarTelefone(userInfo.celular)}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, celular: e.target.value })
@@ -263,11 +263,11 @@ export const FormInfoUsuario = ({
                             type="tel"
                             placeholder="(00) 00000-0000"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                '& .MuiInputBase-root': { borderRadius: '8px' },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                 },
-                                width: "100%",
+                                width: '100%',
                             }}
                         />
                     </Box>
@@ -275,21 +275,21 @@ export const FormInfoUsuario = ({
 
                 <Box
                     sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 0.8fr 0.8fr",
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 0.8fr 0.8fr',
                         flex: 1,
-                        columnGap: "20px",
-                        rowGap: "10px",
-                        color: "black",
-                        pt: "10px",
+                        columnGap: '20px',
+                        rowGap: '10px',
+                        color: 'black',
+                        pt: '10px',
                     }}
                 >
                     <Box>
                         <label>
-                            Email  <span style={{ color: "red" }}>*</span>
+                            Email  <span style={{ color: 'red' }}>*</span>
                         </label>
                         <TextField
-                            disabled={operacao === "visualizacao"}
+                            disabled={operacao === 'visualizacao'}
                             value={userInfo.email || undefined}
                             onChange={(e) =>
                                 setUserInfo({ ...userInfo, email: e.target.value })
@@ -298,18 +298,18 @@ export const FormInfoUsuario = ({
                             size="small"
                             type="email"
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                '& .MuiInputBase-root': { borderRadius: '8px' },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                 },
-                                width: "100%",
+                                width: '100%',
                             }}
                         />
                     </Box>
 
-                    <Box sx={{ display: operacao === "cadastro" ? "block" : "none" }}>
+                    <Box sx={{ display: operacao === 'cadastro' ? 'block' : 'none' }}>
                         <label>
-                            Senha  <span style={{ color: "red" }}>*</span>
+                            Senha  <span style={{ color: 'red' }}>*</span>
                         </label>
                         <TextField
                             value={senha}
@@ -319,13 +319,13 @@ export const FormInfoUsuario = ({
                             }}
                             variant="outlined"
                             size="small"
-                            type={mostrarSenha ? "text" : "password"}
+                            type={mostrarSenha ? 'text' : 'password'}
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                '& .MuiInputBase-root': { borderRadius: '8px' },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                 },
-                                width: "100%",
+                                width: '100%',
                             }}
                             InputProps={{
                                 endAdornment: (
@@ -334,9 +334,9 @@ export const FormInfoUsuario = ({
                                             onClick={() => setMostrarSenha(!mostrarSenha)}
                                             edge="end"
                                             sx={{
-                                                color: "#093962",
+                                                color: '#093962',
                                                 '&:hover': {
-                                                    color: "#093962",
+                                                    color: '#093962',
                                                 },
                                             }}
                                         >
@@ -348,9 +348,9 @@ export const FormInfoUsuario = ({
                         />
                     </Box>
 
-                    <Box sx={{ display: operacao === "cadastro" ? "block" : "none" }}>
+                    <Box sx={{ display: operacao === 'cadastro' ? 'block' : 'none' }}>
                         <label>
-                            Confirmar senha  <span style={{ color: "red" }}>*</span>
+                            Confirmar senha  <span style={{ color: 'red' }}>*</span>
                         </label>
                         <TextField
                             error={erroConfirmarSenha}
@@ -360,13 +360,13 @@ export const FormInfoUsuario = ({
                             }
                             variant="outlined"
                             size="small"
-                            type={mostrarConfirmarSenha ? "text" : "password"}
+                            type={mostrarConfirmarSenha ? 'text' : 'password'}
                             sx={{
-                                "& .MuiInputBase-root": { borderRadius: "8px" },
+                                '& .MuiInputBase-root': { borderRadius: '8px' },
                                 '& .MuiInputBase-input.Mui-disabled': {
-                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                 },
-                                width: "100%",
+                                width: '100%',
                             }}
                             InputProps={{
                                 endAdornment: (
@@ -375,9 +375,9 @@ export const FormInfoUsuario = ({
                                             onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
                                             edge="end"
                                             sx={{
-                                                color: "#093962",
+                                                color: '#093962',
                                                 '&:hover': {
-                                                    color: "#093962",
+                                                    color: '#093962',
                                                 },
                                             }}
                                         >
@@ -392,27 +392,27 @@ export const FormInfoUsuario = ({
             </Box>
             <Box
                 sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
-                    justifyContent: "end",
-                    alignItems: "end",
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '10px',
+                    justifyContent: 'end',
+                    alignItems: 'end',
                     flex: 1,
                 }}
             >
-                {operacao === "visualizacao" && String(idUsuario) != String(idUsuarioLogado) && (
+                {operacao === 'visualizacao' && String(idUsuario) != String(idUsuarioLogado) && (
                     <DefaultButton
                         variant="outlined"
                         label="Excluir"
                         onClick={handleDeletar}
-                        color={operacao === "visualizacao" ? "red" : ""}
+                        color={operacao === 'visualizacao' ? 'red' : ''}
                     />
                 )}
-                {operacao !== "visualizacao" && (
+                {operacao !== 'visualizacao' && (
                     <DefaultButton
                         variant="outlined"
                         label="Cancelar"
-                        onClick={() => navigation("/controleUsuarios")}
+                        onClick={() => navigation('/controleUsuarios')}
                     />
                 )}
                 <DefaultButton
@@ -424,5 +424,5 @@ export const FormInfoUsuario = ({
             </Box>
             <ToastContainer />
         </FormControl>
-    )
-}
+    );
+};

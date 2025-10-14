@@ -1,12 +1,24 @@
-import { Box, Tooltip, Typography, TextField, RadioGroup, FormControlLabel, Radio, FormControl, InputAdornment, IconButton } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import HelpIcon from "@mui/icons-material/Help";
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 
-import { DefaultButton } from "../DefaultButton";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+    Box,
+    Tooltip,
+    Typography,
+    TextField,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    FormControl,
+    InputAdornment,
+    IconButton
+} from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DefaultButton } from '../DefaultButton';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import HelpIcon from '@mui/icons-material/Help';
+
 
 export const FormBuilder = ({
     campos,
@@ -16,8 +28,8 @@ export const FormBuilder = ({
     cancelButton
 }) => {
     const [linhas, setLinhas] = useState([]);
-    const [senha, setSenha] = useState("");
-    const [confirmarSenha, setConfirmarSenha] = useState("");
+    const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
     const [erroConfirmarSenha, setErroConfirmarSenha] = useState(false);
@@ -39,41 +51,41 @@ export const FormBuilder = ({
     return (
         <FormControl
             sx={{
-                paddingBlock: "30px",
-                pr: "30px",
-                display: "flex",
+                paddingBlock: '30px',
+                pr: '30px',
+                display: 'flex',
                 flex: 1,
-                flexDirection: "column",
+                flexDirection: 'column',
             }}
         >
             <Box
                 sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "20px",
-                    width: "100%",
-                    color: "black",
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '20px',
+                    width: '100%',
+                    color: 'black',
                 }}
             >
                 {linhas.map((linha, idx) => (
                     <Box
                         key={idx}
                         sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "10px",
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px',
                             flex: 1,
-                            height: "fit-content",
+                            height: 'fit-content',
                         }}
                     >
                         {linha.map((campo, cidx) => (
                             <Box key={cidx}>
                                 <label>
-                                    {campo.label} {campo.required ? <span style={{ color: "red" }}>*</span> : null}
+                                    {campo.label} {campo.required ? <span style={{ color: 'red' }}>*</span> : null}
                                     {campo.toolTip ? (
                                         <Tooltip
                                             title={
-                                                <Typography sx={{ fontSize: "14px" }}>
+                                                <Typography sx={{ fontSize: '14px' }}>
                                                     {campo.toolTip}
                                                 </Typography>
                                             }
@@ -82,15 +94,15 @@ export const FormBuilder = ({
                                         >
                                             <HelpIcon
                                                 sx={{
-                                                    marginTop: "1px",
-                                                    color: "#286DA8",
-                                                    fontSize: "18px",
+                                                    marginTop: '1px',
+                                                    color: '#286DA8',
+                                                    fontSize: '18px',
                                                 }}
                                             />
                                         </Tooltip>
                                     ) : null}
                                 </label>
-                                {campo?.type === "date" && (
+                                {campo?.type === 'date' && (
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             size="small"
@@ -98,26 +110,26 @@ export const FormBuilder = ({
                                             value={campo.value}
                                             format="DD/MM/YYYY"
                                             maxDate={dayjs().subtract(1, 'day')}
-                                            minDate={dayjs("1940-01-01")}
+                                            minDate={dayjs('1940-01-01')}
                                             onChange={campo.onChange}
                                             onError={campo.onError}
                                             slotProps={{
-                                                textField: { size: "small", placeholder: "DD/MM/AAAA" },
+                                                textField: { size: 'small', placeholder: 'DD/MM/AAAA' },
                                             }}
                                             sx={{
-                                                "& .MuiInputBase-root": {
-                                                    borderRadius: "8px"
+                                                '& .MuiInputBase-root': {
+                                                    borderRadius: '8px'
                                                 },
                                                 '& .MuiInputBase-input.Mui-disabled': {
-                                                    WebkitTextFillColor: "rgba(0, 0, 0, 0.60)",
-                                                    backgroundColor: "#00000015",
+                                                    WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)',
+                                                    backgroundColor: '#00000015',
                                                 },
-                                                width: "100%",
+                                                width: '100%',
                                             }}
                                         />
                                     </LocalizationProvider>
                                 )}
-                                {campo?.type === "text" && (
+                                {campo?.type === 'text' && (
                                     <TextField
                                         disabled={campo.disabled}
                                         value={campo.value}
@@ -125,28 +137,28 @@ export const FormBuilder = ({
                                         variant="outlined"
                                         size="small"
                                         sx={{
-                                            "& .MuiInputBase-root": {
-                                                borderRadius: "8px"
+                                            '& .MuiInputBase-root': {
+                                                borderRadius: '8px'
                                             },
                                             '& .MuiInputBase-input.Mui-disabled': {
-                                                WebkitTextFillColor: "rgba(0, 0, 0, 0.60)",
-                                                backgroundColor: "#00000015",
+                                                WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)',
+                                                backgroundColor: '#00000015',
                                             },
-                                            width: "100%",
+                                            width: '100%',
                                         }}
                                     />
                                 )}
-                                {campo?.type === "password" && (
+                                {campo?.type === 'password' && (
                                     <TextField
-                                        error={campo.name === "confirmarSenha" && erroConfirmarSenha}
+                                        error={campo.name === 'confirmarSenha' && erroConfirmarSenha}
                                         helperText={
-                                            campo.name === "confirmarSenha" && erroConfirmarSenha
-                                                ? "As senhas não conferem"
-                                                : ""
+                                            campo.name === 'confirmarSenha' && erroConfirmarSenha
+                                                ? 'As senhas não conferem'
+                                                : ''
                                         }
-                                        value={campo.name === "senha" ? senha : confirmarSenha}
+                                        value={campo.name === 'senha' ? senha : confirmarSenha}
                                         onChange={(e) => {
-                                            if (campo.name === "senha") {
+                                            if (campo.name === 'senha') {
                                                 setSenha(e.target.value);
                                             } else {
                                                 setConfirmarSenha(e.target.value);
@@ -155,37 +167,37 @@ export const FormBuilder = ({
                                         variant="outlined"
                                         size="small"
                                         type={
-                                            campo.name === "senha"
+                                            campo.name === 'senha'
                                                 ? mostrarSenha
-                                                    ? "text"
-                                                    : "password"
+                                                    ? 'text'
+                                                    : 'password'
                                                 : mostrarConfirmarSenha
-                                                    ? "text"
-                                                    : "password"
+                                                    ? 'text'
+                                                    : 'password'
                                         }
                                         sx={{
-                                            "& .MuiInputBase-root": { borderRadius: "8px" },
-                                            "& .MuiInputBase-input.Mui-disabled": {
-                                                WebkitTextFillColor: "rgba(0, 0, 0, 0.60)"
+                                            '& .MuiInputBase-root': { borderRadius: '8px' },
+                                            '& .MuiInputBase-input.Mui-disabled': {
+                                                WebkitTextFillColor: 'rgba(0, 0, 0, 0.60)'
                                             },
-                                            width: "100%"
+                                            width: '100%'
                                         }}
                                         InputProps={{
                                             endAdornment: (
                                                 <InputAdornment position="end">
                                                     <IconButton
                                                         onClick={() =>
-                                                            campo.name === "senha"
+                                                            campo.name === 'senha'
                                                                 ? setMostrarSenha(!mostrarSenha)
                                                                 : setMostrarConfirmarSenha(!mostrarConfirmarSenha)
                                                         }
                                                         edge="end"
                                                         sx={{
-                                                            color: "#093962",
-                                                            "&:hover": { color: "#093962" }
+                                                            color: '#093962',
+                                                            '&:hover': { color: '#093962' }
                                                         }}
                                                     >
-                                                        {campo.name === "senha"
+                                                        {campo.name === 'senha'
                                                             ? (mostrarSenha ? <VisibilityOff /> : <Visibility />)
                                                             : (mostrarConfirmarSenha ? <VisibilityOff /> : <Visibility />)}
                                                     </IconButton>
@@ -200,22 +212,22 @@ export const FormBuilder = ({
                 ))}
             </Box>
 
-            <Box sx={{ marginTop: "10px", display: "flex", gap: "50px" }}>
+            <Box sx={{ marginTop: '10px', display: 'flex', gap: '50px' }}>
                 {radios?.map((radio, ridx) => (
-                    <Box key={ridx} sx={{ color: "black" }}>
+                    <Box key={ridx} sx={{ color: 'black' }}>
                         <label
                             style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "5px",
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px',
                             }}
                         >
                             <span>
-                                {radio.radioTitle} {radio.required ? <span style={{ color: "red" }}>*</span> : null}
+                                {radio.radioTitle} {radio.required ? <span style={{ color: 'red' }}>*</span> : null}
                             </span>
                             <Tooltip
                                 title={
-                                    <Typography sx={{ fontSize: "14px" }}>
+                                    <Typography sx={{ fontSize: '14px' }}>
                                         {radio.toolTip}
                                     </Typography>
                                 }
@@ -224,9 +236,9 @@ export const FormBuilder = ({
                             >
                                 <HelpIcon
                                     sx={{
-                                        marginTop: "1px",
-                                        color: "#286DA8",
-                                        fontSize: "18px",
+                                        marginTop: '1px',
+                                        color: '#286DA8',
+                                        fontSize: '18px',
                                     }}
                                 />
                             </Tooltip>
@@ -245,9 +257,9 @@ export const FormBuilder = ({
                                         <Radio
                                             disabled={option.disabled}
                                             sx={{
-                                                "&.Mui-disabled.Mui-checked": {
-                                                    color: "#00000080",
-                                                    backgroundColor: "#00000015",
+                                                '&.Mui-disabled.Mui-checked': {
+                                                    color: '#00000080',
+                                                    backgroundColor: '#00000015',
                                                 },
                                             }}
                                         />
@@ -259,11 +271,11 @@ export const FormBuilder = ({
                                 <TextField
                                     disabled={radio?.textField?.disabled}
                                     size="small"
-                                    placeholder={radio?.textField?.label || "Especifique"}
+                                    placeholder={radio?.textField?.label || 'Especifique'}
                                     sx={{
-                                        "&.MuiInputBase-input.Mui-disabled": {
-                                            color: "#00000080",
-                                            backgroundColor: "#00000015",
+                                        '&.MuiInputBase-input.Mui-disabled': {
+                                            color: '#00000080',
+                                            backgroundColor: '#00000015',
                                         },
                                     }}
                                     value={radio?.textField?.value}
@@ -277,11 +289,11 @@ export const FormBuilder = ({
 
             <Box
                 sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
-                    justifyContent: "end",
-                    alignItems: "end",
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '10px',
+                    justifyContent: 'end',
+                    alignItems: 'end',
                     flex: 1,
                 }}
             >

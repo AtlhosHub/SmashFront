@@ -1,46 +1,46 @@
-import dayjs from "dayjs";
-import { Box, Tooltip } from "@mui/material"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { useEffect, useState } from "react";
+import dayjs from 'dayjs';
+import { Box, Tooltip } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { useEffect, useState } from 'react';
 
-import { DefaultButton } from "../../../DefaultComponents/DefaultButton"
-import { DefaultTable } from "../../../DefaultComponents/DefaultTable";
-import { dateFormater } from "../../../../utils/dateFormaterService";
-import { toasterMsg } from "../../../../utils/toasterService";
-import { api } from "../../../../provider/apiProvider";
+import { DefaultButton } from '../../../DefaultComponents/DefaultButton';
+import { DefaultTable } from '../../../DefaultComponents/DefaultTable';
+import { dateFormater } from '../../../../utils/dateFormaterService';
+import { toasterMsg } from '../../../../utils/toasterService';
+import { api } from '../../../../provider/apiProvider';
 
 export const HistPagamento = ({ userInfo }) => {
     const [selectedMonth, setSelectedMonth] = useState(null);
 
     const headCells = [
         {
-            name: "dataVencimento",
-            description: "Data de Vencimento",
-            align: "center"
+            name: 'dataVencimento',
+            description: 'Data de Vencimento',
+            align: 'center'
         },
         {
-            name: "dataEnvio",
-            description: "Data de Pagamento",
-            align: "center"
+            name: 'dataEnvio',
+            description: 'Data de Pagamento',
+            align: 'center'
         },
         {
-            name: "formaPagamento",
-            description: "Forma de Pagamento",
-            align: "center"
+            name: 'formaPagamento',
+            description: 'Forma de Pagamento',
+            align: 'center'
         },
         {
-            name: "valor",
-            description: "Valor Pago",
-            align: "center"
+            name: 'valor',
+            description: 'Valor Pago',
+            align: 'center'
         }
-    ]
+    ];
 
-    const [rowData, setRowData] = useState([])
+    const [rowData, setRowData] = useState([]);
 
     useEffect(() => {
-        listarHistoricoPagamento(userInfo.id)
-    }, [])
+        listarHistoricoPagamento(userInfo.id);
+    }, []);
 
     const handleBuscarClick = () => {
         if (selectedMonth) {
@@ -62,7 +62,7 @@ export const HistPagamento = ({ userInfo }) => {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             }
         )
@@ -81,17 +81,17 @@ export const HistPagamento = ({ userInfo }) => {
             })
             .catch((error) => {
                 if (error.message.status === 500) {
-                    toasterMsg("error", "Erro ao listar mensalidades, por favor contacte os admnistradores.");
+                    toasterMsg('error', 'Erro ao listar mensalidades, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg("error", error.response.data);
+                    toasterMsg('error', error.response.data);
                 }
             });
-    }
+    };
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "25px", pt: "30px", pr: "30px", flex: 1 }}>
-            <h2 style={{ textTransform: "uppercase", color: "black" }}>{userInfo.nome}</h2>
-            <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '25px', pt: '30px', pr: '30px', flex: 1 }}>
+            <h2 style={{ textTransform: 'uppercase', color: 'black' }}>{userInfo.nome}</h2>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                         label="Data de Pagamento"
@@ -102,7 +102,7 @@ export const HistPagamento = ({ userInfo }) => {
                         maxDate={dayjs().endOf('year')}
                         onChange={(e) => setSelectedMonth(e)}
                         slotProps={{
-                            textField: { size: "small", placeholder: "Mês/Ano" },
+                            textField: { size: 'small', placeholder: 'Mês/Ano' },
                         }}
                         sx={{
                             '& .MuiInputBase-root': {
@@ -139,7 +139,7 @@ export const HistPagamento = ({ userInfo }) => {
                     variant="outlined"
                     onClick={() => {
                         setSelectedMonth(null),
-                        listarHistoricoPagamento(userInfo.id)
+                        listarHistoricoPagamento(userInfo.id);
                     }}
                 />
             </Box>
@@ -162,5 +162,5 @@ export const HistPagamento = ({ userInfo }) => {
                 withPagStatus={true}
             />
         </Box>
-    )
-}
+    );
+};

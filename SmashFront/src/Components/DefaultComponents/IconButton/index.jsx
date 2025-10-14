@@ -19,8 +19,8 @@ export default function ActionMenu({ menuOptions }) {
 
   const handleItemClick = (option) => {
     option.onClickFunc();
-    handleClose()
-  }
+    handleClose();
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -37,7 +37,7 @@ export default function ActionMenu({ menuOptions }) {
         onClick={handleClick}
         size="small"
       >
-        <MoreVertIcon sx={{ color: "black" }} />
+        <MoreVertIcon sx={{ color: 'black' }} />
       </IconButton>
 
       <Menu
@@ -47,7 +47,7 @@ export default function ActionMenu({ menuOptions }) {
         onClose={handleClose}
         PaperProps={{
           style: {
-            color: "black",
+            color: 'black',
             maxHeight: ITEM_HEIGHT * 4.5,
             width: '180px',
             borderRadius: '10px',
@@ -58,8 +58,9 @@ export default function ActionMenu({ menuOptions }) {
           'aria-labelledby': 'action-menu-button',
         }}
       >
-        {menuOptions.map((opt) => (
+        {menuOptions.map((opt, index) => (
           <Tooltip
+            key={`opt-${opt.label}-${index}`}
             title={opt.disabled && opt?.disabledLabel}
             arrow
             slotProps={{
@@ -73,9 +74,9 @@ export default function ActionMenu({ menuOptions }) {
               sx={{
                 ...(opt.disabled && {
                   opacity: 0.5,
-                  ":hover": {
+                  ':hover': {
                     backgroundColor: 'white',
-                    cursor: "default"
+                    cursor: 'default'
                   }
                 }),
               }}>

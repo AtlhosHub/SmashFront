@@ -1,4 +1,4 @@
-export const diffConfig = (originais, temporarios, keyId = "id") => {
+export const diffConfig = (originais, temporarios, keyId = 'id') => {
     const resultado = {};
 
     Object.keys(originais).forEach(secao => {
@@ -21,4 +21,4 @@ export const diffConfig = (originais, temporarios, keyId = "id") => {
     });
 
     return resultado;
-}
+};

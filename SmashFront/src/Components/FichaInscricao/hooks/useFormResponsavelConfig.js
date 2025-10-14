@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { TOOLTIP_MESSAGES } from "../../../constants/tooltips";
-// import { formatarTelefone } from "../../utils/validacaoForm";
+import { useMemo } from 'react';
+import { TOOLTIP_MESSAGES } from '../../../constants/tooltips';
+// import { formatarTelefone } from '../../utils/validacaoForm';
 
 export const useFormResponsavelConfig = ({
     userInfo,
@@ -13,10 +13,10 @@ export const useFormResponsavelConfig = ({
     const formConfig = useMemo(() => ({
         campos: [
             {
-                key: "nome",
-                label: "Nome",
+                key: 'nome',
+                label: 'Nome',
                 required: true,
-                disabled: operacao === "visualizacao",
+                disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].nome,
                 onChange: (e) =>
                     setUserInfo({
@@ -25,9 +25,9 @@ export const useFormResponsavelConfig = ({
                     }),
             },
             {
-                key: "rg",
-                label: "RG",
-                disabled: operacao === "visualizacao",
+                key: 'rg',
+                label: 'RG',
+                disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].rg,
                 onChange: (e) =>
                     setUserInfo({
@@ -36,13 +36,13 @@ export const useFormResponsavelConfig = ({
                     }),
             },
             {
-                key: "cpf",
-                label: "CPF",
+                key: 'cpf',
+                label: 'CPF',
                 required: true,
-                disabled: operacao === "visualizacao",
+                disabled: operacao === 'visualizacao',
                 value: cpfUser,
                 onChange: (e) => {
-                    const raw = e.target.value.replace(/\D/g, "");
+                    const raw = e.target.value.replace(/\D/g, '');
                     setCpfUser(formatCPF(raw));
                     setUserInfo({
                         ...userInfo,
@@ -51,9 +51,9 @@ export const useFormResponsavelConfig = ({
                 },
             },
             {
-                key: "nomeSocial",
-                label: "Nome Social",
-                disabled: operacao === "visualizacao",
+                key: 'nomeSocial',
+                label: 'Nome Social',
+                disabled: operacao === 'visualizacao',
                 tooltip: TOOLTIP_MESSAGES.nomeSocial,
                 value: userInfo.responsaveis[0].nomeSocial,
                 onChange: (e) =>
@@ -63,9 +63,9 @@ export const useFormResponsavelConfig = ({
                     }),
             },
             {
-                key: "profissao",
-                label: "Profissão",
-                disabled: operacao === "visualizacao",
+                key: 'profissao',
+                label: 'Profissão',
+                disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].profissao,
                 onChange: (e) =>
                     setUserInfo({
@@ -74,9 +74,9 @@ export const useFormResponsavelConfig = ({
                     }),
             },
             {
-                key: "genero",
-                label: "Gênero",
-                disabled: operacao === "visualizacao",
+                key: 'genero',
+                label: 'Gênero',
+                disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].genero,
                 onChange: (e) =>
                     setUserInfo({
@@ -85,10 +85,10 @@ export const useFormResponsavelConfig = ({
                     }),
             },
             {
-                key: "email",
-                label: "Email",
+                key: 'email',
+                label: 'Email',
                 required: true,
-                disabled: operacao === "visualizacao",
+                disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].email,
                 onChange: (e) =>
                     setUserInfo({
@@ -97,10 +97,10 @@ export const useFormResponsavelConfig = ({
                     }),
             },
             {
-                key: "telefone",
-                label: "Telefone",
-                disabled: operacao === "visualizacao",
-                placeholder: operacao === "cadastro" ? "(00) 00000-0000" : "",
+                key: 'telefone',
+                label: 'Telefone',
+                disabled: operacao === 'visualizacao',
+                placeholder: operacao === 'cadastro' ? '(00) 00000-0000' : '',
                 value: userInfo.responsaveis[0].telefone,
                 onChange: (e) =>
                     setUserInfo({
@@ -109,10 +109,10 @@ export const useFormResponsavelConfig = ({
                     }),
             },
             {
-                key: "celular",
-                label: "Celular",
-                disabled: operacao === "visualizacao",
-                placeholder: operacao === "cadastro" ? "(00) 00000-0000" : "",
+                key: 'celular',
+                label: 'Celular',
+                disabled: operacao === 'visualizacao',
+                placeholder: operacao === 'cadastro' ? '(00) 00000-0000' : '',
                 value: userInfo.responsaveis[0].celular,
                 onChange: (e) =>
                     setUserInfo({
@@ -123,17 +123,17 @@ export const useFormResponsavelConfig = ({
         ],
         radios: [
             {
-                key: "autorizado",
-                radioTitle: "Autorização",
+                key: 'autorizado',
+                radioTitle: 'Autorização',
                 toolTip: TOOLTIP_MESSAGES.autorizacao,
                 value: userInfo.autorizado,
                 onChange: (e) => setUserInfo({
                     ...userInfo,
-                    autorizado: e.target.value === "true"
+                    autorizado: e.target.value === 'true'
                 }),
                 options: [
-                    { value: "true", label: "Sim", disabled: operacao === "visualizacao" },
-                    { value: "false", label: "Não", disabled: operacao === "visualizacao" }
+                    { value: 'true', label: 'Sim', disabled: operacao === 'visualizacao' },
+                    { value: 'false', label: 'Não', disabled: operacao === 'visualizacao' }
                 ]
             }
         ]

@@ -1,24 +1,24 @@
 import {
     useLocation,
     useNavigate
-} from "react-router-dom";
+} from 'react-router-dom';
 import {
-    useEffect
-} from "react";
-import { ToastContainer } from "react-toastify";
+    useEffect, React
+} from 'react';
+import { ToastContainer } from 'react-toastify';
 
-import { DefaultBreadcrumb } from "../../../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb";
+import { DefaultBreadcrumb } from '../../../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import { MenuCadastro } from "../../../DefaultComponents/MenuCadastro/MenuCadastro";
-import { ModalDelete } from "../../../DefaultComponents/Modals/ModalDelete";
-import { toasterMsg } from "../../../../utils/toasterService";
-import { Box } from "@mui/material";
+import { MenuCadastro } from '../../../DefaultComponents/MenuCadastro/MenuCadastro';
+import { ModalDelete } from '../../../DefaultComponents/Modals/ModalDelete';
+import { toasterMsg } from '../../../../utils/toasterService';
+import { Box } from '@mui/material';
 
-import { getBreadcrumbRoutes } from "../../utils/breadCrumbRoutes";
-import { deleteUsuario, getUsuarioData, postUsuario, putUsuario } from "../../utils/apiRequest";
-import { FormBuilder } from "../../../DefaultComponents/FormBuilder";
-import { useFormInfoConfig } from "../../hooks/useFormInfoConfig";
-import { useCadastroUsuario } from "../CadastroUsuarioContext";
+import { getBreadcrumbRoutes } from '../../utils/breadCrumbRoutes';
+import { deleteUsuario, getUsuarioData, postUsuario, putUsuario } from '../../utils/apiRequest';
+import { FormBuilder } from '../../../DefaultComponents/FormBuilder';
+import { useFormInfoConfig } from '../../hooks/useFormInfoConfig';
+import { useCadastroUsuario } from '../CadastroUsuarioContext';
 
 export const CadastroUsuarios = () => {
     const navigate = useNavigate();
@@ -46,8 +46,8 @@ export const CadastroUsuarios = () => {
 
     const etapasMenu = [
         {
-            id: "info",
-            nome: "Informações",
+            id: 'info',
+            nome: 'Informações',
             Icone: AccountCircleOutlinedIcon,
             visivel: true,
             concluido: infoConcluido,
@@ -72,98 +72,98 @@ export const CadastroUsuarios = () => {
     });
 
     const labels = {
-        visualizacao: "Editar",
-        cadastro: "Concluir",
-        edicao: "Salvar"
+        visualizacao: 'Editar',
+        cadastro: 'Concluir',
+        edicao: 'Salvar'
     };
 
-    const labelBotao = labels[operacao] ?? "Salvar"
+    const labelBotao = labels[operacao] ?? 'Salvar';
 
     const cadastrarUsuario = () => {
         try {
             postUsuario(userInfo);
-            navigate("/controleUsuarios", { state: { userCreated: true } })
+            navigate('/controleUsuarios', { state: { userCreated: true } });
         } catch (error) {
             if (error.message.status === 500) {
-                toasterMsg("error", "Erro ao cadastrar usuário, por favor contacte os admnistradores.")
+                toasterMsg('error', 'Erro ao cadastrar usuário, por favor contacte os admnistradores.');
             } else {
-                toasterMsg("error", error.response.message)
+                toasterMsg('error', error.response.message);
             }
         }
-    }
+    };
 
     const deletarUsuario = () => {
         try {
-            deleteUsuario(location.state?.idUsuario)
-            navigate("/controleUsuarios", { state: { userDeleted: true } })
+            deleteUsuario(location.state?.idUsuario);
+            navigate('/controleUsuarios', { state: { userDeleted: true } });
         } catch (error) {
             if (error.message.status === 500) {
-                toasterMsg("error", "Erro ao deletar usuário, por favor contacte os admnistradores.")
+                toasterMsg('error', 'Erro ao deletar usuário, por favor contacte os admnistradores.');
             } else {
-                toasterMsg("error", error.message.data)
+                toasterMsg('error', error.message.data);
             }
         }
-    }
+    };
 
     const editarUsuario = () => {
         try {
             putUsuario(location.state?.idUsuario, userInfo);
 
-            toasterMsg("success", "Usuário editado com sucesso!");
-            setOperacao("visualizacao");
+            toasterMsg('success', 'Usuário editado com sucesso!');
+            setOperacao('visualizacao');
         } catch (error) {
             if (error.message.status === 500) {
-                toasterMsg("error", "Erro ao editar usuário, por favor contacte os admnistradores.")
+                toasterMsg('error', 'Erro ao editar usuário, por favor contacte os admnistradores.');
             } else {
-                toasterMsg("error", error.message.data)
+                toasterMsg('error', error.message.data);
             }
         }
-    }
+    };
 
     const listarDadosUsuario = () => {
         try {
-            const request = getUsuarioData(location.state?.idUsuario)
-            setUserInfo(request)
+            const request = getUsuarioData(location.state?.idUsuario);
+            setUserInfo(request);
         } catch (error) {
             if (error.message.status === 500) {
-                toasterMsg("error", "Erro ao lista dados do usuário, por favor contacte os admnistradores.")
+                toasterMsg('error', 'Erro ao lista dados do usuário, por favor contacte os admnistradores.');
             } else {
-                toasterMsg("error", error.message.data)
+                toasterMsg('error', error.message.data);
             }
         }
-    }
+    };
 
     const handleClick = () => {
-        if (operacao === "visualizacao") {
-            setOperacao("edicao");
-        } else if (operacao === "cadastro") {
-            cadastrarUsuario()
+        if (operacao === 'visualizacao') {
+            setOperacao('edicao');
+        } else if (operacao === 'cadastro') {
+            cadastrarUsuario();
         } else {
             editarUsuario();
         }
-    }
+    };
 
     useEffect(() => {
-        if (operacao !== "cadastro") {
-            listarDadosUsuario()
+        if (operacao !== 'cadastro') {
+            listarDadosUsuario();
         }
     }, []);
 
     return (
-        <>
+        <React.Fragment>
             <Box
                 sx={{
-                    display: "grid",
-                    gridTemplateRows: "auto 1fr",
-                    height: "90.9vh",
+                    display: 'grid',
+                    gridTemplateRows: 'auto 1fr',
+                    height: '90.9vh',
                 }}
             >
                 <DefaultBreadcrumb rotas={getBreadcrumbRoutes(operacao)} />
 
                 <Box
                     sx={{
-                        display: "flex",
-                        flexDirection: "row",
+                        display: 'flex',
+                        flexDirection: 'row',
                     }}
                 >
                     <MenuCadastro
@@ -175,11 +175,11 @@ export const CadastroUsuarios = () => {
                         campos={formConfig.campos}
                         radios={formConfig.radios}
                         cancelButton={{
-                            label: operacao === "visualizacao" ? "Excluir" : "Voltar",
-                            onClick: operacao === "visualizacao"
+                            label: operacao === 'visualizacao' ? 'Excluir' : 'Voltar',
+                            onClick: operacao === 'visualizacao'
                                 ? () => setIsModalDeleteOpen(true)
-                                : () => setOperacao("info"),
-                            color: operacao === "visualizacao" ? "red" : ""
+                                : () => setOperacao('info'),
+                            color: operacao === 'visualizacao' ? 'red' : ''
                         }}
                         confirmButton={{
                             label: labelBotao,
@@ -197,6 +197,6 @@ export const CadastroUsuarios = () => {
                 setIsModalOpen={setIsModalDeleteOpen}
                 handleDelete={deletarUsuario}
             />
-        </>
+        </React.Fragment>
     );
 };

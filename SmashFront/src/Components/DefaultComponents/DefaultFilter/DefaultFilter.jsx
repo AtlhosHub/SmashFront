@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { DefaultButton } from "../DefaultButton"
+import { useState, React } from 'react';
+import { DefaultButton } from '../DefaultButton';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -10,9 +10,9 @@ import {
     Fade,
     Popover,
     TextField
-} from "@mui/material";
-import "./DefaultFilter.css"
-import dayjs from "dayjs";
+} from '@mui/material';
+import './DefaultFilter.css';
+import dayjs from 'dayjs';
 
 
 export const DefaultFilter = ({
@@ -29,22 +29,22 @@ export const DefaultFilter = ({
     handleClearFilter
 }) => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl)
+    const open = Boolean(anchorEl);
     const rect = anchorEl?.getBoundingClientRect();
 
     const statusPagArray = [
-        { label: "PAGO" },
-        { label: "PENDENTE" },
-        { label: "ATRASADO" }
+        { label: 'PAGO' },
+        { label: 'PENDENTE' },
+        { label: 'ATRASADO' }
     ];
     const statusPresencaArray = [
-        { label: "Presente", value: true, },
-        { label: "Ausente", value: false, }
+        { label: 'Presente', value: true, },
+        { label: 'Ausente', value: false, }
     ];
     const horarioPrefArray = [
-        { id: 1820, label: "18h - 20h" },
-        { id: 1214, label: "12h - 14h" }
-    ]
+        { id: 1820, label: '18h - 20h' },
+        { id: 1214, label: '12h - 14h' }
+    ];
 
     const handleOpenFilter = (event) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -63,7 +63,7 @@ export const DefaultFilter = ({
     };
 
     return (
-        <>
+        <React.Fragment>
             <DefaultButton
                 label="Filtro"
                 endIcon={<FilterAltOutlinedIcon />}
@@ -72,23 +72,23 @@ export const DefaultFilter = ({
             <Popover
                 open={open}
                 anchorReference="anchorPosition"
-                anchorPosition={{ top: "0 !important", left: "0 !important" }}
+                anchorPosition={{ top: '0 !important', left: '0 !important' }}
                 TransitionComponent={Fade}
                 onClose={() => setAnchorEl(null)}
                 PaperProps={{
                     style: {
-                        width: "100vw",
-                        height: "97.5vh",
-                        maxHeight: "none",
-                        overflow: "hidden",
-                        boxShadow: "none",
-                        backgroundColor: "rgba(0,0,0,0)",
-                        display: "flex",
+                        width: '100vw',
+                        height: '97.5vh',
+                        maxHeight: 'none',
+                        overflow: 'hidden',
+                        boxShadow: 'none',
+                        backgroundColor: 'rgba(0,0,0,0)',
+                        display: 'flex',
                     },
                 }}
             >
                 {rect && (
-                    <>
+                    <React.Fragment>
                         <Box
                             className="filter-box"
                             position="absolute"
@@ -100,7 +100,7 @@ export const DefaultFilter = ({
                                     size="small"
                                     value={statusPagamento}
                                     options={statusPagArray}
-                                    getOptionLabel={(option) => option?.label || ""}
+                                    getOptionLabel={(option) => option?.label || ''}
                                     renderInput={(params) => <TextField {...params} label="Status de Pagamento" />}
                                     onChange={(e, newValue) => setStatusPagamento(newValue)}
                                 />
@@ -108,7 +108,7 @@ export const DefaultFilter = ({
                                     size="small"
                                     value={statusPresenca}
                                     options={statusPresencaArray}
-                                    getOptionLabel={(option) => option?.label || ""}
+                                    getOptionLabel={(option) => option?.label || ''}
                                     renderInput={(params) => <TextField {...params} label="Status de Presença" />}
                                     onChange={(e, newValue) => setStatusPresenca(newValue)}
                                 />
@@ -117,7 +117,7 @@ export const DefaultFilter = ({
                                         size="small"
                                         value={horarioPref}
                                         options={horarioPrefArray}
-                                        getOptionLabel={(option) => option?.label || ""}
+                                        getOptionLabel={(option) => option?.label || ''}
                                         renderInput={(params) => <TextField {...params} label="Horario de Preferência" />}
                                         onChange={(e, newValue) => setHorarioPref(newValue)}
                                     />
@@ -137,16 +137,16 @@ export const DefaultFilter = ({
                                                     }
                                                 }}
                                                 sx={{
-                                                    "& .MuiInputBase-root": {
-                                                        borderRadius: "5px"
+                                                    '& .MuiInputBase-root': {
+                                                        borderRadius: '5px'
                                                     },
                                                     '& .MuiInputBase-input.Mui-disabled': {
-                                                        "-webkit-text-fill-color": "rgba(0, 0, 0, 0.60)"
+                                                        '-webkit-text-fill-color': 'rgba(0, 0, 0, 0.60)'
                                                     },
                                                     '& .MuiInputBase-input': {
-                                                        textTransform: "capitalize"
+                                                        textTransform: 'capitalize'
                                                     },
-                                                    width: "100%",
+                                                    width: '100%',
                                                 }}
 
                                                 views={['year', 'month']}
@@ -158,11 +158,11 @@ export const DefaultFilter = ({
                                     </LocalizationProvider>
                                 }
                             </Box>
-                            <Box sx={{ display: "flex", gap: "10px", marginLeft: "auto" }}>
+                            <Box sx={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
                                 <DefaultButton size="small" label="Limpar"
                                     onClick={() => {
-                                        handleClearFilter()
-                                        handleMonthChange(dayjs())
+                                        handleClearFilter();
+                                        handleMonthChange(dayjs());
                                     }}
 
                                 />
@@ -177,15 +177,15 @@ export const DefaultFilter = ({
                         <Box
                             onClick={() => setAnchorEl(null)}
                             sx={{
-                                height: "100vh",
-                                width: "100vw"
+                                height: '100vh',
+                                width: '100vw'
                             }}
                         />
-                    </>
+                    </React.Fragment>
                 )}
             </Popover >
-        </>
-    )
-}
+        </React.Fragment>
+    );
+};
 
 export default DefaultFilter;

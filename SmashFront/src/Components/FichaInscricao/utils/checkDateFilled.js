@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const checkDateFilled = (date, setMaiorIdade, dataPreenchida) => {
     if(!date) return false; 
@@ -12,9 +12,9 @@ export const checkDateFilled = (date, setMaiorIdade, dataPreenchida) => {
     let dateString;
 
     if (dayjs.isDayjs(date)) {
-        dateString = date.format("DD-MM-YYYY");
+        dateString = date.format('DD-MM-YYYY');
     } else {
-        dateString = dayjs(date).format("DD-MM-YYYY");
+        dateString = dayjs(date).format('DD-MM-YYYY');
     }
 
     const regex = /^\d{2}-\d{2}-\d{4}/;

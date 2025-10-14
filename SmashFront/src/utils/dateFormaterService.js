@@ -27,4 +27,4 @@ export const dateFormater = (timestamp) => {
     }).format(date);
 
     return formattedDate.replace(',', ' -').replace(' ', ' ');
-}
+};

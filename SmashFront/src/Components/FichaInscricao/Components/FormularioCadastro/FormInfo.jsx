@@ -1,12 +1,12 @@
-import dayjs from "dayjs";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { checkDateFilled } from "../../utils/checkDateFilled";
-import { FormBuilder } from "../../../DefaultComponents/FormBuilder";
-import { useFichaInscricao } from "../FichaInscricaoContext";
-import { formatCPF, validarCpf } from "../../../../utils/validateCpf";
-import { useFormInfoConfig } from "../../hooks/useFormInfoConfig";
-import { ToastContainer } from "react-toastify";
+import dayjs from 'dayjs';
+import { useEffect, useRef, useState, React } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { checkDateFilled } from '../../utils/checkDateFilled';
+import { FormBuilder } from '../../../DefaultComponents/FormBuilder';
+import { useFichaInscricao } from '../FichaInscricaoContext';
+import { formatCPF, validarCpf } from '../../../../utils/validateCpf';
+import { useFormInfoConfig } from '../../hooks/useFormInfoConfig';
+import { ToastContainer } from 'react-toastify';
 
 export const FormInfo = () => {
     const navigate = useNavigate();
@@ -33,12 +33,12 @@ export const FormInfo = () => {
     const dataPreenchida = useRef(false);
 
     const labels = {
-        visualizacao: "Editar",
-        cadastro: "Próximo",
-        edicao: "Próximo"
+        visualizacao: 'Editar',
+        cadastro: 'Próximo',
+        edicao: 'Próximo'
     };
 
-    const labelBotao = labels[operacao] ?? "Próximo";
+    const labelBotao = labels[operacao] ?? 'Próximo';
 
     const isMaiorDeIdade = (dataNascimento) => {
         const hoje = dayjs();
@@ -56,17 +56,17 @@ export const FormInfo = () => {
 
     const handleClick = () => {
         switch (operacao) {
-            case "visualizacao":
-                setOperacao("edicao");
+            case 'visualizacao':
+                setOperacao('edicao');
                 break;
             default:
-                setTabAtiva("ende");
+                setTabAtiva('ende');
                 break;
         }
     };
 
     useEffect(() => {
-        const cpf = userInfo?.cpf || "";
+        const cpf = userInfo?.cpf || '';
         const cpfFormatado = formatCPF(cpf);
         const cpfEhValido = validarCpf(cpf);
 
@@ -113,16 +113,16 @@ export const FormInfo = () => {
     });
 
     return (
-        <>
+        <React.Fragment>
             <FormBuilder
                 campos={formConfig.campos}
                 radios={formConfig.radios}
                 cancelButton={{
-                    label: operacao === "visualizacao" ? "Excluir" : "Cancelar",
-                    onClick: operacao === "visualizacao"
+                    label: operacao === 'visualizacao' ? 'Excluir' : 'Cancelar',
+                    onClick: operacao === 'visualizacao'
                         ? () => setIsModalDeleteOpen(true)
-                        : () => navigate("/alunos"),
-                    color: operacao === "visualizacao" ? "red" : ""
+                        : () => navigate('/alunos'),
+                    color: operacao === 'visualizacao' ? 'red' : ''
                 }}
                 confirmButton={{
                     label: labelBotao,
@@ -133,6 +133,6 @@ export const FormInfo = () => {
                 operacao={operacao}
             />
             <ToastContainer />
-        </>
+        </React.Fragment>
     );
 };

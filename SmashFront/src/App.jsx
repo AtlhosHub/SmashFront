@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import { ListaAlunos } from './Components/ListaAlunos';
 import { TelaInicial } from './Components/TelaInicial';
@@ -48,7 +48,7 @@ function App() {
                 <Route path="/config" element={<ConfigSistema />} />
             </Route >
         </Routes >
-    )
+    );
 }
 
-export default App
+export default App;

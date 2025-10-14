@@ -1,16 +1,13 @@
-import {
-    useEffect,
-    useState
-} from "react";
-import dayjs from "dayjs";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 
-import { Box } from "@mui/material";
+import { Box } from '@mui/material';
 import CakeIcon from '@mui/icons-material/Cake';
 
-import { meses } from "./enum";
-import "./Aniversariantes.css";
+import { meses } from './enum';
+import './Aniversariantes.css';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -59,7 +56,7 @@ export const Aniversariantes = ({ alunos }) => {
         const dataFormatada = dayjs(`${anoAtual}-${mes}-${dia}`).startOf("day");
         if (dataFormatada.isBefore(dataAtual)) return "niver-passado"
         else if (dataFormatada.isAfter(dataAtual)) return "niver-futuro"
-        else return "niver-atual";
+        else return 'niver-atual';
     }
 
     useEffect(() => {
@@ -115,7 +112,7 @@ export const Aniversariantes = ({ alunos }) => {
                                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                                     {proximos.map(({ nome, data }) => {
                                         const classe = verificarAniversario(data);
-                                        const aniversario = classe === "niver-atual";
+                                        const aniversario = classe === 'niver-atual';
                                         return (
                                             <Box className="niver-box" key={nome + data}>
                                                 <span className={classe}>{data} - {nome}{aniversario && " 🎉"}</span>

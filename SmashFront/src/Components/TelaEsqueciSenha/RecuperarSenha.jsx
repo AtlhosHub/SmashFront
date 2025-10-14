@@ -3,9 +3,9 @@ import { Box, Link, TextField, Typography, Button } from '@mui/material';
 import bgImg2 from '../../assets/loginBg2.png';
 import { DefaultLoginCard } from '../DefaultComponents/DefaultLoginCard/DefaultLoginCard';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { api } from "../../provider/apiProvider"
-import { toasterMsg } from "../../utils/toasterService";
-import { ToastContainer } from "react-toastify"
+import { api } from '../../provider/apiProvider';
+import { toasterMsg } from '../../utils/toasterService';
+import { ToastContainer } from 'react-toastify';
 
 export const RecuperarSenha = () => {
     const [novaSenha, setNovaSenha] = useState('');
@@ -24,7 +24,7 @@ export const RecuperarSenha = () => {
         }
 
         api
-            .get(`/resetPassword/validate`, { params: { token } })
+            .get('/resetPassword/validate', { params: { token } })
             .then(() => setValidToken(true))
             .catch(() => {
                 toasterMsg('error', 'Link inválido ou expirado.');
@@ -72,42 +72,42 @@ export const RecuperarSenha = () => {
         >
             <Box
                 sx={{
-                    width: "1400px",
-                    height: "600px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    width: '1400px',
+                    height: '600px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}
             >
                 <DefaultLoginCard
                     typeButton="contained"
                     withButton={false}
                     sx={{
-                        width: "400px",
-                        height: "500px",
+                        width: '400px',
+                        height: '500px',
                     }}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <Typography
                             sx={{
-                                fontFamily: "'Mohave', sans-serif",
-                                fontWeight: "600",
-                                fontSize: "35px",
-                                textAlign: "left",
-                                color: "#1E1919",
-                                marginBottom: "0.1rem",
+                                fontFamily: '\'Mohave\', sans-serif',
+                                fontWeight: '600',
+                                fontSize: '35px',
+                                textAlign: 'left',
+                                color: '#1E1919',
+                                marginBottom: '0.1rem',
                             }}
                         >
                             ALTERAR SENHA
                         </Typography>
                         <Typography
                             sx={{
-                                fontFamily: "'Inter', sans-serif",
-                                fontWeight: "400",
-                                fontSize: "15px",
-                                textAlign: "left",
-                                color: "#1E1919",
-                                marginTop: "0rem",
+                                fontFamily: '\'Inter\', sans-serif',
+                                fontWeight: '400',
+                                fontSize: '15px',
+                                textAlign: 'left',
+                                color: '#1E1919',
+                                marginTop: '0rem',
                             }}
                         >
                             Essa ação irá alterar a senha vinculada ao email informado.
@@ -123,8 +123,8 @@ export const RecuperarSenha = () => {
                                 shrink: true,
                             }}
                             sx={{
-                                width: "100%",
-                                marginTop: "1rem",
+                                width: '100%',
+                                marginTop: '1rem',
                                 '& .MuiInputBase-root': {
                                     borderRadius: '8px',
                                 },
@@ -141,8 +141,8 @@ export const RecuperarSenha = () => {
                                 shrink: true,
                             }}
                             sx={{
-                                width: "100%",
-                                marginBottom: "2rem",
+                                width: '100%',
+                                marginBottom: '2rem',
                                 '& .MuiInputBase-root': {
                                     borderRadius: '8px',
                                 },
@@ -152,15 +152,15 @@ export const RecuperarSenha = () => {
                             variant="contained"
                             onClick={handleAlterarSenha}
                             sx={{
-                                backgroundColor: "#0D3C53",
-                                color: "#FFFFFF",
-                                textTransform: "none",
-                                fontFamily: "'Inter', sans-serif",
-                                fontWeight: "600",
-                                fontSize: "16px",
-                                borderRadius: "8px",
+                                backgroundColor: '#0D3C53',
+                                color: '#FFFFFF',
+                                textTransform: 'none',
+                                fontFamily: '\'Inter\', sans-serif',
+                                fontWeight: '600',
+                                fontSize: '16px',
+                                borderRadius: '8px',
                                 '&:hover': {
-                                    backgroundColor: "#093962",
+                                    backgroundColor: '#093962',
                                 },
                             }}
                         >
@@ -169,15 +169,15 @@ export const RecuperarSenha = () => {
                         <Link
                             onClick={() => navigate('/')}
                             sx={{
-                                textAlign: "center",
-                                color: "#0D3C53",
-                                textDecoration: "none",
-                                fontFamily: "'Inter', sans-serif",
-                                fontWeight: "500",
-                                fontSize: "16px",
-                                cursor: "pointer",
+                                textAlign: 'center',
+                                color: '#0D3C53',
+                                textDecoration: 'none',
+                                fontFamily: '\'Inter\', sans-serif',
+                                fontWeight: '500',
+                                fontSize: '16px',
+                                cursor: 'pointer',
                                 '&:hover': {
-                                    textDecoration: "underline",
+                                    textDecoration: 'underline',
                                 },
                             }}
                         >
@@ -188,32 +188,32 @@ export const RecuperarSenha = () => {
             </Box>
             <Box
                 sx={{
-                    justifyContent: "end",
-                    display: "flex",
-                    flexDirection: "column",
-                    color: "#0D3C53",
-                    width: "100%",
-                    pr: "5rem",
-                    pb: "1rem",
-                    textAlign: "right",
+                    justifyContent: 'end',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    color: '#0D3C53',
+                    width: '100%',
+                    pr: '5rem',
+                    pb: '1rem',
+                    textAlign: 'right',
                 }}
             >
                 <Typography
                     sx={{
-                        fontSize: "80px",
-                        fontFamily: "'Mohave', sans-serif ",
-                        fontWeight: "700",
-                        lineHeight: "70px",
+                        fontSize: '80px',
+                        fontFamily: '\'Mohave\', sans-serif ',
+                        fontWeight: '700',
+                        lineHeight: '70px',
                     }}
                 >
                     CT Vila Formosa
                 </Typography>
                 <Typography
                     sx={{
-                        fontSize: "25px",
-                        fontFamily: "'Poppins', sans-serif ",
-                        fontWeight: "400",
-                        lineHeight: "30px",
+                        fontSize: '25px',
+                        fontFamily: '\'Poppins\', sans-serif ',
+                        fontWeight: '400',
+                        lineHeight: '30px',
                     }}
                 >
                     Sistema de Gerenciamento Financeiro

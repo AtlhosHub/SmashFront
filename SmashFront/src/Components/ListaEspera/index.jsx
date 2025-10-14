@@ -1,47 +1,47 @@
-import { DefaultBreadcrumb } from "../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb"
-import { DefaultButton } from "../DefaultComponents/DefaultButton"
-import { DefaultTable } from "../DefaultComponents/DefaultTable";
-import { ToastContainer } from "react-toastify"
-import { api } from "../../provider/apiProvider"
+import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
+import { DefaultButton } from '../DefaultComponents/DefaultButton';
+import { DefaultTable } from '../DefaultComponents/DefaultTable';
+import { ToastContainer } from 'react-toastify';
+import { api } from '../../provider/apiProvider';
 import {
   Box,
   InputAdornment,
   TextField
-} from "@mui/material"
-import { useEffect, useRef, useState } from "react"
+} from '@mui/material';
+import { useEffect, useRef, useState, React } from 'react';
 import {
   Add,
   Search
-} from "@mui/icons-material"
-import { useLocation, useNavigate } from "react-router-dom";
-import ActionMenu from "../DefaultComponents/IconButton";
+} from '@mui/icons-material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ActionMenu from '../DefaultComponents/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { dateFormater } from "../../utils/dateFormaterService";
-import { ModalDelete } from "../DefaultComponents/Modals/ModalDelete";
-import { toasterMsg } from "../../utils/toasterService";
+import { dateFormater } from '../../utils/dateFormaterService';
+import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
+import { toasterMsg } from '../../utils/toasterService';
 
 export const ListaEspera = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const timeoutRef = useRef(null);
-  const searchValueRef = useRef("");
-  const [searchValue, setSearchValue] = useState("");
+  const searchValueRef = useRef('');
+  const [searchValue, setSearchValue] = useState('');
   const [rowToDelete, setRowToDelete] = useState(undefined);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
   const headCells = [
-    { name: "nome", description: "Nome", cellWidth: "40%" },
-    { name: "dataInteresse", description: "Data de Contato", cellWidth: "33%" },
-    { name: "horarioPreferencia", description: "Horário de Preferência", cellWidth: "33%" },
+    { name: 'nome', description: 'Nome', cellWidth: '40%' },
+    { name: 'dataInteresse', description: 'Data de Contato', cellWidth: '33%' },
+    { name: 'horarioPreferencia', description: 'Horário de Preferência', cellWidth: '33%' },
   ];
 
   const [rowData, setRowData] = useState([]);
 
   const rotas = [
-    { route: "/listaEspera", description: "Lista de Espera", cellWidth: "100%" },
+    { route: '/listaEspera', description: 'Lista de Espera', cellWidth: '100%' },
   ];
 
   const handleApplyFilter = () => {
@@ -59,7 +59,7 @@ export const ListaEspera = () => {
       { key: 'saved', type: 'success', msg: 'Perfil de Pessoa Interessada criado com sucesso!' },
     ];
 
-    let newState = { ...location.state };
+    const newState = { ...location.state };
 
     flags.forEach(({ key, type, msg }) => {
       if (location.state?.[key]) {
@@ -82,19 +82,19 @@ export const ListaEspera = () => {
   };
 
   const fetchListaEspera = (filtro) => {
-    api.post("/lista-espera/filtro", filtro, {
+    api.post('/lista-espera/filtro', filtro, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
       },
     })
       .then((res) => {
         const formattedData = res.data.map((item) => ({
           ...item,
           dataInteresse: item.dataInteresse ? dateFormater(item.dataInteresse) : null,
-          horarioPreferencia: item.horarioPreferencia && typeof item.horarioPreferencia === "object"
-            ? `${item.horarioPreferencia.horarioAulaInicio ? item.horarioPreferencia.horarioAulaInicio.slice(0, 5) : ""} - ${item.horarioPreferencia.horarioAulaFim ? item.horarioPreferencia.horarioAulaFim.slice(0, 5) : ""}`
-            : item.horarioPreferencia || ""
+          horarioPreferencia: item.horarioPreferencia && typeof item.horarioPreferencia === 'object'
+            ? `${item.horarioPreferencia.horarioAulaInicio ? item.horarioPreferencia.horarioAulaInicio.slice(0, 5) : ''} - ${item.horarioPreferencia.horarioAulaFim ? item.horarioPreferencia.horarioAulaFim.slice(0, 5) : ''}`
+            : item.horarioPreferencia || ''
         }));
 
         if (!formattedData) return;
@@ -102,9 +102,9 @@ export const ListaEspera = () => {
       })
       .catch((error) => {
         if (error.message.status === 500) {
-          toasterMsg("error", "Erro ao listar interessados, por favor contacte os admnistradores.");
+          toasterMsg('error', 'Erro ao listar interessados, por favor contacte os admnistradores.');
         } else {
-          toasterMsg("error", error.response.data);
+          toasterMsg('error', error.response.data);
         }
       });
   };
@@ -112,27 +112,27 @@ export const ListaEspera = () => {
   const handleDelete = (id) => {
     api.delete(`lista-espera/${id}`, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
       }
     })
       .then(() => {
-        toasterMsg("success", "Perfil de Pessoa Interessada excluído com sucesso!");
+        toasterMsg('success', 'Perfil de Pessoa Interessada excluído com sucesso!');
         setIsModalDeleteOpen(false);
         fetchListaEspera({});
         setRowToDelete(undefined);
       })
       .catch((error) => {
         if (error.message.status === 500) {
-          toasterMsg("error", "Erro ao deletar interessado, por favor contacte os admnistradores.");
+          toasterMsg('error', 'Erro ao deletar interessado, por favor contacte os admnistradores.');
         } else {
-          toasterMsg("error", error.response.data);
+          toasterMsg('error', error.response.data);
         }
-      })
-  }
+      });
+  };
 
   return (
-    <>
+    <React.Fragment>
       <Box>
         <DefaultBreadcrumb rotas={rotas} />
       </Box>
@@ -168,7 +168,7 @@ export const ListaEspera = () => {
             variant="contained"
             label="Novo Cadastro"
             endIcon={<Add />}
-            onClick={() => navigate("/cadastrarListaEspera", { state: { operacao: "cadastro" } })}
+            onClick={() => navigate('/cadastrarListaEspera', { state: { operacao: 'cadastro' } })}
           />
         </Box>
         <Box>
@@ -181,24 +181,24 @@ export const ListaEspera = () => {
                   label: 'Visualizar',
                   icon: <VisibilityIcon fontSize="small" />,
                   onClickFunc: () => {
-                    navigate("/cadastrarListaEspera", {
+                    navigate('/cadastrarListaEspera', {
                       state: {
                         idPessoa: row.id,
-                        operacao: "visualizacao"
+                        operacao: 'visualizacao'
                       }
-                    })
+                    });
                   }
                 },
                 {
                   label: 'Editar',
                   icon: <EditIcon fontSize="small" />,
                   onClickFunc: () => {
-                    navigate("/cadastrarListaEspera", {
+                    navigate('/cadastrarListaEspera', {
                       state: {
                         idPessoa: row.id,
-                        operacao: "edicao"
+                        operacao: 'edicao'
                       }
-                    })
+                    });
                   }
                 },
                 {
@@ -217,11 +217,11 @@ export const ListaEspera = () => {
       </Box>
       <ToastContainer />
       <ModalDelete
-        textoModal={"o Perfil de Pessoa Interessada"}
+        textoModal={'o Perfil de Pessoa Interessada'}
         isModalOpen={isModalDeleteOpen}
         setIsModalOpen={setIsModalDeleteOpen}
         handleDelete={() => handleDelete(rowToDelete)}
       />
-    </>
+    </React.Fragment>
   );
 };

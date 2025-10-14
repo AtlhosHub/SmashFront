@@ -38,4 +38,4 @@ export const defaultUser = {
             email: null
         }
     ]
-}
+};
