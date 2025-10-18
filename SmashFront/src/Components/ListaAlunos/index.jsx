@@ -8,26 +8,21 @@ import {
     Box,
     InputAdornment,
     TextField,
-    Tooltip
 } from '@mui/material';
-import { useEffect, useRef, useState, React } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Add,
     Search
 } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { toasterMsg } from '../../utils/toasterService';
-import ActionMenu from '../DefaultComponents/IconButton';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
 import dayjs from 'dayjs';
 import { ModalStatus } from '../DefaultComponents/Modals/ModalStatus';
 import { getAlunos } from './utils/apiRequest';
 import { formatResponse } from './utils/formatResponse';
 import { getHeadCells } from './constants/headerCells';
+import { renderAcoes, renderValor } from './utils/renderColmns';
 
 export const ListaAlunos = () => {
     const navigate = useNavigate();
@@ -37,13 +32,11 @@ export const ListaAlunos = () => {
     const searchValueRef = useRef(null);
     const idToDelete = useRef(undefined);
 
-    const [pageableDate, setPageableDate] = useState({
+    const [pageableData, setPageableData] = useState({
         offset: 0,
         limit: 5,
         totalItens: 0
     });
-
-    const [isFirstLoad, setIsFirstLoad] = useState(false);
 
     const [rowData, setRowData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
@@ -53,8 +46,8 @@ export const ListaAlunos = () => {
     const [isModalStatusOpen, setIsModalStatusOpen] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState(dayjs().startOf('month'));
     const [selectedMonthRange, setSelectedMonthRange] = useState({
-        start: dayjs().startOf('month'),
-        end: dayjs().endOf('month')
+        start: dayjs().startOf('month').format('YYYY-MM-DD'),
+        end: dayjs().endOf('month').format('YYYY-MM-DD'),
     });
     const [statusInfoModal, setStatusInfoModal] = useState({
         idAluno: null,
@@ -84,7 +77,7 @@ export const ListaAlunos = () => {
             .then(() => {
                 toasterMsg('success', 'Aluno excluído com sucesso!');
                 setIsModalDeleteOpen(false);
-                handleApplyFilter();
+                fetchAlunos();
             })
             .catch((error) => {
                 if (error.message.status === 500) {
@@ -93,20 +86,6 @@ export const ListaAlunos = () => {
                     toasterMsg('error', error.response.data);
                 }
             });
-    };
-
-    const handleApplyFilter = () => {
-        const objFilter = {
-            nome: searchValueRef.current != '' ? searchValueRef.current : null,
-            status: statusPagamento?.label,
-            ativo: statusPresenca?.value,
-            dataEnvioFrom: selectedMonthRange.start,
-            dataEnvioTo: selectedMonthRange.end,
-            offset: pageableDate.offset,
-            limit: pageableDate.limit
-        };
-
-        fetchAlunos(objFilter);
     };
 
     const handleClearFilter = () => {
@@ -124,33 +103,64 @@ export const ListaAlunos = () => {
         }
 
         timeoutRef.current = setTimeout(() => {
-            handleApplyFilter();
+            fetchAlunos();
         }, 1000);
     };
 
-    const fetchAlunos = async (objFilter) => {
-        if (isFirstLoad && pageableDate.offset == pageableDate.totalItens) return;
+    const fetchAlunos = async (novoOfsset = pageableData.offset) => {
+        const objFilter = {
+            nome: searchValueRef.current ?? null,
+            status: statusPagamento ? [statusPagamento?.label] : null,
+            ativo: statusPresenca?.value,
+            dataEnvioFrom: selectedMonthRange.start,
+            dataEnvioTo: selectedMonthRange.end,
+            offset: novoOfsset,
+            limit: pageableData.limit
+        };
 
         try {
-            const { offset, total, content } = await getAlunos(objFilter);
+            const { total, content } = await getAlunos(objFilter);
+
+            if (content.length === 0) {
+                setRowData([]);
+                setPageableData({
+                    ...pageableData,
+                    totalItens: 0,
+                    offset: 0,
+                });
+                return;
+            };
 
             const formattedData = formatResponse(content);
 
             setRowData(formattedData);
-            setPageableDate({
-                ...pageableDate,
-                offset: offset + 5,
-                totalItens: total
+            setPageableData({
+                ...pageableData,
+                totalItens: total,
+                offset: novoOfsset,
             });
         } catch (error) {
             if (error.message.status === 500) {
                 toasterMsg('error', 'Erro ao listar alunos, por favor contacte os admnistradores.');
             } else {
-                toasterMsg('error', error.response.data);
+                toasterMsg('error', error.response);
             }
-        } finally {
-            setIsFirstLoad(true);
         }
+    };
+
+    const formatRowData = (rows) => {
+        return rows.map(row => ({
+            ...row,
+            valor: renderValor(row),
+            acoes: renderAcoes({
+                row,
+                navigate,
+                idToDelete,
+                setStatusInfoModal,
+                setIsModalStatusOpen,
+                setIsModalDeleteOpen,
+            })
+        }));
     };
 
     useEffect(() => {
@@ -174,7 +184,7 @@ export const ListaAlunos = () => {
     }, [location]);
 
     useEffect(() => {
-        handleApplyFilter();
+        fetchAlunos();
     }, []);
 
     return (
@@ -229,7 +239,7 @@ export const ListaAlunos = () => {
                         setSelectedMonth={setSelectedMonth}
                         setStatusPagamento={setStatusPagamento}
                         setStatusPresenca={setStatusPresenca}
-                        handleApplyFilter={handleApplyFilter}
+                        handleApplyFilter={fetchAlunos}
                         handleClearFilter={handleClearFilter}
                     />
                     <DefaultButton
@@ -246,75 +256,11 @@ export const ListaAlunos = () => {
                 <Box>
                     <DefaultTable
                         headCells={getHeadCells()}
-                        rowData={rowData.map(row => ({
-                            ...row, valor: row.desconto ? (
-                                <Tooltip title="Pago com desconto" arrow placement="top">
-                                    <span style={{ color: row.valorColor }}>
-                                        {row.valor}
-                                    </span>
-                                </Tooltip>
-                            ) : (
-                                <span style={{ color: row.valorColor }}>
-                                    {row.valor}
-                                </span>
-                            ),
-                            acoes: <ActionMenu menuOptions={[
-                                {
-                                    label: 'Visualizar',
-                                    icon: <VisibilityIcon fontSize="small" />,
-                                    onClickFunc: () => {
-                                        navigate('/fichaInscricao', {
-                                            state: {
-                                                idAluno: row.id,
-                                                operacao: 'visualizacao'
-                                            }
-                                        });
-                                    }
-                                },
-                                {
-                                    label: 'Alterar Status',
-                                    icon: <CurrencyExchangeIcon fontSize="small" />,
-                                    onClickFunc: () => {
-                                        setIsModalStatusOpen(true);
-                                        setStatusInfoModal({
-                                            idAluno: row.id,
-                                            idMensalidade: row.idMensalidade,
-                                            dataVencimento: row.dataVencimento,
-                                            nome: row.nome,
-                                            status: row.status,
-                                            dataPagamento: row.dataEnvioOriginal,
-                                            formaPagamento: row.formaPagamento,
-                                            valor: row.valor,
-                                        });
-                                    },
-                                    disabled: row.automatico === true,
-                                    disabledLabel: 'Não é possível alterar o status de Pagamentos Automáticos',
-                                },
-                                {
-                                    label: 'Editar',
-                                    icon: <EditIcon fontSize="small" />,
-                                    onClickFunc: () => {
-                                        navigate('/fichaInscricao', {
-                                            state: {
-                                                idAluno: row.id,
-                                                operacao: 'edicao'
-                                            }
-                                        });
-                                    }
-                                },
-                                {
-                                    label: 'Excluir',
-                                    icon: <DeleteIcon fontSize="small" />,
-                                    onClickFunc: () => {
-                                        idToDelete.current = row.id;
-                                        setIsModalDeleteOpen(true);
-                                    }
-                                }
-                            ]}
-                            />
-                        }))}
+                        rowData={formatRowData(rowData)}
                         withStatus={true}
                         withPagStatus={true}
+                        totalItems={pageableData.totalItens}
+                        fetchMoreData={fetchAlunos}
                     />
                 </Box>
             </Box>
@@ -327,7 +273,7 @@ export const ListaAlunos = () => {
                 isModalOpen={isModalStatusOpen}
                 setIsModalOpen={setIsModalStatusOpen}
                 statusInfoModal={statusInfoModal}
-                handleApplyFilter={handleApplyFilter}
+                handleApplyFilter={fetchAlunos}
             />
             <ToastContainer />
         </React.Fragment>

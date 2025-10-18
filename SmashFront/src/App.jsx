@@ -11,10 +11,10 @@ import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha';
 import { RecuperarSenha } from './Components/TelaEsqueciSenha/RecuperarSenha';
 import { Dashboard } from './Components/Dashboard';
 import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
-import { CadastrarInteressado } from './Components/ListaEspera/CadastrarInteressado';
 import { ConfigSistema } from './Components/ConfigSistema';
 import { FichaInscricaoProvider } from './Components/FichaInscricao/Components/FichaInscricaoContext';
 import { CadastroUsuarioProvider } from './Components/ControleUsuarios/Components/CadastroUsuarioContext';
+import { CadastrarInteressado } from './Components/ListaEspera/Components/CadastroInteressado';
 
 function App() {
     return (

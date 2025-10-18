@@ -7,14 +7,12 @@ export const listarHorarios = () => {
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
         }
     })
-        .then((response) => { return response; });
-
-    if (!requestResponse.data) return [];
+        .then((response) => { return response.data; });
 
     return requestResponse;
 };
 
-export const adicionarAlterarHorario = ({ horario }) => {
+export const upsertHorario = ({ horario }) => {
     const payload = {
         horarioAulaFim: horario.horarioAulaFim,
         horarioAulaInicio: horario.horarioAulaInicio,
@@ -53,16 +51,14 @@ export const listarValorMensalidade = () => {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
-            .then((response) => { return response; });
-
-    if (!requestResponse.data) return [];
+            .then((response) => { return response.data; });
 
     return requestResponse;
 };
 
 export const alterarValorMensalidade = ({ mensalidade }) => {
     const requestResponse =
-        api.post('/valor-mensalidade', {
+        api.post('/mensalidades/valor-mensalidade', {
             valor: mensalidade.data,
         }, {
             headers: {

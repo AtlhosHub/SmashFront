@@ -18,7 +18,7 @@ export const defaultUser = {
     dataInclusao: null,
     endereco: {
         logradouro: null,
-        numLogradouro: null,
+        numLog: null,
         bairro: null,
         cidade: null,
         cep: {

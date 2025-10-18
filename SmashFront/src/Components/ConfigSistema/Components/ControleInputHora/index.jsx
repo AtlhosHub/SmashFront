@@ -1,6 +1,6 @@
 import React from 'react';
-import { TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import { TimePicker } from '@mui/x-date-pickers';
 
 export default function ControleInputHora({
     index,

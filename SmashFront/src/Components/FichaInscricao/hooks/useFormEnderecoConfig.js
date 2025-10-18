@@ -32,11 +32,11 @@ export const useFormEnderecoConfig = ({
                     setUserInfo({ ...userInfo, endereco: { ...userInfo.endereco, logradouro: e.target.value } })
             },
             {
-                key: 'numLogradouro',
+                key: 'numLog',
                 label: 'Número',
                 required: true,
                 disabled: operacao === 'visualizacao',
-                value: userInfo.endereco.numLogradouro,
+                value: userInfo.endereco.numLog,
                 type: 'text',
                 onChange: (e) => {
                     const regex = /^[A-Za-z0-9]*$/;
@@ -46,7 +46,7 @@ export const useFormEnderecoConfig = ({
                             ...userInfo,
                             endereco: {
                                 ...userInfo.endereco,
-                                numLogradouro: valor,
+                                numLog: valor,
                             },
                         });
                     }

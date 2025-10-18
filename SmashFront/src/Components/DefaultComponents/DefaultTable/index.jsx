@@ -1,7 +1,7 @@
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Pagination } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 import './DefaultTable.css';
-import { useState, React } from 'react';
+import React, { useState } from 'react';
 
 export const DefaultTable = ({
     headCells,
@@ -9,16 +9,18 @@ export const DefaultTable = ({
     withStatus = false,
     withPagStatus = false,
     onRowClick,
-    rowsPerPage = 5
+    rowsPerPage = 5,
+    totalItems,
+    fetchMoreData
 }) => {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(rowData.length / rowsPerPage);
+    const totalPages = Math.ceil(totalItems / rowsPerPage);
 
-    const displayRows = rowData.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-    );
+    const handleChagePage = async (page) => {
+        await fetchMoreData(rowsPerPage * (page - 1));
+        setCurrentPage(page);
+    };
 
     return (
         <React.Fragment>
@@ -45,7 +47,7 @@ export const DefaultTable = ({
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {displayRows?.map((row, index) => (
+                        {rowData?.map((row, index) => (
                             <TableRow
                                 key={`row-index-${index}`}
                                 className="body-table-row"
@@ -116,12 +118,12 @@ export const DefaultTable = ({
                     </TableBody>
                 </Table>
             </TableContainer>
-            {rowData.length > rowsPerPage &&
+            {totalItems >= rowsPerPage &&
                 <Box display="flex" justifyContent="center" mt={2}>
                     <Pagination
                         count={totalPages}
                         page={currentPage}
-                        onChange={(_, value) => setCurrentPage(value)}
+                        onChange={(_, value) => { handleChagePage(value); }}
                         color="primary"
                     />
                 </Box>

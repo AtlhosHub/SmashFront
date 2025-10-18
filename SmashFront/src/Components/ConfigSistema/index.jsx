@@ -12,7 +12,7 @@ import {
 
 import { toasterMsg } from '../../utils/toasterService';
 import { 
-    adicionarAlterarHorario,
+    upsertHorario,
     alterarValorMensalidade,
     listarHorarios,
     listarValorMensalidade,
@@ -46,8 +46,8 @@ export const ConfigSistema = () => {
     const rotas = [{ route: '/listaEspera', description: 'Lista de Espera' }];
 
     const fetchDadosConfig = async () => {
-        const horarios = (await listarHorarios()).data;
-        const valor = (await listarValorMensalidade()).data;
+        const horarios = await listarHorarios();
+        const valor = await listarValorMensalidade();
 
         const treatedHour = treatHourResponse(horarios);
         const treatedValue = treatValueResponse(valor);
@@ -74,12 +74,12 @@ export const ConfigSistema = () => {
             for (const secao of Object.keys(diff)) {
                 for (const item of diff[secao].novos) {
                     if (secao === 'horarioAulas') {
-                        promises.push(adicionarAlterarHorario({horario: item}));
+                        promises.push(upsertHorario({horario: item}));
                     }
                 }
                 for (const item of diff[secao].alterados) {
                     if (secao === 'horarioAulas') {
-                        promises.push(adicionarAlterarHorario({horario: item}));
+                        promises.push(upsertHorario({horario: item}));
                     } else if (secao === 'valorMensalidade') {
                         promises.push(alterarValorMensalidade({mensalidade: item}));
                     }

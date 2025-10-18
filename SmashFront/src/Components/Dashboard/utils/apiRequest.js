@@ -1,45 +1,46 @@
 import { api } from '../../../provider/apiProvider';
 
-export const getNumAlunos = () => {
-    const request = api.get('/alunos/ativos', {
+export const getNumAlunos = async () => {
+    const request = await api.get('/alunos/ativos', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
         }
-    });
+    })
+    .then(response => response.data);
 
-    return request.data;
+    return request;
 };
 
-export const getNumDesconto = () => {
-    const request = api.get('/mensalidades/qtd-descontos', {
+export const getNumDesconto = async () => {
+    const request = await api.get('/mensalidades/qtd-descontos', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
         }
-    });
+    }).then(response => response.data);
 
-    return request.data;
+    return request;
 };
 
-export const getAlunosAniversariantes = () => {
-    const request = api.get('/alunos/aniversariantes', {
+export const getAlunosAniversariantes = async () => {
+    const request = await api.get('/alunos/aniversariantes', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
         }
-    });
+    }).then(response => response.data);
 
-    return request.data;
+    return request;
 };
 
-export const getConteudoGrafico = () => {
-    const request = api.get('/mensalidades/grafico', {
+export const getConteudoGrafico = async () => {
+    const request = await api.get('/mensalidades/grafico', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
         }
-    });
+    }).then(response => response.data);
 
-    return request.data;
+    return request;
 };

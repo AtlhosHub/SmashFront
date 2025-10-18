@@ -1,7 +1,5 @@
 export const dateFormater = (timestamp) => {
-    if (timestamp === null || timestamp === undefined) {
-        return null;
-    }
+    if (timestamp === null || timestamp === undefined) return null;
 
     const isDateOnly = typeof timestamp === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(timestamp);
 
@@ -27,4 +25,11 @@ export const dateFormater = (timestamp) => {
     }).format(date);
 
     return formattedDate.replace(',', ' -').replace(' ', ' ');
+};
+
+export const dateIsoFormatter = (isoUtcString) => {
+    const date = new Date(isoUtcString);
+    const offsetDate = new Date(date.getTime() - 3 * 60 * 60 * 1000);
+
+    return offsetDate.toISOString();
 };

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, React } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { toasterMsg } from '../../../../utils/toasterService';
 import { ToastContainer } from 'react-toastify';
 import { useFormEnderecoConfig } from '../../hooks/useFormEnderecoConfig';
@@ -123,7 +123,7 @@ export const FormEndereco = ({
     };
 
     useEffect(() => {
-        const camposPreenchidos = (operacao === 'cadastro' ? cepValido : true) && userInfo.endereco.numLogradouro;
+        const camposPreenchidos = (operacao === 'cadastro' ? cepValido : true) && userInfo.endereco.numLog;
 
         setBotaoLiberado(camposPreenchidos);
         setEnderecoConcluido(camposPreenchidos);

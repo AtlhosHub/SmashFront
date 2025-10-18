@@ -5,10 +5,7 @@ export const formatResponse = (data) => {
         ...aluno,
         dataEnvioOriginal: aluno.dataEnvio,
         dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
-        valor: aluno.valor != null
-            ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-            : null,
-        valorColor: aluno.desconto ? '#286DA8' : 'inherit'
+        valor: aluno?.valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) ?? null,
     }));
 
     return formattedData;

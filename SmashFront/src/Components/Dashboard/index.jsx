@@ -26,9 +26,9 @@ export const Dashboard = () => {
     const [qtdAlunosAtivos, setQtdAlunosAtivos] = useState('0');
     const [dadosDash, setDadosDash] = useState([]);
 
-    const listarAniversariantes = () => {
+    const listarAniversariantes = async () => {
         try {
-            const alunosAniversariantes = getAlunosAniversariantes();
+            const alunosAniversariantes = await getAlunosAniversariantes();
             setAniversariantes(alunosAniversariantes);
         } catch (error) {
             if (error.response.status === 401 || error.response.data.message === 'JWT strings must contain exactly 2 period characters. Found: 0') {
@@ -38,9 +38,9 @@ export const Dashboard = () => {
         }
     };
 
-    const listarQtdAlunosAtivos = () => {
+    const listarQtdAlunosAtivos = async () => {
         try {
-            const numAlunos = getNumAlunos();
+            const numAlunos = await getNumAlunos();
             setQtdAlunosAtivos(numAlunos);
         } catch (error) {
             if (error.response.status === 401 || error.response.data.message === 'JWT strings must contain exactly 2 period characters. Found: 0') {
@@ -50,9 +50,9 @@ export const Dashboard = () => {
         }
     };
 
-    const listarPagamentosComDesconto = () => {
+    const listarPagamentosComDesconto = async () => {
         try {
-            const numDesconto = getNumDesconto();
+            const numDesconto = await getNumDesconto();
             setQtdPagamentosComDesconto(numDesconto);
         } catch (error) {
             if (error.response.status === 401 || error.response.data.message === 'JWT strings must contain exactly 2 period characters. Found: 0') {
@@ -62,9 +62,9 @@ export const Dashboard = () => {
         }
     };
 
-    const listarDadosDashboard = () => {
+    const listarDadosDashboard = async () => {
         try {
-            const dadosGrafico = getConteudoGrafico();
+            const dadosGrafico = await getConteudoGrafico();
             setDadosDash(dadosGrafico);
         } catch (error) {
             if (error.response.status === 401 || error.response.data.message === 'JWT strings must contain exactly 2 period characters. Found: 0') {

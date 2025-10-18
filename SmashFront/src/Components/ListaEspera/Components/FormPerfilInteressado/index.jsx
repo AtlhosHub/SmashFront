@@ -18,10 +18,10 @@ import {
 } from '@mui/x-date-pickers-pro';
 import HelpIcon from '@mui/icons-material/Help';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DefaultButton } from '../DefaultComponents/DefaultButton';
-import { formatarTelefone } from '../../Components/FichaInscricao/utils/validacaoForm';
 
-import { api } from '../../provider/apiProvider';
+import { DefaultButton } from '../../../DefaultComponents/DefaultButton';
+import { formatarTelefone } from '../../../FichaInscricao/utils/validacaoForm';
+import { api } from '../../../../provider/apiProvider';
 
 export const FormInfo = ({
     userInfo,
@@ -41,13 +41,12 @@ export const FormInfo = ({
     const nomeSocialText = 'Nome social é o nome em que a pessoa prefere ser chamada, diferente do seu nome legal.';
 
     useEffect(() => {
-        api
-            .get('/horario-preferencia', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-                }
-            })
+        api.get('/horario-preferencia', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
             .then(({ data }) => setHorarios(data || []))
             .catch(() => setHorarios([]))
             .finally(() => setLoadingHorarios(false));
@@ -75,6 +74,7 @@ export const FormInfo = ({
         });
 
     };
+
     const handleDataNascimento = (v) => setUserInfo({ ...userInfo, dataNascimento: v });
 
     const handleClick = () => {

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
 import { MenuCadastro } from '../DefaultComponents/MenuCadastro/MenuCadastro';
-import { useEffect, React } from 'react';
+import React, { useEffect } from 'react';
 import { FormInfo } from './Components/FormularioCadastro/FormInfo';
 import { FormEndereco } from './Components/FormularioCadastro/FormEndereco';
 import { api } from '../../provider/apiProvider';
@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
 import { setTabName } from './utils/setTabName';
 import { useFichaInscricao } from './Components/FichaInscricaoContext';
+import { formatEditPayload, formatAddPayload } from './utils/formatPayload';
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -86,13 +87,9 @@ export const FichaInscricao = () => {
     ];
 
     const cadastrarAluno = () => {
-        const dadosAluno = { ...userInfo };
+        const payload = formatAddPayload(userInfo, maiorIdade);
 
-        if (maiorIdade) {
-            dadosAluno.responsaveis = [];
-        }
-
-        api.post('/alunos', dadosAluno, {
+        api.post('/alunos', payload, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
@@ -111,16 +108,9 @@ export const FichaInscricao = () => {
     };
 
     const editarAluno = () => {
-        const dadosAluno = {
-            ...userInfo,
-            usuarioInclusao: { id: sessionStorage.getItem('idUsuario') }
-        };
+        const payload = formatEditPayload(userInfo, maiorIdade);
 
-        if (maiorIdade) {
-            dadosAluno.responsaveis = [];
-        }
-
-        api.put(`/alunos/${userInfo.id}`, dadosAluno, {
+        api.put(`/alunos/${userInfo.id}`, payload, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
