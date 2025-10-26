@@ -1,5 +1,5 @@
 export const formatarTelefone = (valor) => {
-    if (!valor) return;
+    if (!valor) return null;
     const numeros = valor.replaceAll(/\D/g, '').slice(0, 11);
 
     if (numeros.length < 3) {

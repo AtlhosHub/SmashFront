@@ -1,24 +1,26 @@
+import React, { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+
 import { Box } from '@mui/material';
+import HistoryIcon from '@mui/icons-material/History';
+import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
+import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
 import { MenuCadastro } from '../DefaultComponents/MenuCadastro/MenuCadastro';
-import React, { useEffect } from 'react';
-import { FormInfo } from './Components/FormularioCadastro/FormInfo';
-import { FormEndereco } from './Components/FormularioCadastro/FormEndereco';
-import { api } from '../../provider/apiProvider';
-import { FormResponsavel } from './Components/FormularioCadastro/FormResponsavel';
-import { useLocation, useNavigate } from 'react-router-dom';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
-import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
-import HistoryIcon from '@mui/icons-material/History';
-import dayjs from 'dayjs';
-import { HistPagamento } from './Components/HistPag/HistPagamento';
-import { toasterMsg } from '../../utils/toasterService';
-import { ToastContainer } from 'react-toastify';
-import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
-import { setTabName } from './utils/setTabName';
 import { useFichaInscricao } from './Components/FichaInscricaoContext';
+import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
+import FormResponsavel from './Components/FormResponsavel';
+import FormEndereco from './Components/FormEndereco';
+import FormInfo from './Components/FormInfo';
+import HistoricoPagamento from './Components/HistoricoPagamento';
+
 import { formatEditPayload, formatAddPayload } from './utils/formatPayload';
+import { toasterMsg } from '../../utils/toasterService';
+import { setTabName } from './utils/setTabName';
+import { api } from '../../provider/apiProvider';
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -209,7 +211,7 @@ export const FichaInscricao = () => {
                         />
                     }
                     {tabAtiva === 'paga' &&
-                        <HistPagamento
+                        <HistoricoPagamento
                             userInfo={userInfo}
                         />
                     }

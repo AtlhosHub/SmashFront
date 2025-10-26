@@ -172,3 +172,5 @@ export const FormEndereco = ({
         </React.Fragment>
     );
 };
+
+export default FormEndereco;

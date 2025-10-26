@@ -48,10 +48,6 @@ export const FormResponsavel = ({
     };
 
     useEffect(() => {
-        console.log(operacao);
-    }, []);
-
-    useEffect(() => {
         const camposPreenchidos =
             userInfo.responsaveis[0].nome
             && userInfo.responsaveis[0].email
@@ -104,3 +100,5 @@ export const FormResponsavel = ({
         </React.Fragment>
     );
 };
+
+export default FormResponsavel;

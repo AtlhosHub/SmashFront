@@ -33,7 +33,7 @@ export const DefaultHeader = () => {
         return 'Cadastro de Usuários';
       case '/fichaInscricao':
         return 'Ficha de Inscrição';
-      case '/cadastrarListaEspera':
+      case '/cadastroInteressado':
         return 'Adicionar Perfil do Interessado';
       default:
         return 'Configurações do Sistema';

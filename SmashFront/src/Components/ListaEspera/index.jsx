@@ -15,14 +15,12 @@ import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/Defaul
 import { DefaultButton } from '../DefaultComponents/DefaultButton';
 import { DefaultTable } from '../DefaultComponents/DefaultTable';
 import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
-import ActionMenu from '../DefaultComponents/IconButton';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 import { toasterMsg } from '../../utils/toasterService';
-import { formatResponse } from './utils/formatResponse';
+import { formatListResponse } from './utils/formatResponse';
 import { deleteInteressado, getListaEspera } from './utils/apiRequest';
+import { renderAcoes } from './utils/renderColumns';
+import { getHeadCells } from './utils/headerCells';
 
 export const ListaEspera = () => {
     const navigate = useNavigate();
@@ -31,26 +29,85 @@ export const ListaEspera = () => {
     const searchValueRef = useRef('');
     const [rowData, setRowData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-    const [rowToDelete, setRowToDelete] = useState(undefined);
+    const idToDelete = useRef(undefined);
 
     const timeoutRef = useRef(null);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
-    const [pageableDate, setPageableDate] = useState({
+    const [pageableData, setPageableData] = useState({
         offset: 0,
         limit: 5,
-        totalItens: 0
+        totalItems: 0
     });
-
-    const headCells = [
-        { name: 'nome', description: 'Nome', cellWidth: '40%' },
-        { name: 'dataInteresse', description: 'Data de Contato', cellWidth: '33%' },
-        { name: 'horarioPreferencia', description: 'Horário de Preferência', cellWidth: '33%' },
-    ];
 
     const rotas = [
         { route: '/listaEspera', description: 'Lista de Espera', cellWidth: '100%' },
     ];
+
+    const handleInputChange = e => {
+        const v = e.target.value;
+        setSearchValue(v);
+        searchValueRef.current = v;
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(fetchListaEspera, 800);
+    };
+
+    const fetchListaEspera = async (novoOfsset = pageableData.offset) => {
+        const paylaod = {
+            nome: searchValueRef.current || null,
+            offset: novoOfsset,
+            limit: pageableData.limit
+        };
+
+        try {
+            const { total, content } = await getListaEspera(paylaod);
+            if (!content) return;
+
+            const formattedData = formatListResponse(content);
+            setRowData(formattedData);
+            setPageableData({
+                ...pageableData,
+                totalItems: total,
+                offset: novoOfsset
+            });
+        } catch (error) {
+            if (error.message.status === 500) {
+                toasterMsg('error', 'Erro ao listar interessados, por favor contacte os admnistradores.');
+            } else {
+                toasterMsg('error', error);
+            }
+        }
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteInteressado(id);
+
+            fetchListaEspera();
+            idToDelete.current = undefined;
+        } catch (error) {
+            if (error.message.status === 500) {
+                toasterMsg('error', 'Erro ao deletar interessado, por favor contacte os admnistradores.');
+            } else {
+                toasterMsg('error', error.response.data);
+            }
+        } finally {
+            setIsModalDeleteOpen(false);
+            toasterMsg('success', 'Perfil de Pessoa Interessada excluído com sucesso!');
+        }
+    };
+
+    const formatRowData = (rows) => {
+        return rows.map(row => ({
+            ...row,
+            acoes: renderAcoes({
+                row,
+                navigate,
+                idToDelete,
+                setIsModalDeleteOpen,
+            })
+        }));
+    };
 
     useEffect(() => {
         fetchListaEspera();
@@ -73,58 +130,6 @@ export const ListaEspera = () => {
             window.history.replaceState(newState, document.title);
         }
     }, []);
-
-    const handleInputChange = e => {
-        const v = e.target.value;
-        setSearchValue(v);
-        searchValueRef.current = v;
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(fetchListaEspera, 800);
-    };
-
-    const fetchListaEspera = async () => {
-        const paylaod = {
-            nome: searchValueRef.current || null,
-            offset: pageableDate.offset,
-            limit: pageableDate.limit
-        };
-
-        try {
-            const { total, content } = await getListaEspera(paylaod);
-            if (!content) return;
-
-            const formattedData = formatResponse(content);
-            setRowData(formattedData);
-            setPageableDate({
-                ...pageableDate,
-                totalItens: total
-            });
-        } catch (error) {
-            if (error.message.status === 500) {
-                toasterMsg('error', 'Erro ao listar interessados, por favor contacte os admnistradores.');
-            } else {
-                toasterMsg('error', error.response.data);
-            }
-        }
-    };
-
-    const handleDelete = async (id) => {
-        try {
-            await deleteInteressado(id);
-
-            fetchListaEspera({});
-            setRowToDelete(undefined);
-        } catch (error) {
-            if (error.message.status === 500) {
-                toasterMsg('error', 'Erro ao deletar interessado, por favor contacte os admnistradores.');
-            } else {
-                toasterMsg('error', error.response.data);
-            }
-        } finally {
-            setIsModalDeleteOpen(false);
-            toasterMsg('success', 'Perfil de Pessoa Interessada excluído com sucesso!');
-        }
-    };
 
     return (
         <React.Fragment>
@@ -163,59 +168,24 @@ export const ListaEspera = () => {
                         variant="contained"
                         label="Novo Cadastro"
                         endIcon={<Add />}
-                        onClick={() => navigate('/cadastrarListaEspera', { state: { operacao: 'cadastro' } })}
+                        onClick={() => navigate('/cadastroInteressado', { state: { operacao: 'cadastro' } })}
                     />
                 </Box>
                 <Box>
                     <DefaultTable
-                        headCells={headCells}
-                        rowData={rowData.map(row => ({
-                            ...row,
-                            acoes: <ActionMenu menuOptions={[
-                                {
-                                    label: 'Visualizar',
-                                    icon: <VisibilityIcon fontSize="small" />,
-                                    onClickFunc: () => {
-                                        navigate('/cadastrarListaEspera', {
-                                            state: {
-                                                idPessoa: row.id,
-                                                operacao: 'visualizacao'
-                                            }
-                                        });
-                                    }
-                                },
-                                {
-                                    label: 'Editar',
-                                    icon: <EditIcon fontSize="small" />,
-                                    onClickFunc: () => {
-                                        navigate('/cadastrarListaEspera', {
-                                            state: {
-                                                idPessoa: row.id,
-                                                operacao: 'edicao'
-                                            }
-                                        });
-                                    }
-                                },
-                                {
-                                    label: 'Excluir',
-                                    icon: <DeleteIcon fontSize="small" />,
-                                    onClickFunc: () => {
-                                        setRowToDelete(row.id);
-                                        setIsModalDeleteOpen(true);
-                                    }
-                                },
-                            ]} />
-                        }))}
-                        withActions={false}
+                        headCells={getHeadCells()}
+                        rowData={formatRowData(rowData)}
+                        totalItems={pageableData.totalItems}
+                        fetchMoreData={fetchListaEspera}
                     />
                 </Box>
-            </Box>
+            </Box> 
             <ToastContainer />
             <ModalDelete
                 textoModal={'o Perfil de Pessoa Interessada'}
                 isModalOpen={isModalDeleteOpen}
                 setIsModalOpen={setIsModalDeleteOpen}
-                handleDelete={() => handleDelete(rowToDelete)}
+                handleDelete={() => handleDelete(idToDelete.current)}
             />
         </React.Fragment>
     );

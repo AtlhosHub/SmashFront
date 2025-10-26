@@ -10,7 +10,7 @@ import { dateFormater } from '../../../../utils/dateFormaterService';
 import { toasterMsg } from '../../../../utils/toasterService';
 import { api } from '../../../../provider/apiProvider';
 
-export const HistPagamento = ({ userInfo }) => {
+export const HistoricoPagamento = ({ userInfo }) => {
     const [selectedMonth, setSelectedMonth] = useState(null);
 
     const headCells = [
@@ -164,3 +164,5 @@ export const HistPagamento = ({ userInfo }) => {
         </Box>
     );
 };
+
+export default HistoricoPagamento;

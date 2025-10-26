@@ -35,7 +35,7 @@ export const ListaAlunos = () => {
     const [pageableData, setPageableData] = useState({
         offset: 0,
         limit: 5,
-        totalItens: 0
+        totalItems: 0
     });
 
     const [rowData, setRowData] = useState([]);
@@ -125,7 +125,7 @@ export const ListaAlunos = () => {
                 setRowData([]);
                 setPageableData({
                     ...pageableData,
-                    totalItens: 0,
+                    totalItems: 0,
                     offset: 0,
                 });
                 return;
@@ -136,7 +136,7 @@ export const ListaAlunos = () => {
             setRowData(formattedData);
             setPageableData({
                 ...pageableData,
-                totalItens: total,
+                totalItems: total,
                 offset: novoOfsset,
             });
         } catch (error) {
@@ -259,7 +259,7 @@ export const ListaAlunos = () => {
                         rowData={formatRowData(rowData)}
                         withStatus={true}
                         withPagStatus={true}
-                        totalItems={pageableData.totalItens}
+                        totalItems={pageableData.totalItems}
                         fetchMoreData={fetchAlunos}
                     />
                 </Box>

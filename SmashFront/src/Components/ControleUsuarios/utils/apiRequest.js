@@ -1,14 +1,14 @@
 import { api } from '../../../provider/apiProvider';
 
 export const postUsuario = (userInfo) => {
-    api.post('/usuarios', userInfo, {
+    const request = api.post('/usuarios', userInfo, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
         }
     });
 
-    return true;
+    return request;
 };
 
 export const deleteUsuario = (idUsuario) => {
@@ -39,7 +39,21 @@ export const getUsuarioData = (idUsuario) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
         }
-    });
+    })
+        .then((response) => { return response.data; });
 
-    return request.data;
+    return request;
+};
+
+export const getAllUsuarios = (payload) => {
+    const request =
+        api.post('/usuarios/filtro', payload, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => { return response.data; });
+
+    return request;
 };
