@@ -136,3 +136,5 @@ export const FormInfo = () => {
         </React.Fragment>
     );
 };
+
+export default FormInfo;

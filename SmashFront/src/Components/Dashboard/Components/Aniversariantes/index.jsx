@@ -30,7 +30,7 @@ export const Aniversariantes = ({ alunos }) => {
             if (!d.isValid()) return;
 
             const dia = String(d.date()).padStart(2, '0');
-            const mes = d.month(); // 0-11
+            const mes = d.month();
             const nomeMes = meses[mes] ?? `MÊS ${mes + 1}`;
             const mesStr = String(mes + 1).padStart(2, '0');
 
@@ -53,8 +53,6 @@ export const Aniversariantes = ({ alunos }) => {
         const resultado = Object.entries(respostaObj)
             .map(([mes, aniversariantes]) => ({ mes, aniversariantes }))
             .sort((a, b) => meses.indexOf(a.mes) - meses.indexOf(b.mes));
-
-            console.log(resultado)
 
         setRespostaFormatada(resultado);
     };
@@ -111,7 +109,6 @@ export const Aniversariantes = ({ alunos }) => {
                         const proximos = aniversariantes.filter(({ data }) => {
                             const [dia, mesStr] = data.split('/');
                             const aniversario = dayjs(`${dayjs().year()}-${mesStr}-${dia}`);
-                            console.log(dayjs(`${dayjs().year()}-${mesStr}-${dia}`));
                             return aniversario.isSameOrAfter(inicio) && aniversario.isSameOrBefore(fim);
                         });
 

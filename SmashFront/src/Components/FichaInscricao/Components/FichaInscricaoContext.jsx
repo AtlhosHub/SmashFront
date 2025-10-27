@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { defaultUser } from '../utils/defaultUser';
 
@@ -27,8 +27,19 @@ export const FichaInscricaoProvider = ({ children }) => {
     const [cpfValidoResp, setCpfValidoResp] = useState(false);
     const [cepValido, setCepValido] = useState(false);
 
+    const firstLoad = useRef(true);
+
     useEffect(() => {
-        if (!isDeficiente) setUserInfo({ ...userInfo, deficiencia: null });
+        if (firstLoad.current && userInfo.deficiencia) {
+            setIsDeficiente(true);
+            firstLoad.current = false;
+        }
+    }, [userInfo]);
+
+    useEffect(() => {
+        if (!userInfo.deficiencia || !isDeficiente) {
+            setUserInfo({ ...userInfo, deficiencia: null });
+        }
     }, [isDeficiente]);
 
     return (

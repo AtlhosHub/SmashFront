@@ -15,6 +15,7 @@ import { ConfigSistema } from './Components/ConfigSistema';
 import { FichaInscricaoProvider } from './Components/FichaInscricao/Components/FichaInscricaoContext';
 import { CadastroUsuarioProvider } from './Components/ControleUsuarios/Components/CadastroUsuarioContext';
 import { CadastrarInteressado } from './Components/ListaEspera/Components/CadastroInteressado';
+import { CadastroInteressadoProvider } from './Components/ListaEspera/Components/CadastroInteressadoContext';
 
 function App() {
     return (
@@ -44,7 +45,12 @@ function App() {
                     }
                 />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/cadastrarListaEspera" element={<CadastrarInteressado />} />
+                <Route path="/cadastroInteressado" element={
+                    <CadastroInteressadoProvider>
+                        <CadastrarInteressado />
+                    </CadastroInteressadoProvider>
+                }
+                />
                 <Route path="/config" element={<ConfigSistema />} />
             </Route >
         </Routes >

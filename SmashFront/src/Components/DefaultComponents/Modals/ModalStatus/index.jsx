@@ -39,7 +39,6 @@ export const ModalStatus = ({
         formaPagamento: null,
     });
 
-
     const isSalvarHabilitado =
         !!statusPagamento &&
         (
@@ -105,7 +104,7 @@ export const ModalStatus = ({
         if (statusPagamento?.label !== 'PAGO') {
             setFormaPagamento(null);
             setDataPagamento(null);
-            setValorPago('');
+            setValorPago(0.0);
             setStatusInfo((prev) => ({
                 ...prev,
                 formaPagamento: null,
@@ -114,7 +113,6 @@ export const ModalStatus = ({
             }));
         }
     }, [statusPagamento]);
-
 
     const alterarStatusMensalidade = () => {
         api.put(`/mensalidades/${statusInfoModal.idMensalidade}/pagar`, statusInfo, {

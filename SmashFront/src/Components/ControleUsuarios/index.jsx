@@ -20,10 +20,17 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ModalDelete } from '../DefaultComponents/Modals/ModalDelete';
+import { getAllUsuarios } from './utils/apiRequest';
 
 export const ControleUsuarios = () => {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [pageableData, setPageableData] = useState({
+        offset: 0,
+        limit: 5,
+        totalItems: 0
+    });
 
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [rowToDelete, setRowToDelete] = useState(undefined);
@@ -45,23 +52,39 @@ export const ControleUsuarios = () => {
         }
     ];
 
-    const listarUsuarios = () => {
-        api.get('/usuarios', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        })
-            .then((response) => {
-                setRowData(response.data || []);
-            })
-            .catch((error) => {
-                if (error.message.status === 500) {
-                    toasterMsg('error', 'Erro ao listar usuários, por favor contacte os admnistradores.');
-                } else {
-                    toasterMsg('error', error.message.data);
-                }
+    const listarUsuarios = async (novoOfsset = pageableData.offset) => {
+        const payload = {
+            offset: novoOfsset,
+            limit: pageableData.limit,
+            nome: searchValue
+        };
+
+        try {
+            const { total, content } = await getAllUsuarios(payload);
+
+            if (content.length === 0) {
+                setRowData([]);
+                setPageableData({
+                    ...pageableData,
+                    totalItems: 0,
+                    offset: 0,
+                });
+                return;
+            };
+
+            setRowData(content);
+            setPageableData({
+                ...pageableData,
+                totalItems: total,
+                offset: novoOfsset,
             });
+        } catch (error) {
+            if (error.message.status === 500) {
+                toasterMsg('error', 'Erro ao listar usuários, por favor contacte os admnistradores.');
+            } else {
+                toasterMsg('error', error.message.data);
+            }
+        }
     };
 
     const handleDelete = (id) => {
@@ -106,7 +129,7 @@ export const ControleUsuarios = () => {
         });
 
         if (JSON.stringify(newState) !== JSON.stringify(location.state)) {
-            window.history.replaceState(newState, document.title);
+            globalThis.history.replaceState(newState, document.title);
         }
     }, [location]);
 
@@ -194,11 +217,13 @@ export const ControleUsuarios = () => {
                                         setRowToDelete(row.id);
                                         setIsModalDeleteOpen(true);
                                     },
-                                     disabled: String(row.id) === String(sessionStorage.getItem('idUsuario')) 
+                                    disabled: String(row.id) === String(sessionStorage.getItem('idUsuario'))
                                 }
                             ]}
                             />
                         }))}
+                        totalItems={pageableData.totalItems}
+                        fetchMoreData={listarUsuarios}
                     />
                 </Box>
             </Box>
