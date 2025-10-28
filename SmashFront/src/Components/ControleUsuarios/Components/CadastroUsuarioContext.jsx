@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from 'react';
+import dayjs from 'dayjs';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { defaultUser } from '../utils/defaultUser';
+import { dateIsoFormatter } from '../../../utils/dateFormaterService';
 
 const CadastroUsuarioContext = createContext();
 
@@ -8,8 +9,17 @@ export const CadastroUsuarioProvider = ({ children }) => {
     const location = useLocation();
 
     const [userInfo, setUserInfo] = useState({
-        ...defaultUser,
-        usuarioInclusao: { id: sessionStorage.getItem('idUsuario') }
+        nome: null,
+        email: null,
+        celular: null,
+        dataNascimento: null,
+        nomeSocial: null,
+        genero: null,
+        senha: null,
+        telefone: null,
+        cargo: null,
+        dataInclusao: dateIsoFormatter(dayjs().toISOString()),
+        usuarioInclusao: sessionStorage.getItem('idUsuario')
     });
 
     const [tabAtiva, setTabAtiva] = useState('info');
@@ -25,6 +35,12 @@ export const CadastroUsuarioProvider = ({ children }) => {
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
     const [erroConfirmarSenha, setErroConfirmarSenha] = useState(false);
+
+    useEffect(() => {
+        if (senha == confirmarSenha) {
+            setUserInfo({ ...userInfo, senha: senha });
+        }
+    }, [senha, confirmarSenha]);
 
     return (
         <CadastroUsuarioContext.Provider

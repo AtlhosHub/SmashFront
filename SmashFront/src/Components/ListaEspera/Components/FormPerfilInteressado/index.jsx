@@ -38,8 +38,6 @@ export const FormInfo = ({
     const [horarios, setHorarios] = useState([]);
     const [loadingHorarios, setLoadingHorarios] = useState(true);
 
-    const nomeSocialText = 'Nome social é o nome em que a pessoa prefere ser chamada, diferente do seu nome legal.';
-
     useEffect(() => {
         api.get('/horario-preferencia', {
             headers: {

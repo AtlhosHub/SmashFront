@@ -3,7 +3,6 @@ import globals from 'globals';
 import pluginReact from 'eslint-plugin-react';
 import { defineConfig } from 'eslint/config';
 
-
 export default defineConfig([
   pluginReact.configs.flat.recommended,
   {
@@ -37,7 +36,6 @@ export default defineConfig([
       'no-var': 'error',
       'prefer-const': 'warn',
       'no-path-concat': 'error',
-      'linebreak-style': ['error', 'unix'],
       'quotes': ['error', 'single'],
       'semi': ['error', 'always'],
       'react/prop-types': 'off',

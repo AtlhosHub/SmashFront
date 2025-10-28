@@ -1,153 +1,144 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import dayjs from 'dayjs';
 
 import { Box } from '@mui/material';
-import { FormInfo } from '../FormPerfilInteressado';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
-import { api } from '../../../../provider/apiProvider';
 import { toasterMsg } from '../../../../utils/toasterService';
 import { DefaultBreadcrumb } from '../../../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
 import { MenuCadastro } from '../../../DefaultComponents/MenuCadastro/MenuCadastro';
 import { ModalDelete } from '../../../DefaultComponents/Modals/ModalDelete';
+import { deleteInteressado, editInteressado, getDadosInteressado, savePessoaInteressada } from '../../utils/apiRequest';
+import { getBreadcrumbRoutes } from '../../utils/breadCrumbRoutes';
+import { FormBuilder } from '../../../DefaultComponents/FormBuilder';
+import useFormInfoConfig from '../../hooks/useFormInfoConfig';
+import { useCadastroInteressado } from '../CadastroInteressadoContext';
+import { formatFormResponse } from '../../utils/formatResponse';
 
 export const CadastrarInteressado = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [tabAtiva, setTabAtiva] = useState('info');
-    const [infoConcluido, setInfoConcluido] = useState(false);
-    const [operacao, setOperacao] = useState(location.state?.operacao);
-    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const {
+        userInfo,
+        operacao,
+        infoConcluido,
+        tabAtiva,
+        setTabAtiva,
+        isModalDeleteOpen,
+        setIsModalDeleteOpen,
+        setOperacao,
+        setUserInfo,
+    } = useCadastroInteressado();
 
-    const [userInfo, setUserInfo] = useState({
-        nome: null,
-        nomeSocial: null,
-        genero: null,
-        dataInteresse: null,
-        dataNascimento: null,
-        celular: null,
-        telefone: null,
-        email: null,
-        horarioPref: null,
-        usuarioInclusao: {
-            id: sessionStorage.getItem('idUsuario'),
-        }
-    });
-
-    const definirNomePagina = () => {
-        if (operacao === 'cadastro') return 'Adicionar Perfil do Interessado';
-        if (operacao === 'visualizacao') return 'Visualizar Perfil do Interessado';
-        return 'Editar Perfil do Interessado';
+    const labels = {
+        visualizacao: 'Editar',
+        cadastro: 'Concluir',
+        edicao: 'Salvar'
     };
 
-    const rotas = [
-        { route: '/listaEspera', description: 'Lista de Espera' },
-        { route: '/cadastrarListaEspera', description: definirNomePagina() },
-    ];
+    const labelBotao = labels[operacao] ?? 'Salvar';
 
-    const cadastrarPessoaInteressada = () => {
-        const payload = {
-            nome: userInfo.nome,
-            email: userInfo.email,
-            dataInteresse: userInfo.dataInteresse
-                ? dayjs(userInfo.dataInteresse).format('YYYY-MM-DDTHH:mm')
-                : null,
-            celular: userInfo.celular,
-            nomeSocial: userInfo.nomeSocial,
-            genero: userInfo.genero,
-            dataNascimento: userInfo.dataNascimento
-                ? dayjs(userInfo.dataNascimento).format('YYYY-MM-DD')
-                : null,
-            telefone: userInfo.telefone,
-            horarioPref: userInfo.horarioPref,
-        };
+    const handleCadastrar = async () => {
+        try {
+            const payload = {
+                nome: userInfo.nome,
+                email: userInfo.email,
+                dataInteresse: userInfo.dataInteresse
+                    ? dayjs(userInfo.dataInteresse).format('YYYY-MM-DDTHH:mm')
+                    : null,
+                celular: userInfo.celular,
+                nomeSocial: userInfo.nomeSocial,
+                genero: userInfo.genero,
+                dataNascimento: userInfo.dataNascimento
+                    ? dayjs(userInfo.dataNascimento).format('YYYY-MM-DD')
+                    : null,
+                telefone: userInfo.telefone,
+                horarioPref: userInfo.horarioPref,
+            };
 
-        api.post('/lista-espera', payload, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            await savePessoaInteressada(payload);
+
+            navigate('/listaEspera', { state: { saved: true } });
+        } catch (error) {
+            if (error.response?.status === 409) {
+                alert('Este nome e e-mail já estão cadastrados na lista de espera.');
+            } else {
+                console.error(error);
+                alert('Erro ao cadastrar interessado.');
             }
-        })
-            .then(() => {
-                navigate('/listaEspera', { state: { saved: true } });
-            })
-            .catch(err => {
-                if (err.response?.status === 409) {
-                    alert('Este nome e e-mail já estão cadastrados na lista de espera.');
-                } else {
-                    console.error(err);
-                    alert('Erro ao cadastrar interessado.');
-                }
-            });
+        }
     };
+
+    const handleFetchData = async () => {
+        try {
+            const response = await getDadosInteressado(location.state?.idPessoa);
+
+            const formattedResponse = formatFormResponse(response);
+
+            setUserInfo(formattedResponse);
+        } catch (error) {
+            if (error.message.status === 500) {
+                toasterMsg('error', 'Erro ao cadastrar interessado, por favor contacte os admnistradores.');
+            } else {
+                toasterMsg('error', error.response.data);
+            }
+        }
+    };
+
+    const handleEdit = async () => {
+        try {
+            await editInteressado(location.state?.idPessoa, userInfo);
+
+            toasterMsg('success', 'Perfil de Pessoa Interessada editado com sucesso!');
+            setOperacao('visualizacao');
+        } catch (error) {
+            if (error.message.status === 500) {
+                toasterMsg('error', 'Erro ao editar interessado, por favor contacte os admnistradores.');
+            } else {
+                toasterMsg('error', error.response.data);
+            }
+        };
+    };
+
+    const handleDelete = async () => {
+        try {
+            await deleteInteressado(location.state?.idPessoa);
+
+            toasterMsg('success', 'Perfil de Pessoa Interessada deletado com sucesso!');
+            navigate('/listaEspera', { state: { userDeleted: true } });
+        } catch (error) {
+            if (error.message.status === 500) {
+                toasterMsg('error', 'Erro ao deletar interessado, por favor contacte os admnistradores.');
+            } else {
+                toasterMsg('error', error.response.data);
+            }
+        }
+    };
+
+    const handleClick = () => {
+        if (operacao === 'visualizacao') {
+            setOperacao('edicao');
+        } else if (operacao === 'cadastro') {
+            handleCadastrar();
+        } else {
+            handleEdit();
+        }
+    };
+
+    const formConfig = useFormInfoConfig({
+        userInfo,
+        setUserInfo,
+        operacao,
+    });
 
     useEffect(() => {
         if (operacao !== 'cadastro') {
-            listarDadosPessoaInteressada(location.state?.idPessoa);
+            handleFetchData();
         }
     }, []);
-
-    const listarDadosPessoaInteressada = (id) => {
-        api.get(`/lista-espera/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        })
-            .then((response) => {
-                setUserInfo(response.data);
-            })
-            .catch((error) => {
-                if (error.message.status === 500) {
-                    toasterMsg('error', 'Erro ao cadastrar interessado, por favor contacte os admnistradores.');
-                } else {
-                    toasterMsg('error', error.response.data);
-                }
-            });
-    };
-
-    const editarPessoaInteressada = () => {
-        api.put(`/lista-espera/${location.state?.idPessoa}`, userInfo, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        })
-            .then(() => {
-                toasterMsg('success', 'Perfil de Pessoa Interessada editado com sucesso!');
-                setOperacao('visualizacao');
-            })
-            .catch((error) => {
-                if (error.message.status === 500) {
-                    toasterMsg('error', 'Erro ao editar interessado, por favor contacte os admnistradores.');
-                } else {
-                    toasterMsg('error', error.response.data);
-                }
-            });
-    };
-
-    const deletarPessoaInteressada = () => {
-        api.delete(`lista-espera/${location.state?.idPessoa}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        })
-            .then(() => {
-                toasterMsg('success', 'Perfil de Pessoa Interessada deletado com sucesso!');
-                navigate('/listaEspera', { state: { userDeleted: true } });
-            })
-            .catch((error) => {
-                if (error.message.status === 500) {
-                    toasterMsg('error', 'Erro ao deletar interessado, por favor contacte os admnistradores.');
-                } else {
-                    toasterMsg('error', error.response.data);
-                }
-            });
-    };
 
     return (
         <React.Fragment>
@@ -157,7 +148,7 @@ export const CadastrarInteressado = () => {
                     gridTemplateRows: 'auto 1fr',
                     height: '90.9vh'
                 }}>
-                <DefaultBreadcrumb rotas={rotas} />
+                <DefaultBreadcrumb rotas={getBreadcrumbRoutes(operacao)} />
                 <Box sx={{ display: 'flex', flex: 1 }}>
                     <MenuCadastro
                         operacao={operacao}
@@ -175,18 +166,24 @@ export const CadastrarInteressado = () => {
                         ]}
                     />
 
-                    {tabAtiva === 'info' &&
-                        <FormInfo
-                            userInfo={userInfo}
-                            setUserInfo={setUserInfo}
-                            setInfoConcluido={setInfoConcluido}
-                            setOperacao={setOperacao}
-                            operacao={operacao}
-                            handleSalvar={editarPessoaInteressada}
-                            handleCadastrar={cadastrarPessoaInteressada}
-                            handleDeletar={() => setIsModalDeleteOpen(true)}
-                        />
-                    }
+                    <FormBuilder
+                        campos={formConfig.campos}
+                        radios={formConfig.radios}
+                        cancelButton={{
+                            label: operacao === 'visualizacao' ? 'Excluir' : 'Voltar',
+                            onClick: operacao === 'visualizacao'
+                                ? () => setIsModalDeleteOpen(true)
+                                : () => setOperacao('info'),
+                            color: operacao === 'visualizacao' ? 'red' : ''
+                        }}
+                        confirmButton={{
+                            label: labelBotao,
+                            onClick: handleClick,
+                            disabled: false
+                        }}
+                        columnsWidth={[1, 1, 1]}
+                        operacao={operacao}
+                    />
                 </Box>
             </Box>
             <ToastContainer />
@@ -194,7 +191,7 @@ export const CadastrarInteressado = () => {
                 textoModal={'o perfil de Pessoa Interessada'}
                 isModalOpen={isModalDeleteOpen}
                 setIsModalOpen={setIsModalDeleteOpen}
-                handleDelete={deletarPessoaInteressada}
+                handleDelete={handleDelete}
             />
         </React.Fragment>
     );

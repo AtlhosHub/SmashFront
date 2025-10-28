@@ -5,7 +5,7 @@ export const formatEditPayload = (data, maiorIdade) => {
     const formattedData = {
         ...data,
         nome: { value: data.nome },
-        nomeSocal: { value: data.nomeSocial },
+        nomeSocial: { value: data.nomeSocial },
         celular: { value: data.celular },
         telefone: { value: data.telefone },
         email: { value: data.email },

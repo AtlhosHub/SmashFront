@@ -72,7 +72,13 @@ export const useFormInfoConfig = ({
                 type: 'password',
                 value: senha,
                 showToggle: true,
-                onChange: (e) => setSenha(e.target.value),
+                onChange: (e) => {
+                    setSenha(e.target.value);
+
+                    if (confirmarSenha) {
+                        setErroConfirmarSenha(e.target.value !== confirmarSenha);
+                    }
+                },
                 show: operacao === 'cadastro',
             },
             {
@@ -96,16 +102,17 @@ export const useFormInfoConfig = ({
             {
                 key: 'confirmarSenha',
                 label: 'Confirmar senha',
-                required: true,
                 type: 'password',
                 value: confirmarSenha,
-                error: erroConfirmarSenha,
-                compareWith: 'senha',
                 showToggle: true,
                 onChange: (e) => {
-                    setConfirmarSenha(e.target.value);
-                    setErroConfirmarSenha(e.target.value !== senha);
+                    const value = e.target.value;
+
+                    setConfirmarSenha(value);
+                    setErroConfirmarSenha(value != senha);
                 },
+                error: erroConfirmarSenha,
+                helperText: erroConfirmarSenha ? 'As senhas não conferem' : '',
                 show: operacao === 'cadastro',
             },
         ]

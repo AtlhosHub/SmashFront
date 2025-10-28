@@ -2,8 +2,8 @@ import {
     useLocation,
     useNavigate
 } from 'react-router-dom';
-import {
-    useEffect, React
+import React, {
+    useEffect
 } from 'react';
 import { ToastContainer } from 'react-toastify';
 
@@ -79,10 +79,14 @@ export const CadastroUsuarios = () => {
 
     const labelBotao = labels[operacao] ?? 'Salvar';
 
-    const cadastrarUsuario = () => {
+    const cadastrarUsuario = async () => {
         try {
-            postUsuario(userInfo);
-            navigate('/controleUsuarios', { state: { userCreated: true } });
+            const response = await postUsuario(userInfo);
+
+            if (response.status == 200) {
+                navigate('/controleUsuarios', { state: { userCreated: true } });
+            }
+
         } catch (error) {
             if (error.message.status === 500) {
                 toasterMsg('error', 'Erro ao cadastrar usuário, por favor contacte os admnistradores.');
@@ -120,9 +124,10 @@ export const CadastroUsuarios = () => {
         }
     };
 
-    const listarDadosUsuario = () => {
+    const listarDadosUsuario = async () => {
         try {
-            const request = getUsuarioData(location.state?.idUsuario);
+            const request = await getUsuarioData(location.state?.idUsuario);
+
             setUserInfo(request);
         } catch (error) {
             if (error.message.status === 500) {
@@ -184,7 +189,7 @@ export const CadastroUsuarios = () => {
                         confirmButton={{
                             label: labelBotao,
                             onClick: handleClick,
-                            disabled: true
+                            disabled: false
                         }}
                         columnsWidth={[1, 1, 1]}
                         operacao={operacao}
