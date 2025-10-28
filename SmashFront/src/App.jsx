@@ -10,7 +10,7 @@ import { CadastroUsuarios } from './Components/ControleUsuarios/Components/Cadas
 import { TelaEsqueciSenha } from './Components/TelaEsqueciSenha';
 import { RecuperarSenha } from './Components/TelaEsqueciSenha/RecuperarSenha';
 import { Dashboard } from './Components/Dashboard';
-import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader/DefaultHeader';
+import { DefaultHeader } from './Components/DefaultComponents/DefaultHeader';
 import { ConfigSistema } from './Components/ConfigSistema';
 import { FichaInscricaoProvider } from './Components/FichaInscricao/Components/FichaInscricaoContext';
 import { CadastroUsuarioProvider } from './Components/ControleUsuarios/Components/CadastroUsuarioContext';

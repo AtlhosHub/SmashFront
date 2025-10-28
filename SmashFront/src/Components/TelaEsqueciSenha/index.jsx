@@ -9,7 +9,7 @@ import {
     Typography,
     Button
 } from '@mui/material';
-import { DefaultLoginCard } from '../DefaultComponents/DefaultLoginCard/DefaultLoginCard';
+import { DefaultLoginCard } from '../DefaultComponents/DefaultLoginCard';
 
 import bgImg2 from '../../assets/loginBg2.png';
 import { api } from '../../provider/apiProvider';

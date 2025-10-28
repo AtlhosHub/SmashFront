@@ -11,7 +11,7 @@ import {
     Typography
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { DefaultLoginCard } from '../DefaultComponents/DefaultLoginCard/DefaultLoginCard';
+import { DefaultLoginCard } from '../DefaultComponents/DefaultLoginCard';
 
 import { api } from '../../provider/apiProvider';
 import { toasterMsg } from '../../utils/toasterService';

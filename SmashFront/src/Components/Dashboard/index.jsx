@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { DefaultBreadcrumb } from '../DefaultComponents/DefaultBreadcrumb/DefaultBreadcrumb';
 import { Aniversariantes } from './Components/Aniversariantes';
-import { Kpi } from '../DefaultComponents/KPI/KPI';
+import { Kpi } from '../DefaultComponents/KPI';
 import discount from '../../assets/Discount.png';
 import people from '../../assets/Users.png';
 import { Grafico } from './Components/Grafico';

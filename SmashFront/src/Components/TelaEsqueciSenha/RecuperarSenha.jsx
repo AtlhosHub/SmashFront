@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Link, TextField, Typography, Button } from '@mui/material';
 import bgImg2 from '../../assets/loginBg2.png';
-import { DefaultLoginCard } from '../DefaultComponents/DefaultLoginCard/DefaultLoginCard';
+import { DefaultLoginCard } from '../DefaultComponents/DefaultLoginCard';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../../provider/apiProvider';
 import { toasterMsg } from '../../utils/toasterService';
