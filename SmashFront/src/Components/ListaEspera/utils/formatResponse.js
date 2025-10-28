@@ -25,8 +25,8 @@ export const formatFormResponse = (response) => {
         nomeSocial: response.nomeSocial ? response.nomeSocial.value : null,
         genero: response.genero,
         email: response.email.value,
-        celular: response.celular.value,
-        telefone: response.telefone.value,
+        celular: response.celular?.value,
+        telefone: response.telefone?.value,
         dataNascimento: response.dataNascimento.value,
         dataInteresse: response.dataInteresse.value,
         horarioPref: {

@@ -21,6 +21,7 @@ import { formatEditPayload, formatAddPayload } from './utils/formatPayload';
 import { toasterMsg } from '../../utils/toasterService';
 import { setTabName } from './utils/setTabName';
 import { api } from '../../provider/apiProvider';
+import { formatResponse } from './utils/formatResponse';
 
 export const FichaInscricao = () => {
     const location = useLocation();
@@ -161,18 +162,17 @@ export const FichaInscricao = () => {
                 const hoje = dayjs();
                 const nascimento = dayjs(response.data.dataNascimento);
 
-                setUserInfo(response.data);
+                const formattedResponse = formatResponse(response.data);
+
+                setUserInfo(formattedResponse);
                 setMaiorIdade(hoje.diff(nascimento, 'year') >= 18);
             })
             .catch((error) => {
                 if (error.message.status === 500) {
                     toasterMsg('error', 'Erro ao listar alunos, por favor contacte os admnistradores.');
                 } else {
-                    toasterMsg('error', error.response.data);
+                    toasterMsg('error', error.response);
                 }
-            })
-            .finally(() => {
-
             });
     };
 

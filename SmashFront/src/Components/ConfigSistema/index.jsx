@@ -11,12 +11,13 @@ import {
 } from '@mui/material';
 
 import { toasterMsg } from '../../utils/toasterService';
-import { 
+import {
     upsertHorario,
     alterarValorMensalidade,
     listarHorarios,
     listarValorMensalidade,
     removerHorario,
+    editHorario,
 } from './utils/apiRequest';
 import { treatHourResponse, treatValueResponse } from './utils/treatResponse';
 import { diffConfig } from './utils/diffConfig';
@@ -51,7 +52,7 @@ export const ConfigSistema = () => {
 
         const treatedHour = treatHourResponse(horarios);
         const treatedValue = treatValueResponse(valor);
-        
+
         setDados(prev => ({
             ...prev,
             horarioAulas: {
@@ -74,19 +75,19 @@ export const ConfigSistema = () => {
             for (const secao of Object.keys(diff)) {
                 for (const item of diff[secao].novos) {
                     if (secao === 'horarioAulas') {
-                        promises.push(upsertHorario({horario: item}));
+                        promises.push(upsertHorario({ horario: item }));
                     }
                 }
                 for (const item of diff[secao].alterados) {
                     if (secao === 'horarioAulas') {
-                        promises.push(upsertHorario({horario: item}));
+                        promises.push(editHorario({ horario: item }));
                     } else if (secao === 'valorMensalidade') {
-                        promises.push(alterarValorMensalidade({mensalidade: item}));
+                        promises.push(alterarValorMensalidade({ mensalidade: item }));
                     }
                 }
                 for (const item of diff[secao].removidos) {
                     if (secao === 'horarioAulas') {
-                        promises.push(removerHorario({id: item.id}));
+                        promises.push(removerHorario({ id: item.id }));
                     }
                 }
             }

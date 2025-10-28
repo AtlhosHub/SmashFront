@@ -56,7 +56,7 @@ export const CadastrarInteressado = () => {
                     ? dayjs(userInfo.dataNascimento).format('YYYY-MM-DD')
                     : null,
                 telefone: userInfo.telefone,
-                horarioPref: userInfo.horarioPref,
+                horarioPrefId: userInfo.horarioPref.id,
             };
 
             await savePessoaInteressada(payload);
@@ -83,7 +83,7 @@ export const CadastrarInteressado = () => {
             if (error.message.status === 500) {
                 toasterMsg('error', 'Erro ao cadastrar interessado, por favor contacte os admnistradores.');
             } else {
-                toasterMsg('error', error.response.data);
+                toasterMsg('error', error.response);
             }
         }
     };

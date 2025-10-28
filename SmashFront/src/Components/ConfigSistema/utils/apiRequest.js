@@ -30,6 +30,24 @@ export const upsertHorario = ({ horario }) => {
     return requestResponse;
 };
 
+export const editHorario = ({ horario }) => {
+    const payload = {
+        horarioAulaInicio: horario.horarioAulaInicio,
+        horarioAulaFim: horario.horarioAulaFim,
+        dataInclusao: horario.dataInclusao.value
+    };
+
+    const requestResponse = api.put(`/horario-preferencia/${horario.id}`, payload, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+        }
+    })
+        .then((response) => { return response; });
+
+    return requestResponse;
+};
+
 export const removerHorario = ({ id }) => {
     const requestResponse =
         api.delete(`/horario-preferencia/${id}`, {

@@ -14,6 +14,7 @@ export const useFormResponsavelConfig = ({
         campos: [
             {
                 key: 'nome',
+                type: 'text',
                 label: 'Nome',
                 required: true,
                 disabled: operacao === 'visualizacao',
@@ -26,6 +27,7 @@ export const useFormResponsavelConfig = ({
             },
             {
                 key: 'rg',
+                type: 'text',
                 label: 'RG',
                 disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].rg,
@@ -37,6 +39,7 @@ export const useFormResponsavelConfig = ({
             },
             {
                 key: 'cpf',
+                type: 'text',
                 label: 'CPF',
                 required: true,
                 disabled: operacao === 'visualizacao',
@@ -52,6 +55,7 @@ export const useFormResponsavelConfig = ({
             },
             {
                 key: 'nomeSocial',
+                type: 'text',
                 label: 'Nome Social',
                 disabled: operacao === 'visualizacao',
                 tooltip: TOOLTIP_MESSAGES.nomeSocial,
@@ -64,6 +68,7 @@ export const useFormResponsavelConfig = ({
             },
             {
                 key: 'profissao',
+                type: 'text',
                 label: 'Profissão',
                 disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].profissao,
@@ -75,6 +80,7 @@ export const useFormResponsavelConfig = ({
             },
             {
                 key: 'genero',
+                type: 'text',
                 label: 'Gênero',
                 disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].genero,
@@ -86,6 +92,7 @@ export const useFormResponsavelConfig = ({
             },
             {
                 key: 'email',
+                type: 'text',
                 label: 'Email',
                 required: true,
                 disabled: operacao === 'visualizacao',
@@ -98,6 +105,7 @@ export const useFormResponsavelConfig = ({
             },
             {
                 key: 'telefone',
+                type: 'text',
                 label: 'Telefone',
                 disabled: operacao === 'visualizacao',
                 placeholder: operacao === 'cadastro' ? '(00) 00000-0000' : '',
@@ -110,6 +118,7 @@ export const useFormResponsavelConfig = ({
             },
             {
                 key: 'celular',
+                type: 'text',
                 label: 'Celular',
                 disabled: operacao === 'visualizacao',
                 placeholder: operacao === 'cadastro' ? '(00) 00000-0000' : '',
@@ -124,6 +133,7 @@ export const useFormResponsavelConfig = ({
         radios: [
             {
                 key: 'autorizado',
+                type: 'text',
                 radioTitle: 'Autorização',
                 toolTip: TOOLTIP_MESSAGES.autorizacao,
                 value: userInfo.autorizado,
