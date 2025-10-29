@@ -151,22 +151,14 @@ export const FichaInscricao = () => {
             });
     };
 
-    const listarDadosAluno = (id) => {
-        api.get(`/alunos/${id}`, {
+    const listarDadosAluno = async (id) => {
+        const response = await api.get(`/alunos/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
-            .then((response) => {
-                const hoje = dayjs();
-                const nascimento = dayjs(response.data.dataNascimento);
-
-                const formattedResponse = formatResponse(response.data);
-
-                setUserInfo(formattedResponse);
-                setMaiorIdade(hoje.diff(nascimento, 'year') >= 18);
-            })
+            .then((response) => { return response.data; })
             .catch((error) => {
                 if (error.message.status === 500) {
                     toasterMsg('error', 'Erro ao listar alunos, por favor contacte os admnistradores.');
@@ -174,6 +166,11 @@ export const FichaInscricao = () => {
                     toasterMsg('error', error.response);
                 }
             });
+
+        const formattedResponse = formatResponse(response);
+
+        setUserInfo(formattedResponse);
+        setMaiorIdade(dayjs().diff(dayjs(response.dataNascimento), 'year') >= 18);
     };
 
     useEffect(() => {

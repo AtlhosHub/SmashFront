@@ -54,10 +54,11 @@ export const HistoricoPagamento = ({ userInfo }) => {
 
     const listarHistoricoPagamento = (id, dateFrom, dateTo) => {
         api.post(
-            `/alunos/${id}/historicoMensalidade`,
+            '/mensalidades/historicoMensalidade',
             {
                 dateFrom: dateFrom || null,
-                dateTo: dateTo || null
+                dateTo: dateTo || null,
+                idAluno: id
             },
             {
                 headers: {
@@ -69,9 +70,10 @@ export const HistoricoPagamento = ({ userInfo }) => {
             .then((response) => {
                 const formattedData = response.data.map((aluno) => ({
                     ...aluno,
-                    dataEnvio: aluno.dataEnvio ? dateFormater(aluno.dataEnvio) : null,
-                    valor: aluno.valor != null
-                        ? aluno.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                    status: aluno.statusPagamento,
+                    dataEnvio: aluno.dataPagamento ? dateFormater(aluno.dataPagamento) : null,
+                    valor: aluno.statusPagamento === 'PAGO'
+                        ? aluno.valor.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                         : null,
                     valorColor: aluno.desconto ? '#286DA8' : 'inherit',
                     dataVencimento: aluno.dataVencimento ? dateFormater(aluno.dataVencimento) : null,
