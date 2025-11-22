@@ -96,7 +96,10 @@ export const useFormInfoConfig = ({
                 type: 'text',
                 disabled: operacao === 'visualizacao',
                 value: formatarTelefone(userInfo.celular),
-                onChange: (e) => setUserInfo({ ...userInfo, celular: e.target.value }),
+                onChange: (e) => {
+                    const numeros = e.target.value.replace(/\D/g, '').slice(0, 11);
+                    setUserInfo({ ...userInfo, celular: numeros });
+                },
                 placeholder: '(00) 00000-0000'
             },
             {

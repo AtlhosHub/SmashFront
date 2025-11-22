@@ -105,7 +105,10 @@ export const useFormInfoConfig = ({
                 disabled: operacao === 'visualizacao',
                 value: formatarTelefone(userInfo.telefone),
                 type: 'text',
-                onChange: (e) => setUserInfo({ ...userInfo, telefone: e.target.value }),
+                onChange: (e) => {
+                    const numeros = e.target.value.replace(/\D/g, '').slice(0, 11);
+                    setUserInfo({ ...userInfo, telefone: numeros });
+                },
                 placeholder: operacao === 'cadastro' ? '(00) 00000-0000' : ''
             },
             {
@@ -114,7 +117,10 @@ export const useFormInfoConfig = ({
                 disabled: operacao === 'visualizacao',
                 value: formatarTelefone(userInfo.celular),
                 type: 'text',
-                onChange: (e) => setUserInfo({ ...userInfo, celular: e.target.value }),
+                onChange: (e) => {
+                    const numeros = e.target.value.replace(/\D/g, '').slice(0, 11);
+                    setUserInfo({ ...userInfo, celular: numeros });
+                },
                 placeholder: operacao === 'cadastro' ? '(00) 00000-0000' : ''
             },
             {

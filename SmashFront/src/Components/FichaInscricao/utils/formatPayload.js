@@ -17,6 +17,18 @@ export const formatEditPayload = (data, maiorIdade) => {
 
     if (maiorIdade) {
         formattedData.responsaveis = [];
+    } else {
+        formattedData.responsaveis = [{
+            nome: { value: data.responsaveis[0]?.nome },
+            nomeSocial: { value: data.responsaveis[0]?.nomeSocial },
+            cpf: { value: data.responsaveis[0]?.cpf },
+            rg: data.responsaveis[0]?.rg,
+            profissao: data.responsaveis[0]?.profissao,
+            genero: data.responsaveis[0]?.genero,
+            telefone: { value: data.responsaveis[0]?.telefone },
+            celular: { value: data.responsaveis[0]?.celular },
+            email: { value: data.responsaveis[0]?.email }
+        }];
     }
 
     return formattedData;
@@ -31,6 +43,18 @@ export const formatAddPayload = (data, maiorIdade) => {
 
     if (maiorIdade) {
         formattedData.responsaveis = [];
+    } else {
+        formattedData.responsaveis = [{
+            nome: { value: data.responsaveis[0]?.nome },
+            nomeSocial: { value: data.responsaveis[0]?.nomeSocial },
+            cpf: { value: data.responsaveis[0]?.cpf },
+            rg: data.responsaveis[0]?.rg,
+            profissao: data.responsaveis[0]?.profissao,
+            genero: data.responsaveis[0]?.genero,
+            telefone: { value: data.responsaveis[0]?.telefone },
+            celular: { value: data.responsaveis[0]?.celular },
+            email: { value: data.responsaveis[0]?.email }
+        }];
     };
 
     return formattedData;

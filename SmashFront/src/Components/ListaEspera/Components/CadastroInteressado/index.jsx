@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import dayjs from 'dayjs';
 
@@ -21,6 +21,9 @@ export const CadastrarInteressado = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+    const errorDate = useRef(false);
+
     const {
         userInfo,
         operacao,
@@ -35,8 +38,6 @@ export const CadastrarInteressado = () => {
 
     const labels = {
         visualizacao: 'Editar',
-        cadastro: 'Concluir',
-        edicao: 'Salvar'
     };
 
     const labelBotao = labels[operacao] ?? 'Salvar';
@@ -56,7 +57,7 @@ export const CadastrarInteressado = () => {
                     ? dayjs(userInfo.dataNascimento).format('YYYY-MM-DD')
                     : null,
                 telefone: userInfo.telefone,
-                horarioPref: userInfo.horarioPref,
+                horarioPrefId: userInfo.horarioPref.id,
             };
 
             await savePessoaInteressada(payload);
@@ -89,8 +90,26 @@ export const CadastrarInteressado = () => {
     };
 
     const handleEdit = async () => {
+        console.log('ba');
+
         try {
-            await editInteressado(location.state?.idPessoa, userInfo);
+            const payload = {
+                nome: userInfo.nome,
+                nomeSocial: userInfo.nomeSocial,
+                genero: userInfo.genero,
+                email: userInfo.email,
+                dataInteresse: userInfo.dataInteresse
+                    ? dayjs(userInfo.dataInteresse).format('YYYY-MM-DDTHH:mm')
+                    : null,
+                dataNascimento: userInfo.dataNascimento
+                    ? dayjs(userInfo.dataNascimento).format('YYYY-MM-DD')
+                    : null,
+                celular: userInfo.celular,
+                telefone: userInfo.telefone,
+                horarioPrefId: userInfo.horarioPref.id,
+            };
+
+            await editInteressado(location.state?.idPessoa, payload);
 
             toasterMsg('success', 'Perfil de Pessoa Interessada editado com sucesso!');
             setOperacao('visualizacao');
@@ -132,6 +151,7 @@ export const CadastrarInteressado = () => {
         userInfo,
         setUserInfo,
         operacao,
+        errorDate
     });
 
     useEffect(() => {
@@ -139,6 +159,12 @@ export const CadastrarInteressado = () => {
             handleFetchData();
         }
     }, []);
+
+    useEffect(() => {
+        const camposPreenchidos = userInfo.nome && userInfo.email && userInfo.horarioPref && userInfo.dataNascimento && userInfo.dataInteresse;
+
+        setSaveButtonDisabled(!camposPreenchidos);
+    }, [userInfo.nome, userInfo.email, userInfo.horarioPref, userInfo.dataNascimento, userInfo.dataInteresse]);
 
     return (
         <React.Fragment>
@@ -170,16 +196,16 @@ export const CadastrarInteressado = () => {
                         campos={formConfig.campos}
                         radios={formConfig.radios}
                         cancelButton={{
-                            label: operacao === 'visualizacao' ? 'Excluir' : 'Voltar',
+                            label: operacao === 'visualizacao' ? 'Excluir' : 'Cancelar',
                             onClick: operacao === 'visualizacao'
                                 ? () => setIsModalDeleteOpen(true)
-                                : () => setOperacao('info'),
+                                : () => navigate('/listaEspera'),
                             color: operacao === 'visualizacao' ? 'red' : ''
                         }}
                         confirmButton={{
                             label: labelBotao,
                             onClick: handleClick,
-                            disabled: false
+                            disabled: saveButtonDisabled
                         }}
                         columnsWidth={[1, 1, 1]}
                         operacao={operacao}

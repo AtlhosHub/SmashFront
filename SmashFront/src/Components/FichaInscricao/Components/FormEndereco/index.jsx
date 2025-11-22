@@ -29,10 +29,10 @@ export const FormEndereco = ({
     const labels = {
         visualizacao: 'Editar',
         cadastro: maiorIdade
-            ? 'Concluir'
+            ? 'Salvar'
             : 'Próximo',
         edicao: maiorIdade
-            ? 'Concluir'
+            ? 'Salvar'
             : 'Próximo',
     };
 

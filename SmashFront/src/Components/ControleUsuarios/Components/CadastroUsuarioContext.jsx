@@ -39,6 +39,8 @@ export const CadastroUsuarioProvider = ({ children }) => {
     useEffect(() => {
         if (senha == confirmarSenha) {
             setUserInfo({ ...userInfo, senha: senha });
+        } else {
+            setUserInfo({ ...userInfo, senha: null });
         }
     }, [senha, confirmarSenha]);
 

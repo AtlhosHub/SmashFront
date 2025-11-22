@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { TOOLTIP_MESSAGES } from '../../../constants/tooltips';
-// import { formatarTelefone } from '../../utils/validacaoForm';
+import { formatarTelefone } from '../utils/validacaoForm';
 
 export const useFormResponsavelConfig = ({
     userInfo,
@@ -18,6 +18,7 @@ export const useFormResponsavelConfig = ({
                 required: true,
                 disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].nome,
+                type: 'text',
                 onChange: (e) =>
                     setUserInfo({
                         ...userInfo,
@@ -29,6 +30,7 @@ export const useFormResponsavelConfig = ({
                 label: 'RG',
                 disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].rg,
+                type: 'text',
                 onChange: (e) =>
                     setUserInfo({
                         ...userInfo,
@@ -38,6 +40,7 @@ export const useFormResponsavelConfig = ({
             {
                 key: 'cpf',
                 label: 'CPF',
+                type: 'text',
                 required: true,
                 disabled: operacao === 'visualizacao',
                 value: cpfUser,
@@ -53,6 +56,7 @@ export const useFormResponsavelConfig = ({
             {
                 key: 'nomeSocial',
                 label: 'Nome Social',
+                type: 'text',
                 disabled: operacao === 'visualizacao',
                 tooltip: TOOLTIP_MESSAGES.nomeSocial,
                 value: userInfo.responsaveis[0].nomeSocial,
@@ -65,6 +69,7 @@ export const useFormResponsavelConfig = ({
             {
                 key: 'profissao',
                 label: 'Profissão',
+                type: 'text',
                 disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].profissao,
                 onChange: (e) =>
@@ -76,6 +81,7 @@ export const useFormResponsavelConfig = ({
             {
                 key: 'genero',
                 label: 'Gênero',
+                type: 'text',
                 disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].genero,
                 onChange: (e) =>
@@ -87,6 +93,7 @@ export const useFormResponsavelConfig = ({
             {
                 key: 'email',
                 label: 'Email',
+                type: 'text',
                 required: true,
                 disabled: operacao === 'visualizacao',
                 value: userInfo.responsaveis[0].email,
@@ -99,26 +106,26 @@ export const useFormResponsavelConfig = ({
             {
                 key: 'telefone',
                 label: 'Telefone',
+                type: 'text',
                 disabled: operacao === 'visualizacao',
                 placeholder: operacao === 'cadastro' ? '(00) 00000-0000' : '',
-                value: userInfo.responsaveis[0].telefone,
-                onChange: (e) =>
-                    setUserInfo({
-                        ...userInfo,
-                        responsaveis: [{ ...userInfo.responsaveis[0], telefone: e.target.value }],
-                    }),
+                value: formatarTelefone(userInfo.responsaveis[0].telefone),
+                onChange: (e) =>{
+                    const numeros = e.target.value.replace(/\D/g, '').slice(0, 11);
+                    setUserInfo({ ...userInfo, responsaveis: [{ ...userInfo.responsaveis[0], telefone: numeros }] });
+                }
             },
             {
                 key: 'celular',
                 label: 'Celular',
+                type: 'text',
                 disabled: operacao === 'visualizacao',
                 placeholder: operacao === 'cadastro' ? '(00) 00000-0000' : '',
-                value: userInfo.responsaveis[0].celular,
-                onChange: (e) =>
-                    setUserInfo({
-                        ...userInfo,
-                        responsaveis: [{ ...userInfo.responsaveis[0], celular: e.target.value }],
-                    }),
+                value: formatarTelefone(userInfo.responsaveis[0].celular),
+                onChange: (e) => {
+                    const numeros = e.target.value.replace(/\D/g, '').slice(0, 11);
+                    setUserInfo({ ...userInfo, responsaveis: [{ ...userInfo.responsaveis[0], celular: numeros }] });
+                },
             },
         ],
         radios: [

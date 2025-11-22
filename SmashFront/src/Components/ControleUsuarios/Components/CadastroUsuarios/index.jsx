@@ -3,7 +3,8 @@ import {
     useNavigate
 } from 'react-router-dom';
 import React, {
-    useEffect
+    useEffect,
+    useState
 } from 'react';
 import { ToastContainer } from 'react-toastify';
 
@@ -23,6 +24,8 @@ import { useCadastroUsuario } from '../CadastroUsuarioContext';
 export const CadastroUsuarios = () => {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
     const {
         userInfo,
@@ -154,6 +157,18 @@ export const CadastroUsuarios = () => {
         }
     }, []);
 
+    useEffect(() => {
+        const camposPreenchidos = !!(userInfo.nome && userInfo.email && userInfo.dataNascimento);
+        let desabilitado = !camposPreenchidos;
+
+        if (operacao === 'cadastro') {
+            desabilitado = !(camposPreenchidos && userInfo.senha);
+        }
+
+        setSaveButtonDisabled(desabilitado);
+    }, [userInfo.nome, userInfo.email, userInfo.senha, userInfo.dataNascimento, operacao]);
+
+
     return (
         <React.Fragment>
             <Box
@@ -180,16 +195,16 @@ export const CadastroUsuarios = () => {
                         campos={formConfig.campos}
                         radios={formConfig.radios}
                         cancelButton={{
-                            label: operacao === 'visualizacao' ? 'Excluir' : 'Voltar',
+                            label: operacao === 'visualizacao' ? 'Excluir' : 'Cancelar',
                             onClick: operacao === 'visualizacao'
                                 ? () => setIsModalDeleteOpen(true)
-                                : () => setOperacao('info'),
+                                : () => navigate('/controleUsuarios'),
                             color: operacao === 'visualizacao' ? 'red' : ''
                         }}
                         confirmButton={{
                             label: labelBotao,
                             onClick: handleClick,
-                            disabled: false
+                            disabled: saveButtonDisabled
                         }}
                         columnsWidth={[1, 1, 1]}
                         operacao={operacao}
