@@ -21,7 +21,7 @@ export const FormResponsavel = ({
     } = useFichaInscricao();
 
     const [botaoLiberado, setBotaoLiberado] = useState(false);
-    const [cpfUser, setCpfUser] = useState(formatCPF(userInfo.responsaveis[0].cpf));
+    const [cpfUser, setCpfUser] = useState(formatCPF(userInfo.responsaveis[0].cpf.value));
 
     const labels = {
         visualizacao: 'Editar',
@@ -49,13 +49,13 @@ export const FormResponsavel = ({
 
     useEffect(() => {
         const camposPreenchidos =
-            userInfo.responsaveis[0].nome
-            && userInfo.responsaveis[0].email
+            userInfo.responsaveis[0].nome.value
+            && userInfo.responsaveis[0].email.value
             && cpfValido
             && userInfo.autorizado !== null;
 
         const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        const emailValido = regexEmail.test(userInfo.responsaveis[0].email);
+        const emailValido = regexEmail.test(userInfo.responsaveis[0].email.value);
 
         const condicionalLiberacao = camposPreenchidos && emailValido;
 

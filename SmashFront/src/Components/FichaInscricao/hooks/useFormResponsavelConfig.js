@@ -17,7 +17,7 @@ export const useFormResponsavelConfig = ({
                 label: 'Nome',
                 required: true,
                 disabled: operacao === 'visualizacao',
-                value: userInfo.responsaveis[0].nome,
+                value: userInfo.responsaveis[0].nome.value,
                 type: 'text',
                 onChange: (e) =>
                     setUserInfo({
@@ -59,7 +59,7 @@ export const useFormResponsavelConfig = ({
                 type: 'text',
                 disabled: operacao === 'visualizacao',
                 tooltip: TOOLTIP_MESSAGES.nomeSocial,
-                value: userInfo.responsaveis[0].nomeSocial,
+                value: userInfo.responsaveis[0].nomeSocial?.value,
                 onChange: (e) =>
                     setUserInfo({
                         ...userInfo,
@@ -96,7 +96,7 @@ export const useFormResponsavelConfig = ({
                 type: 'text',
                 required: true,
                 disabled: operacao === 'visualizacao',
-                value: userInfo.responsaveis[0].email,
+                value: userInfo.responsaveis[0].email.value,
                 onChange: (e) =>
                     setUserInfo({
                         ...userInfo,
