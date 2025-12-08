@@ -96,22 +96,6 @@ export const TelaLogin = () => {
                     justifyContent: 'space-between',
                 }}
             >
-                <Box sx={{
-                    justifyContent: 'end',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    color: '#0D3C53',
-                    width: '100%',
-                    pl: '5rem',
-                    pb: '1rem',
-                }}>
-                    <Typography sx={{ fontSize: '80px', fontFamily: '\'Mohave\', sans-serif ', fontWeight: '700', lineHeight: '70px' }}>
-                        CT Vila Formosa
-                    </Typography>
-                    <Typography sx={{ fontSize: '25px', fontFamily: '\'Poppins\', sans-serif ', fontWeight: '400', lineHeight: '30px' }}>
-                        Sistema de Gerenciamento Financeiro
-                    </Typography>
-                </Box>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <DefaultLoginCard
                         typeButton="contained"
@@ -189,6 +173,23 @@ export const TelaLogin = () => {
                             </Box>
                         </Box>
                     </DefaultLoginCard>
+                </Box>
+                <Box sx={{
+                    justifyContent: 'end',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    color: '#0D3C53',
+                    width: '100%',
+                    pr: '5rem',
+                    pb: '1rem',
+                    textAlign: 'right',
+                }}>
+                    <Typography sx={{ fontSize: '80px', fontFamily: '\'Mohave\', sans-serif ', fontWeight: '700', lineHeight: '70px' }}>
+                        CT Vila Formosa
+                    </Typography>
+                    <Typography sx={{ fontSize: '25px', fontFamily: '\'Poppins\', sans-serif ', fontWeight: '400', lineHeight: '30px' }}>
+                        Sistema de Gerenciamento Financeiro
+                    </Typography>
                 </Box>
             </Box>
             <ToastContainer />
