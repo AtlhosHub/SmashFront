@@ -8,8 +8,6 @@ RUN npm run build
 
 # Buildando a imagem com Nginx
 FROM nginx:alpine
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/nginx.conf
 
 # Jogando o build dentro da imagem Nginx
 COPY --from=build /app/dist /var/www/html/
