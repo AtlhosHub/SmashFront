@@ -39,6 +39,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./Dockerfile.ci
+          file: ./SmashFront/Dockerfile.ci
           push: true
           tags: murakamijuliana/imagem-frontend:latest
